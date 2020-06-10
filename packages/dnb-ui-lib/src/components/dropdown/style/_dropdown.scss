@@ -10,34 +10,8 @@
   --dropdown-height--medium: 2.5rem;
   --dropdown-height--large: 3rem;
   --dropdown-padding-horizontal: 1rem;
-  // --dropdown-border-width: 0.0625rem;
   --dropdown-focus-border-width: 0.125rem;
   --dropdown-text-padding: 0.5rem;
-}
-
-@mixin openDropdown($state: 'animation') {
-  z-index: 100; // make sure we are over e.g. switch
-  display: flex;
-
-  &:not(#{&}--no-animation) {
-    animation: dropdown-slide-down 200ms ease-out 1 forwards;
-  }
-  html[data-dnb-test] &,
-  &--no-animation {
-    animation: dropdown-slide-down 1ms ease-out 1 forwards;
-  }
-}
-@mixin closeDropdown($state: 'animation') {
-  &:not(#{&}--no-animation) {
-    animation: dropdown-slide-ip 150ms ease-out 1 forwards;
-  }
-  html[data-dnb-test] &,
-  &--no-animation {
-    animation: dropdown-slide-ip 1ms ease-out 1 forwards;
-  }
-}
-@mixin dropdownClosed() {
-  display: none;
 }
 
 .dnb-dropdown {
@@ -78,111 +52,24 @@
 
   &__suffix {
     padding-left: 0.5rem;
+    line-height: var(--line-height-basis);
   }
 
-  &__content {
-    padding: 0;
+  // NB: looks like we dont need this anymore!
+  // &--default .dnb-drawer-list__list {
+  //   top: var(--dropdown-height);
+  //   bottom: auto;
+  // }
+  // &--default#{&}--top .dnb-drawer-list__list {
+  //   bottom: var(--dropdown-height);
+  //   top: auto;
+  // }
+
+  &--large .dnb-drawer-list__triangle {
+    margin-left: calc(var(--dropdown-padding-horizontal) - 0.25rem);
   }
-
-  &__list {
-    position: absolute;
-    z-index: 3;
-    top: calc(
-      var(--dropdown-height) + var(--dropdown-focus-border-width) - 1px
-    );
-    bottom: auto;
-    left: 0;
-    right: 0;
-
-    width: 100%;
-    min-width: var(--dropdown-width);
-
-    margin: 0;
-    padding: 0;
-
-    font-size: var(--font-size-basis);
-    background-color: transparent;
-
-    transform: translateY(0);
-    transition: transform 200ms, opacity 160ms ease-out;
-  }
-  &__align--right &__list {
-    left: auto;
-  }
-
-  &--direction-top &__list {
-    top: auto;
-    bottom: calc(
-      var(--dropdown-height) + var(--dropdown-focus-border-width) - 1px
-    );
-  }
-
-  // ul element
-  &__options {
-    @at-root .dnb-spacing & li.dnb-dropdown__option {
-      margin: 0;
-    }
-
-    display: flex;
-    flex-direction: column;
-
-    width: 100%;
-    margin: 0;
-    padding: 0;
-
-    list-style: none;
-    background-color: transparent;
-  }
-
-  &--scroll &__options {
-    min-height: 2rem;
-    max-height: 50vh;
-
-    overflow-y: scroll;
-    overscroll-behavior: contain;
-    scroll-behavior: smooth;
-
-    // show scrollbar on IE
-    -ms-overflow-style: auto;
-  }
-  &--no-scroll-animation &__options {
-    scroll-behavior: auto;
-  }
-
-  // li element
-  &__option {
-    position: relative;
-
-    cursor: pointer;
-
-    margin: 0;
-    padding: 0;
-    color: inherit;
-
-    background-color: var(--color-white);
-
-    &__inner {
-      position: relative;
-      z-index: 1; // only to go over &__triangle
-
-      display: block;
-
-      outline: none;
-
-      width: 100%;
-      margin: 0;
-      padding: 1rem;
-
-      color: inherit;
-      background-color: var(--color-white);
-    }
-
-    &__item {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 100%;
-    }
+  &--icon-position-left#{&}--large .dnb-drawer-list__triangle {
+    margin-left: calc(var(--dropdown-padding-horizontal) + 0.25rem);
   }
 
   &__icon {
@@ -193,67 +80,6 @@
     justify-content: center;
 
     pointer-events: none;
-
-    // The rest was used before we used flex
-    // color: inherit;
-    // font-size: var(--font-size-small); // has to be 16px
-    // &.dnb-icon > span {
-    //   display: inline-flex;
-    //
-    //   svg {
-    //     vertical-align: top; // so we don't get the gap on top
-    //   }
-    // }
-  }
-
-  // arrow
-  &__triangle {
-    position: absolute;
-    top: calc(
-      var(--dropdown-focus-border-width) - var(--dropdown-height) / 2
-    );
-    left: auto;
-    right: 0;
-
-    pointer-events: none;
-
-    margin: 0 var(--dropdown-padding-horizontal);
-
-    width: calc(var(--dropdown-height) / 2);
-    height: calc(var(--dropdown-height) / 2);
-
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-
-      width: calc(var(--dropdown-height) / 2);
-      height: calc(var(--dropdown-height) / 2);
-      transform: translateY(60%) rotate(45deg);
-
-      border: 1px solid var(--color-black-border);
-      background-color: var(--color-white);
-    }
-  }
-  &__size--large &__triangle {
-    margin: 0 calc(var(--dropdown-padding-horizontal) + 0.25rem);
-  }
-  &--icon-position-left &__triangle {
-    left: 0;
-    right: auto;
-  }
-  &--direction-top &__triangle {
-    top: auto;
-    bottom: calc(
-      var(--dropdown-focus-border-width) - var(--dropdown-height) / 2 - 2px
-    );
-    transform: rotate(180deg);
-    &::before {
-      transform: translateY(65%) rotate(45deg);
-    }
   }
 
   // button
@@ -264,21 +90,15 @@
     user-select: none;
     -webkit-user-select: none; // Safari / Touch fix
 
-    display: inline-flex;
-    align-items: center;
-
-    outline: none;
-
     width: 100%;
-    padding: 0 var(--dropdown-padding-horizontal);
 
     &.dnb-button {
-      line-height: var(--dropdown-height);
+      padding: 0 1rem;
     }
   }
 
-  // Popup menu
-  &--is-popup &__shell,
+  // Button only menu
+  &--default#{&}--is-popup &__shell,
   &--is-popup &__trigger {
     padding: 0;
     width: var(--dropdown-height);
@@ -287,93 +107,71 @@
   &--is-popup &__icon {
     width: 100%;
   }
-  &--is-popup &__list {
-    left: -0.5rem;
-  }
   &--is-popup#{&}--scroll &__options {
     min-height: 1rem;
   }
-  // small popup
-  &--is-popup#{&}__size--small &__shell,
-  &--is-popup#{&}__size--small &__trigger {
+  &--is-popup .dnb-drawer-list__root {
+    width: var(--dropdown-width); // only a fallback
+  }
+
+  // size--small
+  &--small#{&}--is-popup &__shell,
+  &--small#{&}--is-popup &__trigger {
     width: var(--dropdown-height--small);
   }
-  &--is-popup#{&}__size--small &__list {
-    left: -0.75rem;
-  }
-  &--is-popup#{&}__align--right &__list {
-    left: auto;
-    right: -0.5rem;
-  }
-  &--is-popup#{&}__align--right#{&}__size--small &__list {
-    left: -0.75rem;
-  }
-  // medium popup - TODO: needs &__list correction
-  &--is-popup#{&}__size--medium &__trigger {
+
+  // size--medium
+  &--medium#{&}--is-popup &__shell,
+  &--medium#{&}--is-popup &__trigger {
     width: var(--dropdown-height--medium);
   }
-  // large popup - TODO: needs &__list correction
-  &--is-popup#{&}__size--large &__trigger {
+
+  // size--large
+  &--large#{&}--is-popup &__shell,
+  &--large#{&}--is-popup &__trigger {
     width: var(--dropdown-height--large);
   }
 
   // Size--small
-  &__size--small {
+  &--small {
     line-height: var(--dropdown-height--small);
   }
-  &__size--small &__shell,
-  &__size--small &__trigger {
+  &--small &__shell,
+  &--small &__trigger {
     height: var(--dropdown-height--small);
   }
-  &__size--small &__trigger.dnb-button {
+  &--small &__trigger.dnb-button {
     line-height: var(--dropdown-height--small);
-  }
-  &__size--small &__list {
-    top: var(--dropdown-height--small);
-  }
-  &__size--small#{&}--direction-top &__list {
-    top: auto;
-    bottom: var(--dropdown-height--small);
   }
 
   // Size--medium
-  &__size--medium {
+  &--medium {
     line-height: var(--dropdown-height--medium);
   }
-  &__size--medium &__shell,
-  &__size--medium &__trigger {
+  &--medium &__shell,
+  &--medium &__trigger {
     height: var(--dropdown-height--medium);
     border-radius: var(--dropdown-height--medium);
   }
-  &__size--medium &__trigger.dnb-button {
+  &--medium &__trigger.dnb-button {
     line-height: var(--dropdown-height--medium);
-  }
-  &__size--medium &__list {
-    top: var(--dropdown-height--medium);
-  }
-  &__size--medium#{&}--direction-top &__list {
-    top: auto;
-    bottom: var(--dropdown-height--medium);
   }
 
   // Size--large
-  &__size--large {
+  &--large {
     line-height: var(--dropdown-height--large);
   }
-  &__size--large &__shell,
-  &__size--large &__trigger {
+  &--large &__shell,
+  &--large &__trigger {
     height: var(--dropdown-height--large);
     border-radius: var(--dropdown-height--large);
   }
-  &__size--large &__trigger.dnb-button {
+  &--large &__trigger.dnb-button {
     line-height: var(--dropdown-height--large);
   }
-  &__size--large &__list {
-    top: var(--dropdown-height--large);
-  }
-  &__size--large#{&}--direction-top &__list {
-    top: auto;
-    bottom: var(--dropdown-height--large);
+
+  &--is-popup &__trigger.dnb-button {
+    padding: 0;
   }
 
   &__text {
@@ -381,11 +179,11 @@
     position: relative;
     z-index: 4;
 
-    width: 100%;
-    height: inherit;
-    line-height: inherit;
+    display: inline-flex;
 
-    padding: 0 var(--dropdown-text-padding) 0 0;
+    width: 100%;
+
+    // padding: 0 1rem;
 
     overflow: hidden;
 
@@ -397,33 +195,18 @@
     &__inner {
       display: inline-block;
 
-      // width: calc(
-      //   var(--dropdown-width) -
-      //     calc(var(--dropdown-padding-horizontal) * 3 + 10px)
-      // );
       width: 100%;
 
-      height: inherit;
-      padding: 0;
+      // height: inherit;
+      // padding: 0;
 
       overflow: hidden;
       white-space: nowrap;
 
       color: inherit;
-      text-decoration: none;
       text-overflow: inherit;
       text-align: inherit;
     }
-  }
-
-  &--opened &__list {
-    @include openDropdown();
-  }
-  &--hidden &__list {
-    @include dropdownClosed();
-  }
-  &:not(.dnb-dropdown--opened) &__list {
-    @include closeDropdown();
   }
 
   &--icon-position-left &__icon {
@@ -435,15 +218,11 @@
     padding-left: var(--dropdown-text-padding);
   }
 
-  &__outside-value {
-    display: block;
-    padding: 0.5rem 0 1rem var(--dropdown-padding-horizontal);
-  }
-
-  & > .dnb-form-label {
+  > .dnb-form-label {
     margin-right: 1rem;
     line-height: var(--line-height-basis);
   }
+  @include formLabelWrap();
 
   label + &[class*='__form-status'] {
     vertical-align: top;
@@ -471,7 +250,7 @@
   }
 
   .dnb-responsive-component & {
-    @media (max-width: 40em) {
+    @media screen and (max-width: 40em) {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -499,27 +278,5 @@
       // IE has bug where the height can't be calculated propery
       display: block;
     }
-  }
-}
-
-@keyframes dropdown-slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(calc(1px - var(--dropdown-height)));
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes dropdown-slide-ip {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(calc(1px - var(--dropdown-height)));
   }
 }

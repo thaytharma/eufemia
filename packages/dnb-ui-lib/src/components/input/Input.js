@@ -3,13 +3,11 @@
  *
  */
 
-import React, { PureComponent } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import Button from '../button/Button'
-import FormLabel from '../form-label/FormLabel'
-import FormStatus from '../form-status/FormStatus'
 import {
+  warn,
   isTrue,
   makeUniqueId,
   extendPropsWithContext,
@@ -17,11 +15,14 @@ import {
   validateDOMAttributes,
   processChildren,
   pickRenderProps,
-  dispatchCustomElementEvent,
-  isMac
+  dispatchCustomElementEvent
 } from '../../shared/component-helper'
 import AlignmentHelper from '../../shared/AlignmentHelper'
 import { createSpacingClasses } from '../space/SpacingHelper'
+import Button from '../button/Button'
+import FormLabel from '../form-label/FormLabel'
+import FormStatus from '../form-status/FormStatus'
+import IconPrimary from '../icon-primary/IconPrimary'
 
 import Context from '../../shared/Context'
 import Suffix from '../../shared/helpers/Suffix'
@@ -38,7 +39,10 @@ const renderProps = {
 
 const propTypes = {
   type: PropTypes.string,
-  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  size: PropTypes.oneOfType([
+    PropTypes.oneOf(['default', 'small', 'medium', 'large']),
+    PropTypes.number
+  ]),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   label: PropTypes.oneOfType([
@@ -53,9 +57,9 @@ const propTypes = {
     PropTypes.func,
     PropTypes.node
   ]),
-  input_state: PropTypes.string,
   status_state: PropTypes.string,
   status_animation: PropTypes.string,
+  input_state: PropTypes.string,
   global_status_id: PropTypes.string,
   autocomplete: PropTypes.oneOf(['on', 'off']),
   submit_button_title: PropTypes.string,
@@ -80,6 +84,12 @@ const propTypes = {
     PropTypes.object
   ]),
   input_element: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+    PropTypes.func
+  ]),
+  icon_position: PropTypes.string,
   inner_ref: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
   readOnly: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 
@@ -91,6 +101,7 @@ const propTypes = {
     PropTypes.node,
     PropTypes.func
   ]),
+  submit_button_status: PropTypes.string,
 
   // React props
   className: PropTypes.string,
@@ -121,9 +132,9 @@ const defaultProps = {
   label_direction: null,
   label_sr_only: null,
   status: null,
-  input_state: null,
   status_state: 'error',
   status_animation: null,
+  input_state: null,
   global_status_id: null,
   autocomplete: 'off',
   placeholder: null,
@@ -138,6 +149,8 @@ const defaultProps = {
   input_attributes: null,
   input_element: null,
   inner_ref: null,
+  icon: null,
+  icon_position: 'left',
   readOnly: false,
 
   // Submit button
@@ -145,6 +158,7 @@ const defaultProps = {
   submit_button_title: null,
   submit_button_variant: 'secondary',
   submit_button_icon: 'search',
+  submit_button_status: null,
 
   // React props
   className: null,
@@ -160,7 +174,7 @@ const defaultProps = {
  * The input component is an umbrella component for all inputs which share the same style as the classic `text` input field. Radio buttons and other form elements are not included here.
  */
 
-export default class Input extends PureComponent {
+export default class Input extends React.PureComponent {
   static tagName = 'dnb-input'
   static propTypes = propTypes
   static defaultProps = defaultProps
@@ -227,15 +241,13 @@ export default class Input extends PureComponent {
     // make sure we dont trigger getDerivedStateFromProps on startup
     this.state._listenForPropChanges = true
     this.state._value = props.value
-
-    this.isMac = isMac()
   }
-  onFocusHandler = event => {
+  onFocusHandler = (event) => {
     const { value } = event.target
     this.setState({
-      value,
-      _listenForPropChanges: false,
-      inputState: 'focus'
+      // value,// why should we update the value on blur?
+      inputState: 'focus',
+      _listenForPropChanges: false
     })
 
     if (isTrue(this.props.selectall) && this._ref.current) {
@@ -243,31 +255,31 @@ export default class Input extends PureComponent {
         try {
           this._ref.current.select()
         } catch (e) {
-          console.log(e)
+          warn(e)
         }
       }, 1) // safari needs a delay
     }
 
     dispatchCustomElementEvent(this, 'on_focus', { value, event })
   }
-  onBlurHandler = event => {
+  onBlurHandler = (event) => {
     const { value } = event.target
     this.setState({
-      value,
-      _listenForPropChanges: false,
+      // value,// why should we update the value on blur?
       inputState:
         Input.hasValue(value) && value !== this.state._value
           ? 'dirty'
-          : 'initial'
+          : 'initial',
+      _listenForPropChanges: false
     })
     dispatchCustomElementEvent(this, 'on_blur', { value, event })
   }
-  onChangeHandler = event => {
+  onChangeHandler = (event) => {
     const { value } = event.target
     this.setState({ value, _listenForPropChanges: false })
     dispatchCustomElementEvent(this, 'on_change', { value, event })
   }
-  onKeyDownHandler = event => {
+  onKeyDownHandler = (event) => {
     const value = event.target.value
     dispatchCustomElementEvent(this, 'on_key_down', { value, event })
     if (event.key === 'Enter') {
@@ -302,11 +314,15 @@ export default class Input extends PureComponent {
       submit_button_title,
       submit_button_variant,
       submit_button_icon,
+      submit_button_status,
       submit_element,
       autocomplete,
       readOnly,
       stretch,
       input_attributes,
+      icon,
+      icon_position,
+      icon_size,
       class: _className,
       className,
 
@@ -329,8 +345,14 @@ export default class Input extends PureComponent {
 
     const id = this._id
     const showStatus = status && status !== 'error'
-    const hasSubmitButton = submit_element || type === 'search'
+    const hasSubmitButton =
+      submit_element || (submit_element !== false && type === 'search')
     const hasValue = Input.hasValue(value)
+
+    const iconSize =
+      size === 'large' && (icon_size === 'default' || !icon_size)
+        ? 'medium'
+        : icon_size
 
     const mainParams = {
       className: classnames(
@@ -340,6 +362,9 @@ export default class Input extends PureComponent {
         hasSubmitButton && 'dnb-input--has-submit-element',
         align && `dnb-input__align--${align}`,
         status && `dnb-input__status--${status_state}`,
+        icon && `dnb-input--icon-position-${icon_position}`,
+        icon && 'dnb-input--has-icon',
+        icon && iconSize && `dnb-input--icon-size-${iconSize}`,
         label_direction && `dnb-input--${label_direction}`,
         isTrue(stretch) && `dnb-input--stretch`,
         isTrue(keep_placeholder) && `dnb-input--keep-placeholder`,
@@ -375,7 +400,7 @@ export default class Input extends PureComponent {
       id,
       disabled: isTrue(disabled),
       name: id,
-      'aria-placeholder': placeholder,
+      'aria-placeholder': placeholder, // NVDA just reads out the placeholder twice
       ...attributes,
       ...inputAttributes,
       onChange: this.onChangeHandler,
@@ -450,21 +475,31 @@ export default class Input extends PureComponent {
 
           <span className="dnb-input__row">
             <span className="dnb-input__shell" {...shellParams}>
+              {InputElement || <input ref={this._ref} {...inputParams} />}
+
+              {icon && (
+                <InputIcon
+                  className="dnb-input__icon"
+                  icon={icon}
+                  size={iconSize}
+                  role="presentation"
+                  aria-hidden
+                />
+              )}
+
               {!hasValue && placeholder && focusState !== 'focus' && (
                 <span
                   id={id + '-placeholder'}
-                  // aria-hidden={this.isMac}
-                  aria-hidden
                   className={classnames(
                     'dnb-input__placeholder',
                     align ? `dnb-input__align--${align}` : null
                   )}
+                  role="presentation"
+                  aria-hidden
                 >
                   {placeholder}
                 </span>
               )}
-
-              {InputElement || <input ref={this._ref} {...inputParams} />}
             </span>
 
             {hasSubmitButton && (
@@ -476,6 +511,7 @@ export default class Input extends PureComponent {
                     {...attributes}
                     value={inputParams.value}
                     icon={submit_button_icon}
+                    status={submit_button_status}
                     icon_size={
                       size === 'medium' || size === 'large'
                         ? 'medium'
@@ -505,7 +541,7 @@ export default class Input extends PureComponent {
   }
 }
 
-class InputSubmitButton extends PureComponent {
+class InputSubmitButton extends React.PureComponent {
   static propTypes = {
     id: PropTypes.string,
     value: PropTypes.string,
@@ -544,21 +580,21 @@ class InputSubmitButton extends PureComponent {
 
   state = { focusState: 'virgin' }
 
-  onFocusHandler = event => {
+  onFocusHandler = (event) => {
     const value = this.props.value
     this.setState({
       focusState: 'focus'
     })
     dispatchCustomElementEvent(this, 'on_submit_focus', { value, event })
   }
-  onBlurHandler = event => {
+  onBlurHandler = (event) => {
     const value = this.props.value
     this.setState({
       focusState: 'dirty'
     })
     dispatchCustomElementEvent(this, 'on_submit_blur', { value, event })
   }
-  onSubmitHandler = event => {
+  onSubmitHandler = (event) => {
     const value = this.props.value
     dispatchCustomElementEvent(this, 'on_submit', { value, event })
   }
@@ -613,3 +649,21 @@ const SubmitButton = React.forwardRef((props, ref) => (
 ))
 
 export { SubmitButton }
+
+// We momorize by type, in case we send in a ProgressIndicator (Autocomplete)
+const InputIcon = React.memo(
+  (props) => <IconPrimary {...props} />,
+  ({ icon: prev }, { icon: next }) => {
+    if (typeof prev === 'string' && typeof next === 'string') {
+      return false
+    }
+    return typeof prev === typeof next
+  }
+)
+InputIcon.propTypes = {
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+    PropTypes.func
+  ]).isRequired
+}

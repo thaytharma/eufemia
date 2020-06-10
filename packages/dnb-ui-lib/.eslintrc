@@ -15,9 +15,21 @@
   "parserOptions": {
     "sourceType": "module"
   },
-  "plugins": ["import", "jsx-a11y", "react", "security"],
+  "plugins": ["import", "jsx-a11y", "react", "react-hooks", "security"],
   "rules": {
     "no-console": "off",
+    "import/no-anonymous-default-export": [
+      "error",
+      {
+        "allowArray": true,
+        "allowArrowFunction": false,
+        "allowAnonymousClass": false,
+        "allowAnonymousFunction": false,
+        "allowCallExpression": true, // The true value here is for backward compatibility
+        "allowLiteral": true,
+        "allowObject": true
+      }
+    ],
     "import/no-unresolved": 0,
     "react/prop-types": 1,
     "react/require-default-props": 1,
@@ -57,7 +69,7 @@
   },
   "settings": {
     "react": {
-      "version": "^16.4"
+      "version": "^16.12"
     }
   }
 }

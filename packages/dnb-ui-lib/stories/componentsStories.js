@@ -24,14 +24,22 @@ import FormLabelStory from './components/FormLabel'
 import FormRowStory from './components/FormRow'
 import FormSetStory from './components/FormSet'
 import Dropdown from './components/Dropdown'
+import Autocomplete from './components/Autocomplete'
+import Drawer from './components/Drawer'
+import Tooltip from './components/Tooltip'
 import Space from './components/Space'
 import Tabs from './components/Tabs'
 import FormStatus from './components/FormStatus'
 import GlobalStatus from './components/GlobalStatus'
 import GlobalError from './components/GlobalError'
 import Number from './components/Number'
+import Headings from './components/Headings'
 import Icons from './components/Icons'
 import Experiments from './components/Experiments'
+import Pagination from './components/Pagination'
+import PaginationTable from './components/PaginationTable'
+import PaginationTableMarker from './components/PaginationTableMarker'
+import WebComponent from './components/WebComponent'
 import { Logo } from '../src/components'
 
 const stories = []
@@ -54,14 +62,22 @@ stories.push(FormLabelStory)
 stories.push(FormRowStory)
 stories.push(FormSetStory)
 stories.push(Dropdown)
+stories.push(Autocomplete)
+stories.push(Drawer)
+stories.push(Tooltip)
 stories.push(Space)
 stories.push(Tabs)
 stories.push(FormStatus)
 stories.push(GlobalStatus)
 stories.push(GlobalError)
 stories.push(Number)
+stories.push(Headings)
 stories.push(Icons)
 stories.push(Experiments)
+stories.push(Pagination)
+stories.push(PaginationTable)
+stories.push(PaginationTableMarker)
+stories.push(WebComponent)
 
 stories.push([
   'Logo',
@@ -71,7 +87,7 @@ stories.push([
         <Logo size="80" style={{ color: 'var(--color-fire-red)' }} />
       </Box>
       <Box>
-        <h1 className="dnb-h1">
+        <h1 className="dnb-h--xx-large">
           H1 with the DNB Logo <Logo size="auto" />
         </h1>
         <p className="dnb-p">

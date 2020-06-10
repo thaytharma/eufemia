@@ -3,7 +3,7 @@
  *
  */
 
-import React, { PureComponent, Fragment } from 'react'
+import React from 'react'
 import ComponentBox from 'Src/shared/tags/ComponentBox'
 import styled from '@emotion/styled'
 
@@ -11,61 +11,102 @@ import styled from '@emotion/styled'
 // How to use masks: https://github.com/text-mask/text-mask/blob/master/componentDocumentation.md#readme
 // import createNumberMask from 'dnb-ui-lib/src/components/input-masked/addons/createNumberMask'
 
-class Example extends PureComponent {
-  handleInputChange = ({ value }) => {
-    console.log(value)
-  }
+class Example extends React.PureComponent {
   render() {
-    const handleInputChange = this.handleInputChange
     return (
-      <Fragment>
+      <React.Fragment>
         <ComponentBox
-          title="Only numbers"
-          scope={{
-            handleInputChange
-          }}
+          title="Using the `currency_mask`"
+          data-dnb-test="input-masked-currency_mask"
         >
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
+<FormRow vertical>
+  <InputMasked
+    label="Right aligned:"
+    currency_mask="kr"
+    on_change={(e) => {
+      console.log('e', e)
+    }}
+    right
+    bottom
+  />
+  <InputMasked
+    label="Left aligned:"
+    currency_mask={{ currency: 'NOK' }}
+    align="left"
+    on_change={(e) => {
+      console.log('e', e)
+    }}
+  />
+</FormRow>
+          `
+          }
+        </ComponentBox>
+        <ComponentBox title="Making a custom currency mask">
+          {
+            /* @jsx */ `
+<InputMasked
+  label="Masked amount:"
+  show_mask
+  number_mask={{
+    suffix: ' kr',
+    allowDecimal: true
+  }}
+  placeholder_char={null}
+  align="right"
+  on_change={(e) => {
+    console.log('e', e)
+  }}
+/>
+          `
+          }
+        </ComponentBox>
+        <ComponentBox
+          title="Using the `number_mask` - combined suffix"
+          data-dnb-test="input-masked-number_mask"
+        >
+          {
+            /* @jsx */ `
 <InputMasked
   label="Masked input:"
-  autocomplete="off"
   value="1000000"
   number_mask={{
     suffix: ',-'
   }}
   suffix="kr."
   align="right"
-  on_change={handleInputChange}
+  on_change={(e) => {
+    console.log('e', e)
+  }}
 />
-          `}
+          `
+          }
         </ComponentBox>
-        <ComponentBox
-          title="Only numbers, right aligned and large sized input"
-          scope={{
-            handleInputChange: this.handleInputChange
-          }}
-        >
-          {/* @jsx */ `
+        <ComponentBox title="Using the `number_mask` and a prefix">
+          {
+            /* @jsx */ `
 <InputMasked
   label="Masked input:"
-  autocomplete="off"
-  size="large"
   number_mask={{
     prefix: 'NOK '
   }}
   align="right"
   stretch="true"
   placeholder="Enter a number"
-  on_change={handleInputChange}
+  on_change={(e) => {
+    console.log('e', e)
+  }}
 />
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox
           title="Phone Number, starting with 4"
-          scope={{ handleInputChange: this.handleInputChange }}
           data-dnb-test="input-masked-phone"
         >
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <InputMasked
   label="Masked input:"
   mask={[
@@ -87,11 +128,14 @@ class Example extends PureComponent {
     /\\d/
   ]}
   show_mask="true"
-  on_change={handleInputChange}
+  on_change={(e) => {
+    console.log('e', e)
+  }}
 />
-          `}
+          `
+          }
         </ComponentBox>
-      </Fragment>
+      </React.Fragment>
     )
   }
 }
@@ -109,8 +153,10 @@ const Wrapper = styled.div`
 `
 
 export { Example }
-export default () => (
-  <Wrapper>
-    <Example />
-  </Wrapper>
-)
+export default function StyledExample() {
+  return (
+    <Wrapper>
+      <Example />
+    </Wrapper>
+  )
+}

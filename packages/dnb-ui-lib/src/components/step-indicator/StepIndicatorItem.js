@@ -3,21 +3,20 @@
  *
  */
 
-import React, { PureComponent } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import {
   isTrue,
-  dispatchCustomElementEvent,
-  isMac as isMacFunc
+  dispatchCustomElementEvent
 } from '../../shared/component-helper'
+import { IS_MAC } from '../../shared/helpers'
 // import { Dummy } from '../tabs/Tabs'
 
-let isMac = null
-
-export default class StepItem extends PureComponent {
+export default class StepItem extends React.PureComponent {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    step_title: PropTypes.string,
     activeItem: PropTypes.number,
     currentItem: PropTypes.number.isRequired,
     hide_numbers: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
@@ -31,6 +30,7 @@ export default class StepItem extends PureComponent {
     on_change: PropTypes.func,
     setActimeItem: PropTypes.func,
     hasReached: PropTypes.array,
+    countSteps: PropTypes.number,
     is_active: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     is_current: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     url: PropTypes.string,
@@ -38,12 +38,14 @@ export default class StepItem extends PureComponent {
     url_passed: PropTypes.string
   }
   static defaultProps = {
+    step_title: '%step',
     on_item_render: null,
     on_render: null,
     on_click: null,
     on_change: null,
     setActimeItem: null,
     hasReached: [],
+    countSteps: null,
     hide_numbers: false,
     use_navigation: false,
     is_active: null,
@@ -60,12 +62,7 @@ export default class StepItem extends PureComponent {
   }
 
   onClickHandler = ({ event, item, currentItem }) => {
-    const {
-      use_navigation,
-      on_click,
-      on_change,
-      setActimeItem
-    } = this.props
+    const { use_navigation, on_click, setActimeItem } = this.props
     const params = {
       event,
       item,
@@ -74,15 +71,13 @@ export default class StepItem extends PureComponent {
     if (isTrue(use_navigation) && typeof setActimeItem === 'function') {
       setActimeItem(currentItem)
     }
-    if (typeof on_click === 'function') {
-      const res = dispatchCustomElementEvent(this, 'on_click', params)
-      if (res === false) {
-        return
-      }
+
+    const res = dispatchCustomElementEvent(this, 'on_click', params)
+    if (typeof on_click === 'function' && res === false) {
+      return
     }
-    if (typeof on_change === 'function') {
-      dispatchCustomElementEvent(this, 'on_change', params)
-    }
+
+    dispatchCustomElementEvent(this, 'on_change', params)
 
     // because we use a button, the button will normally stay in focus after click
     // but we don't want this, so we blur after the click
@@ -92,13 +87,10 @@ export default class StepItem extends PureComponent {
   }
 
   render() {
-    if (isMac === null) {
-      isMac = isMacFunc()
-    }
-
     const {
       activeItem,
       currentItem,
+      countSteps,
       is_active,
       is_current,
       url: _url,
@@ -106,6 +98,7 @@ export default class StepItem extends PureComponent {
       url_passed,
       hide_numbers,
       title,
+      step_title,
       use_navigation,
       on_item_render,
       on_render,
@@ -152,12 +145,16 @@ export default class StepItem extends PureComponent {
       'dnb-step-indicator__item-content',
       'dnb-step-indicator__item-content--link'
     )
+    const aria = step_title
+      .replace('%step', currentItem + 1)
+      .replace('%count', countSteps)
 
-    const StepItemWrapper = props => (
+    const StepItemWrapper = (props) => (
       <>
         {!isTrue(hide_numbers) && (
           <span
             className="dnb-step-indicator__item-content--number"
+            aria-label={aria}
             {...props}
           >
             {`${currentItem + 1}. `}
@@ -192,7 +189,7 @@ export default class StepItem extends PureComponent {
       child = (
         <button
           type="button"
-          onClick={event =>
+          onClick={(event) =>
             this.onClickHandler({ event, item: this.props, currentItem })
           }
           {...interactiveParams}
@@ -205,7 +202,7 @@ export default class StepItem extends PureComponent {
       child = (
         <a
           href={url}
-          onClick={event =>
+          onClick={(event) =>
             this.onClickHandler({ event, item: this.props, currentItem })
           }
           {...interactiveParams}
@@ -217,7 +214,7 @@ export default class StepItem extends PureComponent {
       const contentParams = {}
 
       // To screen readers read both the nr. and the text in one sentence
-      if (isMac) {
+      if (IS_MAC) {
         contentParams.role = 'text'
       }
 

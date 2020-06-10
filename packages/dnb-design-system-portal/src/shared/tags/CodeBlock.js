@@ -3,7 +3,7 @@
  *
  */
 
-import React, { PureComponent } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import styled from '@emotion/styled'
@@ -13,6 +13,7 @@ import Tag from './Tag'
 import renderers from './index'
 import Code from '../parts/uilib/Code'
 import { Button } from 'dnb-ui-lib/src/components'
+import { P } from 'dnb-ui-lib/src/elements'
 import { makeUniqueId } from 'dnb-ui-lib/src/shared/component-helper'
 import AutoLinkHeader from './AutoLinkHeader'
 
@@ -81,11 +82,12 @@ const CodeBlock = ({
 
 export default CodeBlock
 
-class LiveCode extends PureComponent {
+class LiveCode extends React.PureComponent {
   static propTypes = {
     code: PropTypes.string.isRequired,
     scope: PropTypes.object,
     title: PropTypes.string,
+    description: PropTypes.string,
     caption: PropTypes.string,
     useRender: PropTypes.bool,
     noFragments: PropTypes.bool,
@@ -99,6 +101,7 @@ class LiveCode extends PureComponent {
   static defaultProps = {
     scope: {},
     title: null,
+    description: null,
     caption: null,
     useRender: false,
     noFragments: true,
@@ -163,6 +166,7 @@ class LiveCode extends PureComponent {
   render() {
     const {
       title,
+      description,
       caption,
       scope,
       useRender,
@@ -210,7 +214,7 @@ class LiveCode extends PureComponent {
           theme={prismTheme}
           code={codeToUse}
           scope={scope}
-          transformCode={code =>
+          transformCode={(code) =>
             !useRender && noFragments ? `<>${code}</>` : code
           }
           noInline={useRender}
@@ -219,7 +223,11 @@ class LiveCode extends PureComponent {
           {!hidePreview && (
             <>
               {title && (
-                <AutoLinkHeader is="h3" useSlug={dnbTest}>
+                <AutoLinkHeader
+                  level={3}
+                  // is="h3"
+                  useSlug={dnbTest}
+                >
                   <ReactMarkdown
                     source={title}
                     escapeHtml={false}
@@ -229,6 +237,16 @@ class LiveCode extends PureComponent {
                     }}
                   />
                 </AutoLinkHeader>
+              )}
+              {description && (
+                <ReactMarkdown
+                  source={description}
+                  escapeHtml={false}
+                  renderers={{
+                    ...renderers,
+                    paragraph: ({ children }) => <P>{children}</P>
+                  }}
+                />
               )}
               <div className="example-box">
                 <LivePreview
@@ -261,7 +279,7 @@ class LiveCode extends PureComponent {
                 style={{
                   font: 'inherit'
                 }}
-                onChange={code => {
+                onChange={(code) => {
                   this.setState({ code })
                 }}
                 onFocus={() => {
@@ -279,7 +297,7 @@ class LiveCode extends PureComponent {
                 // make this wrap to get in the custom Prism
                 // This way we can reformat jsx css template-string
                 // language={language}
-                highlight={code => (
+                highlight={(code) => (
                   <Highlight
                     Prism={Prism}
                     code={code}
@@ -435,7 +453,7 @@ const Syntax = styled.div`
 `
 
 /** Removes the last token from a code example if it's empty. */
-const cleanTokens = tokens => {
+const cleanTokens = (tokens) => {
   const tokensLength = tokens.length
   if (tokensLength === 0) {
     return tokens

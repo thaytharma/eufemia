@@ -61,7 +61,7 @@
         width: calc(var(--checkbox-width) - 0.5rem);
         height: calc(var(--checkbox-width) - 0.5rem);
         border-width: 0.0625rem; // to get 1.5px we use 1px here, and 0.5px with box-shadow
-        box-shadow: 0 0 0 0.0318rem var(--color-sea-green-alt);
+        box-shadow: 0 0 0 0.0318rem var(--color-sea-green);
       }
 
       &__dot {
@@ -86,7 +86,7 @@
         height: calc(var(--radio-width) - 0.5rem);
         border-width: 0.0625rem; // to get 1.5px we use 1px here, and 0.5px with box-shadow
         // extend the broder to be 1.5px (use .0318rem instead of .03125rem because of Windows)
-        box-shadow: 0 0 0 0.0318rem var(--color-sea-green-alt);
+        box-shadow: 0 0 0 0.0318rem var(--color-sea-green);
       }
       &__dot {
         width: calc(var(--radio-width) - 1rem);
@@ -95,21 +95,24 @@
     }
   }
 
-  &__button.dnb-button--has-icon.dnb-button--icon-position-right {
-    padding-right: 0.5rem;
-  }
-  &__button.dnb-button--has-icon.dnb-button--icon-position-left {
-    padding-left: 0.5rem;
-    .dnb-button__icon {
-      margin-left: 0.25rem;
-      margin-right: 0.25rem;
-    }
-  }
-  &__button.dnb-button--has-icon.dnb-button--icon-position-left
-    > &__component {
-    padding-left: 0.5rem;
-    padding-right: 0;
-  }
+  // NB: Do we have usage for that anymore?
+  // [class*='__variant'] & {
+  // }
+  // &__button.dnb-button--has-icon.dnb-button--icon-position-right {
+  //   padding-right: 0.5rem;
+  // }
+  // &__button.dnb-button--has-icon.dnb-button--icon-position-left {
+  //   padding-left: 0.5rem;
+  //   .dnb-button__icon {
+  //     margin-left: 0.25rem;
+  //     margin-right: 0.25rem;
+  //   }
+  // }
+  // &__button.dnb-button--has-icon.dnb-button--icon-position-left
+  //   > &__component {
+  //   padding-left: 0.5rem;
+  //   padding-right: 0;
+  // }
 
   // default "active" style
   &--checked &__button:not([disabled]):not(:active) {
@@ -125,6 +128,7 @@
 
   &__suffix {
     padding-left: 0.5rem;
+    line-height: var(--line-height-basis);
   }
   &__suffix,
   &-group__suffix {
@@ -177,6 +181,10 @@
       // to make sure we vertical align centered to the text
       align-items: baseline;
 
+      &--vertical-label {
+        align-items: flex-start;
+      }
+
       margin-bottom: calc(1px - 1px - var(--toggle-button-margin-bottom));
 
       &::before {
@@ -192,7 +200,7 @@
   }
 
   // default spacing for a single toggle button
-  @media (min-width: 40em) {
+  @media screen and (min-width: 40em) {
     .dnb-form-label + & {
       transform: translateY(-0.5rem);
     }

@@ -3,11 +3,12 @@
  *
  */
 
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import keycode from 'keycode'
 import {
+  warn,
   isTrue,
   makeUniqueId,
   registerElement,
@@ -68,8 +69,13 @@ const propTypes = {
     PropTypes.object,
     PropTypes.array
   ]),
-  icon: PropTypes.string,
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+    PropTypes.func
+  ]),
   icon_position: PropTypes.string,
+  icon_size: PropTypes.string,
   attributes: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   readOnly: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   class: PropTypes.string,
@@ -91,7 +97,7 @@ const defaultProps = {
   label_direction: null,
   label_sr_only: null,
   title: null,
-  checked: null,
+  checked: undefined,
   variant: null,
   left_component: null,
   disabled: null,
@@ -105,6 +111,7 @@ const defaultProps = {
   value: '',
   icon: null,
   icon_position: 'right',
+  icon_size: null,
   attributes: null,
   readOnly: false,
   class: null,
@@ -122,7 +129,7 @@ const defaultProps = {
 /**
  * The toggle-button component is our enhancement of the classic toggle-button button.
  */
-export default class ToggleButton extends Component {
+export default class ToggleButton extends React.PureComponent {
   static tagName = 'dnb-toggle-button'
   static propTypes = propTypes
   static defaultProps = defaultProps
@@ -134,13 +141,29 @@ export default class ToggleButton extends Component {
     registerElement(ToggleButton.tagName, ToggleButton, defaultProps)
   }
 
-  static parseChecked = state => /true|on/.test(String(state))
+  static parseChecked = (state) => /true|on/.test(String(state))
 
   static getDerivedStateFromProps(props, state) {
     if (state._listenForPropChanges) {
-      state.checked = ToggleButton.parseChecked(props.checked)
+      if (props.checked !== state._checked) {
+        state.checked = ToggleButton.parseChecked(props.checked)
+      }
+      if (typeof props.checked !== 'undefined') {
+        state._checked = props.checked
+      }
     }
     state._listenForPropChanges = true
+
+    if (state.checked !== state.__checked) {
+      dispatchCustomElementEvent({ props }, 'on_state_update', {
+        checked: state.checked
+      })
+    }
+
+    if (typeof state.checked === 'undefined') {
+      state.checked = false
+    }
+    state.__checked = state.checked
 
     return state
   }
@@ -168,7 +191,7 @@ export default class ToggleButton extends Component {
       } else if (ToggleButton.parseChecked(props.checked)) {
         if (context.setContext) {
           if (context.multiselect) {
-            context.setContext(tmp => {
+            context.setContext((tmp) => {
               return {
                 values:
                   // in case we have set before a new context (other component)
@@ -188,18 +211,7 @@ export default class ToggleButton extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (
-      ToggleButton.parseChecked(this.props.checked) !==
-      ToggleButton.parseChecked(nextProps.checked)
-    ) {
-      const { checked } = nextState
-      dispatchCustomElementEvent(this, 'on_state_update', { checked })
-    }
-    return true
-  }
-
-  onKeyDownHandler = event => {
+  onKeyDownHandler = (event) => {
     switch (keycode(event)) {
       case 'enter':
         this.onClickHandler(event)
@@ -207,7 +219,7 @@ export default class ToggleButton extends Component {
     }
   }
 
-  onKeyUpHandler = event => {
+  onKeyUpHandler = (event) => {
     switch (keycode(event)) {
       case 'enter':
         this.onClickHandler(event)
@@ -245,7 +257,7 @@ export default class ToggleButton extends Component {
       try {
         this._refButton.current._ref.current.focus()
       } catch (e) {
-        console.warn(e)
+        warn(e)
       }
     }
   }
@@ -268,7 +280,7 @@ export default class ToggleButton extends Component {
   render() {
     return (
       <Context.Consumer>
-        {context => {
+        {(context) => {
           // use only the props from context, who are available here anyway
           const props = extendPropsWithContext(
             this.props,
@@ -295,6 +307,9 @@ export default class ToggleButton extends Component {
             disabled,
             variant,
             left_component,
+            icon,
+            icon_size,
+            icon_position,
             value: propValue,
 
             id: _id, // eslint-disable-line
@@ -335,6 +350,7 @@ export default class ToggleButton extends Component {
             className: classnames(
               'dnb-toggle-button',
               status && `dnb-toggle-button__status--${status_state}`,
+              // variant && `dnb-toggle-button__variant--${variant}`,
               checked && `dnb-toggle-button--checked`,
               label_direction && `dnb-toggle-button--${label_direction}`,
               createSpacingClasses(props),
@@ -343,17 +359,20 @@ export default class ToggleButton extends Component {
             )
           }
 
+          // to remove spacing props
+          validateDOMAttributes(this.props, rest)
+
           const buttonParams = {
             id,
             disabled,
             text: text || children,
             title,
+            icon,
+            icon_size,
+            icon_position,
             ['aria-pressed']: String(checked),
             ...rest
           }
-
-          // to remove spacing props
-          validateDOMAttributes(this.props, buttonParams)
 
           const componentParams = {
             checked,

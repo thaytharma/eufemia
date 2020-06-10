@@ -9,7 +9,7 @@ const path = require('path')
 const { create } = require('tar')
 const chalk = require('chalk')
 const rimraf = require('rimraf')
-const isCi = require('is-ci')
+const isCI = require('is-ci')
 const liveServer = require('live-server')
 import {
   commitToBranch,
@@ -17,8 +17,8 @@ import {
 } from '../../../scripts/prepub/commitToBranch'
 const { DIR } = require('./jestSetupScreenshots').config
 
-module.exports = async function() {
-  if (isCi) {
+module.exports = async function () {
+  if (isCI) {
     console.log(chalk.yellow('Teardown Puppeteer.'))
   }
 
@@ -29,7 +29,7 @@ module.exports = async function() {
   await global.__BROWSER_GLOBAL__.close()
 
   // commit a tar of the reports if we are on a CI
-  if (isCi) {
+  if (isCI) {
     console.log(
       chalk.yellow('Will commit "jest-screenshot-report" to git.')
     )

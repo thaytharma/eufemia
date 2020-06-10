@@ -3,7 +3,7 @@
  *
  */
 
-import React, { useState, useEffect, Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Wrapper, Box } from '../helpers'
 import styled from '@emotion/styled'
@@ -14,28 +14,200 @@ import {
   FormLabel,
   FormSet,
   FormRow,
-  Number
+  Number,
+  Modal
   // Checkbox
 } from '../../src/components'
 
 const CustomStyle = styled.div`
-  [data-dnb-test='dropdown-list'] .dnb-dropdown__options {
+  [data-dnb-test='dropdown-list'].dnb-drawer-list__list {
+    display: block;
+    visibility: visible;
     position: relative;
-    max-width: var(--dropdown-width);
+    top: 0;
+    width: var(--dropdown-width);
   }
-  .dnb-dropdown:not(.dnb-dropdown--is-popup) .dnb-dropdown__shell {
+`
+const CustomWidth = styled.div`
+  /** Because regarding the included label/status etc. we target the "__shell" */
+  .dnb-dropdown__shell {
     width: 10rem;
   }
-  .dnb-dropdown:not(.dnb-dropdown--is-popup) .dnb-dropdown__list {
-    min-width: 20rem;
+
+  /** In order to change only the "__list" width */
+  .dnb-drawer-list__root {
+    width: 8rem;
+  }
+
+  /** In Portal mode */
+  .dnb-dropdown--is-popup .dnb-drawer-list__root {
+    width: 8rem;
   }
 `
 
+const direction = 'auto'
+const label = 'Label'
+const align_dropdown = 'right'
+const opened = false
+
 const DropdownStory = () => {
-  const [data, setData] = useState(dropdownData)
-  const [value, setSelectedItem] = useState(0)
+  const [data, setData] = React.useState(dropdownData)
+  const [value, setSelectedItem] = React.useState(0)
   return (
     <Wrapper>
+      <CustomWidth>
+        <Box>
+          <Modal mode="drawer">
+            <Dropdown
+              use_mobile_view
+              label={label}
+              data={dropdownDataScrollable}
+            />
+          </Modal>
+        </Box>
+        <Box>
+          <Dropdown
+            size="small"
+            skip_portal
+            opened={opened}
+            no_animation
+            direction={direction}
+            align_dropdown={align_dropdown}
+            // icon_position="left"
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+          <Dropdown
+            size="small"
+            opened={opened}
+            use_mobile_view
+            no_animation
+            direction={direction}
+            align_dropdown={align_dropdown}
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+        </Box>
+        <Box top={opened ? 'x-large x-large' : 0}>
+          <Dropdown
+            skip_portal
+            opened={opened}
+            no_animation
+            direction={direction}
+            align_dropdown={align_dropdown}
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+          <Dropdown
+            opened={opened}
+            no_animation
+            direction={direction}
+            align_dropdown={align_dropdown}
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+        </Box>
+        <Box top={opened ? 'x-large x-large' : 0}>
+          <Dropdown
+            size="medium"
+            skip_portal
+            opened={opened}
+            no_animation
+            direction={direction}
+            align_dropdown={align_dropdown}
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+          <Dropdown
+            size="medium"
+            opened={opened}
+            no_animation
+            direction={direction}
+            align_dropdown={align_dropdown}
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+        </Box>
+        <Box top={opened ? 'x-large x-large' : 0}>
+          <Dropdown
+            size="large"
+            skip_portal
+            opened={opened}
+            no_animation
+            direction={direction}
+            align_dropdown={align_dropdown}
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+          <Dropdown
+            size="large"
+            opened={opened}
+            // opened
+            no_animation
+            align_dropdown={align_dropdown}
+            direction={direction}
+            label={label}
+            data={['A', 'B']}
+            right
+          />
+        </Box>
+        <Box top={opened ? 'x-large x-large' : 0}>
+          <Box>
+            <Dropdown
+              size="small"
+              opened={opened}
+              // opened
+              label={label}
+              no_animation
+              direction={direction}
+              align_dropdown={align_dropdown}
+              more_menu={true}
+              data={['Go this this Link', 'Or to this one']}
+              right="x-large x-large"
+              skip_portal
+            />
+            <Dropdown
+              more_menu="true"
+              opened={opened}
+              label={label}
+              no_animation
+              direction={direction}
+              align_dropdown={align_dropdown}
+              data={['Go this this Link', 'Or to this one']}
+              right="x-large x-large"
+            />
+            <Dropdown
+              size="medium"
+              prevent_selection="true"
+              opened={opened}
+              label={label}
+              no_animation
+              direction={direction}
+              align_dropdown={align_dropdown}
+              data={['Go this this Link', 'Or to this one']}
+              right="x-large x-large"
+            />
+            <Dropdown
+              size="large"
+              prevent_selection
+              opened={opened}
+              label={label}
+              no_animation
+              direction={direction}
+              align_dropdown={align_dropdown}
+              data={['Go this this Link', 'Or to this one']}
+              right="x-large x-large"
+            />
+          </Box>
+        </Box>
+      </CustomWidth>
       <Box>
         <CurrencyDropdown />
       </Box>
@@ -51,13 +223,12 @@ const DropdownStory = () => {
           label_direction="vertical"
         >
           <Dropdown
-            label="Vertical A:"
+            label="Vertical A (function):"
             title="Default option"
             data={() => {
-              console.log('dropdownData', dropdownData)
               return dropdownData
             }}
-            right="small"
+            right
             status="Status message"
             on_change={({ attributes }) => {
               console.log(
@@ -72,7 +243,7 @@ const DropdownStory = () => {
           <Dropdown
             title="Default option"
             label="Vertical B:"
-            align_dropdown="right"
+            // align_dropdown="right"
             icon_position="left"
             data={dropdownData}
           />
@@ -86,10 +257,10 @@ const DropdownStory = () => {
       </Box>
       <Box>
         <FormSet
-          onSubmit={event => {
+          onSubmit={(event) => {
             console.log('onSubmit', event)
           }}
-          on_submit={event => {
+          on_submit={(event) => {
             console.log('on_submit', event)
           }}
           prevent_submit
@@ -102,7 +273,7 @@ const DropdownStory = () => {
             label="Label:"
             data={data}
             value={value}
-            on_state_update={event => {
+            on_state_update={(event) => {
               console.log('on_state_update', event)
             }}
             on_change={({ data }) => {
@@ -129,7 +300,6 @@ const DropdownStory = () => {
             variant="secondary"
             onClick={() => {
               dropdownData = dropdownData.slice(1)
-              console.log('dropdownData', dropdownData)
               setData(dropdownData)
               // setData([...dropdownData])
             }}
@@ -172,47 +342,7 @@ const DropdownStory = () => {
         </FormRow>
       </Box>
       <Box>
-        Popup Menu
-        <Dropdown
-          left="small"
-          right="small"
-          size="small"
-          more_menu={true}
-          title="Choose an item"
-          data={['Go this this Link', 'Or to this one']}
-          on_change={({ value }) => {
-            console.log('on_change', value)
-          }}
-          on_select={({ active_item }) => {
-            console.log('on_select', active_item)
-          }}
-        />
-        <Dropdown
-          right="small"
-          more_menu="true"
-          title="Choose an item"
-          data={['Go this this Link', 'Or to this one']}
-          on_change={({ value }) => {
-            console.log('on_change', value)
-          }}
-          on_select={({ active_item }) => {
-            console.log('on_select', active_item)
-          }}
-        />
-        <Dropdown
-          prevent_selection="true"
-          align_dropdown="right"
-          title="Choose an item"
-          data={['Go this this Link', 'Or to this one']}
-          on_change={({ value }) => {
-            console.log('on_change', value)
-          }}
-          on_select={({ active_item }) => {
-            console.log('on_select', active_item)
-          }}
-        />
-      </Box>
-      <Box>
+        <span className="dnb-p">Eros semper</span>
         <Dropdown
           label="Label:"
           // direction="top"
@@ -220,79 +350,105 @@ const DropdownStory = () => {
           value={4}
           no_scroll_animation="true"
           status="Message to the user"
+          right
         />
+        <span className="dnb-p">Eros semper</span>
+      </Box>
+      <Box>
+        <FormLabel for_id="text-dropdown-1" text="FormLabel Label:" />
+        <Dropdown
+          data={dropdownData}
+          id="text-dropdown-1"
+          size="small"
+          icon_position="left"
+          bottom
+          value={2}
+        />
+        <Dropdown
+          data={dropdownData}
+          size="medium"
+          icon_position="left"
+          bottom
+          value={2}
+        />
+        <Dropdown
+          data={dropdownData}
+          size="large"
+          icon_position="left"
+          bottom
+          value={2}
+        />
+        <Dropdown data={dropdownData} size="small" bottom value={2} />
+        <Dropdown data={dropdownData} size="medium" bottom value={2} />
+        <Dropdown data={dropdownData} size="large" bottom value={2} />
         <p className="dnb-p">
           Eros semper blandit tellus mollis primis quisque platea
           sollicitudin ipsum
         </p>
       </Box>
       <Box>
-        <FormLabel for_id="text-dropdown-1" text="Label:" />
-        <Dropdown
-          data={dropdownData}
-          id="text-dropdown-1"
-          size="small"
-          icon_position="left"
-          value={2}
-        />
-        <Dropdown
-          data={dropdownData}
-          id="text-dropdown-1"
-          size="medium"
-          icon_position="left"
-          value={2}
-        />
-        <Dropdown
-          data={dropdownData}
-          id="text-dropdown-1"
-          size="large"
-          icon_position="left"
-          value={2}
-        />
-        <p className="dnb-p">
-          Eros semper blandit tellus mollis primis quisque platea
-          sollicitudin ipsum
-        </p>
+        <FormRow direction="vertical">
+          <Dropdown
+            label="Label:"
+            size="default"
+            bottom
+            data={() => data}
+          />
+          <Dropdown
+            label="Label:"
+            size="medium"
+            bottom
+            data={() => data}
+          />
+        </FormRow>
+        <Dropdown size="large" bottom data={() => data} />
+        <Dropdown data={dropdownData} size="large" bottom value={2} />
       </Box>
-      <Box data-dnb-test="dropdown-list">
-        <ul className="dnb-dropdown__options">
-          <li className="dnb-dropdown__option">
-            <span className="dnb-dropdown__option__inner">
-              Brukskonto - Kari Nordmann
-            </span>
-          </li>
-          <li className="dnb-dropdown__option dnb-dropdown__option--selected">
-            <span className="dnb-dropdown__option__inner">
-              <span className="dnb-dropdown__option__item">
-                <Number ban>12345678902</Number>
+      <Box>
+        <span
+          data-dnb-test="dropdown-list"
+          className="dnb-drawer-list__list"
+        >
+          <ul className="dnb-drawer-list__options">
+            <li className="dnb-drawer-list__option">
+              <span className="dnb-drawer-list__option__inner">
+                Brukskonto - Kari Nordmann
               </span>
-              <span className="dnb-dropdown__option__item">
-                Sparekonto - Ole Nordmann
+            </li>
+            <li className="dnb-drawer-list__option dnb-drawer-list__option--selected">
+              <span className="dnb-drawer-list__option__inner">
+                <span className="dnb-drawer-list__option__item">
+                  <Number ban>12345678902</Number>
+                </span>
+                <span className="dnb-drawer-list__option__item">
+                  Sparekonto - Ole Nordmann
+                </span>
               </span>
-            </span>
-          </li>
-          <li className="dnb-dropdown__option">
-            <span className="dnb-dropdown__option__inner">
-              <span className="dnb-dropdown__option__item">
-                <Number ban>11345678962</Number>
+            </li>
+            <li className="dnb-drawer-list__option">
+              <span className="dnb-drawer-list__option__inner">
+                <span className="dnb-drawer-list__option__item">
+                  <Number ban>11345678962</Number>
+                </span>
+                <span className="dnb-drawer-list__option__item">
+                  Feriekonto - Kari Nordmann med et kjempelangt
+                  etternavnsen
+                </span>
               </span>
-              <span className="dnb-dropdown__option__item">
-                Feriekonto - Kari Nordmann med et kjempelangt etternavnsen
+            </li>
+            <li className="dnb-drawer-list__option last-of-type">
+              <span className="dnb-drawer-list__option__inner">
+                <span className="dnb-drawer-list__option__item">
+                  <Number ban>15349648901</Number>
+                </span>
+                <span className="dnb-drawer-list__option__item">
+                  Oppussing - Ole Nordmann
+                </span>
               </span>
-            </span>
-          </li>
-          <li className="dnb-dropdown__option last-of-type">
-            <span className="dnb-dropdown__option__inner">
-              <span className="dnb-dropdown__option__item">
-                <Number ban>15349648901</Number>
-              </span>
-              <span className="dnb-dropdown__option__item">
-                Oppussing - Ole Nordmann
-              </span>
-            </span>
-          </li>
-          <li className="dnb-dropdown__triangle" />
-        </ul>
+            </li>
+            <li className="dnb-drawer-list__triangle" />
+          </ul>
+        </span>
       </Box>
     </Wrapper>
   )
@@ -336,12 +492,14 @@ let dropdownData = [
     ]
   },
   {
-    selected_value: <>Custom selected {'🔥'}</>,
+    selected_value: (
+      <React.Fragment key="cs-1">Custom selected {'🔥'}</React.Fragment>
+    ),
     content: [
       <Number key={15349648901} ban>
         15349648901
       </Number>,
-      <>Custom content {'🔥'}</>
+      <React.Fragment key="cs-2">Custom content {'🔥'}</React.Fragment>
     ]
   }
 ]
@@ -377,10 +535,10 @@ const dropdownDataScrollable = [
     ]
   },
   {
-    content: <Fragment>E</Fragment>
+    content: <>E</>
   },
-  <Fragment key="key1">Custom content {'🔥'}</Fragment>,
-  [<Fragment key="key2">Custom content X {'🔥'}</Fragment>],
+  <>Custom content {'🔥'}</>,
+  [<React.Fragment key="key2">Custom content X {'🔥'}</React.Fragment>],
   {
     content: 'EE'
   },
@@ -417,7 +575,7 @@ function CurrencySelector({ currencies, onChange, value, ...props }) {
         }
         onChange(selected_value)
       }}
-      data={currencies.map(currency => ({
+      data={currencies.map((currency) => ({
         selected_value: currency,
         content: (
           <>
@@ -438,9 +596,9 @@ CurrencySelector.defaultProps = {
 }
 
 function DropdownStates() {
-  const [state, setState] = useState({})
+  const [state, setState] = React.useState({})
 
-  const handleOnChange = props => {
+  const handleOnChange = (props) => {
     console.log('DropdownStates', props)
     setState({ state: Math.random() })
   }
@@ -451,6 +609,7 @@ function DropdownStates() {
       <Dropdown
         data={dropdownDataScrollable}
         title="Dropdown 1"
+        use_mobile_view
         on_change={handleOnChange}
       />
       <Dropdown
@@ -464,9 +623,9 @@ function DropdownStates() {
 }
 
 function DropdownStatesSync() {
-  const [state, setState] = useState({})
+  const [state, setState] = React.useState({})
 
-  const handleOnChange = props => {
+  const handleOnChange = (props) => {
     console.log('DropdownStates', props)
     setState({ state: Math.random() })
   }
@@ -481,14 +640,14 @@ function DropdownStatesSync() {
         title="Dropdown 1"
         on_change={handleOnChange}
       />
-      <Dropdown
+      {/* <Dropdown
         top
         data={dropdownDataScrollable}
         // value={1}
         default_value={1}
         title="Dropdown 2"
         on_change={handleOnChange}
-      />
+      /> */}
     </FormRow>
   )
 }
@@ -496,17 +655,20 @@ function DropdownStatesSync() {
 function CurrencyDropdown() {
   // You can regard this as part of a state object that we eventually push to the backend iot conduct a Request for Quote in a Foreign Exchange (FX) transaction
   // The string reps of the currencies are pulled from an API that provides valid currency pairs for specific FX instruments
-  const [ccyPair, setCcyPair] = useState({ base: 'EUR', terms: 'SEK' })
+  const [ccyPair, setCcyPair] = React.useState({
+    base: 'EUR',
+    terms: 'SEK'
+  })
 
-  useEffect(() => {
+  React.useEffect(() => {
     console.log('ccyPair:', ccyPair)
   }, [ccyPair])
 
   // Whenever a user selects a new base currency, the termscurrency select should be forced to reset.
-  const handleBaseCurrencyChange = base =>
-    setCcyPair(prev => ({ ...prev, base, terms: undefined }))
-  const handleTermsCurrencyChange = terms =>
-    setCcyPair(prev => ({ ...prev, terms }))
+  const handleBaseCurrencyChange = (base) =>
+    setCcyPair((prev) => ({ ...prev, base, terms: undefined }))
+  const handleTermsCurrencyChange = (terms) =>
+    setCcyPair((prev) => ({ ...prev, terms }))
 
   return (
     <>
@@ -525,7 +687,7 @@ function CurrencyDropdown() {
         text="New base"
         onClick={() => {
           const base = 'USD'
-          setCcyPair(prev => ({ ...prev, base, terms: undefined }))
+          setCcyPair((prev) => ({ ...prev, base, terms: undefined }))
         }}
       />
     </>

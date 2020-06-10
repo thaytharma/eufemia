@@ -32,11 +32,11 @@ const prepareTemplates = async () => {
       __dirname,
       '../../../src/components/'
     ),
-    processToNamesIgnoreList: ['web-components', 'style'],
+    processToNamesIgnoreList: ['web-components', 'fragments', 'style'],
     processToNamesListByUsingFolders: true
   }
   const components = await runFactory(componentsTemplateConfig).then(
-    res => {
+    (res) => {
       if (require.main === module) {
         log.succeed(
           '> PrePublish: Created the index template with all the components'
@@ -54,7 +54,7 @@ const prepareTemplates = async () => {
       ),
       destFile: path.resolve(__dirname, '../../../src/components/lib.js')
     }
-  }).then(res => {
+  }).then((res) => {
     if (require.main === module) {
       log.succeed(
         '> PrePublish: Created the index template with all the components'
@@ -72,10 +72,68 @@ const prepareTemplates = async () => {
       destFile: false,
       destPath: path.resolve(__dirname, '../../../src/components')
     }
-  }).then(res => {
+  }).then((res) => {
     if (require.main === module) {
       log.succeed(
         '> PrePublish: Created the index template with all the components'
+      )
+    }
+    return res
+  })
+
+  // process fragments
+  const fragmentsTemplateConfig = {
+    templateObjectToFill: '{ Template }',
+    templateListToExtend: `import Template from './template/Template'`,
+    templateListToExtendBy: 'Template',
+    srcFile: path.resolve(
+      __dirname,
+      '../../../src/core/templates/components-index-template.js'
+    ),
+    destFile: path.resolve(__dirname, '../../../src/fragments/index.js'),
+    processToNamesList: path.resolve(__dirname, '../../../src/fragments/'),
+    processToNamesIgnoreList: ['web-components', 'style'],
+    processToNamesListByUsingFolders: true
+  }
+  await runFactory(fragmentsTemplateConfig).then((res) => {
+    if (require.main === module) {
+      log.succeed(
+        '> PrePublish: Created the index template with all the fragments'
+      )
+    }
+    return res
+  })
+  await runFactory({
+    ...fragmentsTemplateConfig,
+    ...{
+      srcFile: path.resolve(
+        __dirname,
+        '../../../src/core/templates/fragments-lib-template.js'
+      ),
+      destFile: path.resolve(__dirname, '../../../src/fragments/lib.js')
+    }
+  }).then((res) => {
+    if (require.main === module) {
+      log.succeed(
+        '> PrePublish: Created the index template with all the fragments'
+      )
+    }
+    return res
+  })
+  await runFactory({
+    ...fragmentsTemplateConfig,
+    ...{
+      srcFile: path.resolve(
+        __dirname,
+        '../../../src/core/templates/component-export-template.js'
+      ),
+      destFile: false,
+      destPath: path.resolve(__dirname, '../../../src/fragments')
+    }
+  }).then((res) => {
+    if (require.main === module) {
+      log.succeed(
+        '> PrePublish: Created the index template with all the fragments'
       )
     }
     return res
@@ -95,7 +153,7 @@ const prepareTemplates = async () => {
     processToNamesIgnoreList: ['index', 'lib', 'Element'],
     processToNamesListByUsingFolders: false
   }
-  const elements = await runFactory(elementsTemplateConfig).then(res => {
+  const elements = await runFactory(elementsTemplateConfig).then((res) => {
     if (require.main === module) {
       log.info('> Created the index template with all the elements')
     }
@@ -110,7 +168,7 @@ const prepareTemplates = async () => {
       ),
       destFile: path.resolve(__dirname, '../../../src/elements/lib.js')
     }
-  }).then(res => {
+  }).then((res) => {
     if (require.main === module) {
       log.info('> Created the index template with all the elements')
     }
@@ -131,9 +189,8 @@ const prepareTemplates = async () => {
     processToNamesIgnoreList: ['web-components', 'style'],
     processToNamesListByUsingFolders: true
   }
-  // we dont ezport patterns anymore!
-  // const patterns =
-  await runFactory(patternsTemplateConfig).then(res => {
+  // we dont export patterns anymore!
+  await runFactory(patternsTemplateConfig).then((res) => {
     if (require.main === module) {
       log.info('> Created the index template with all the patterns')
     }
@@ -144,11 +201,11 @@ const prepareTemplates = async () => {
     ...{
       srcFile: path.resolve(
         __dirname,
-        '../../../src/core/templates/components-lib-template.js'
+        '../../../src/core/templates/patterns-lib-template.js'
       ),
       destFile: path.resolve(__dirname, '../../../src/patterns/lib.js')
     }
-  }).then(res => {
+  }).then((res) => {
     if (require.main === module) {
       log.info('> Created the lib template with all the patterns')
     }
@@ -165,14 +222,18 @@ const prepareTemplates = async () => {
       '../../../src/core/templates/main-index-template.js'
     ),
     destFile: path.resolve(__dirname, '../../../src/index.js'),
-    processToNamesList: [...components, ...elements],
+    processToNamesList: [
+      ...components,
+      // ...fragments,
+      ...elements
+    ],
     transformNamesList: ({ result }) => {
       // because elements don't have a folder, we remove the last part of the path
       if (/\/elements\//.test(result)) {
         return result.replace(/\/[^/]+\/?$/g, "'")
       }
     }
-  }).then(res => {
+  }).then((res) => {
     if (require.main === module) {
       log.info('> Created the main index with all the libs')
     }
@@ -198,7 +259,7 @@ const runFactory = async ({
   if (typeof processToNamesList === 'string') {
     const __orig__processToNamesList = processToNamesList
     processToNamesList = (await fs.readdir(processToNamesList)).map(
-      file => ({
+      (file) => ({
         source: joinPath(__orig__processToNamesList, file),
         file
       })
@@ -291,10 +352,7 @@ const runFactory = async ({
 
             // in case we have a type to replace
             if (/\{type\}/.test(res)) {
-              const type = source
-                .trim('/')
-                .split(/\//g)
-                .slice(-2, -1)[0]
+              const type = source.trim('/').split(/\//g).slice(-2, -1)[0]
               res = res.replace(new RegExp('{type}', 'g'), type)
             }
 

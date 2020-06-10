@@ -12,6 +12,7 @@
 import { registerElement } from '../shared/component-helper'
 
 // import all the aviable components
+import Autocomplete from './autocomplete/Autocomplete'
 import Button from './button/Button'
 import Checkbox from './checkbox/Checkbox'
 import DatePicker from './date-picker/DatePicker'
@@ -22,6 +23,7 @@ import FormSet from './form-set/FormSet'
 import FormStatus from './form-status/FormStatus'
 import GlobalError from './global-error/GlobalError'
 import GlobalStatus from './global-status/GlobalStatus'
+import Heading from './heading/Heading'
 import Icon from './icon/Icon'
 import IconPrimary from './icon-primary/IconPrimary'
 import Input from './input/Input'
@@ -31,6 +33,7 @@ import Logo from './logo/Logo'
 import Modal from './modal/Modal'
 import Notification from './notification/Notification'
 import Number from './number/Number'
+import Pagination from './pagination/Pagination'
 import ProgressIndicator from './progress-indicator/ProgressIndicator'
 import Radio from './radio/Radio'
 import Section from './section/Section'
@@ -41,9 +44,11 @@ import Switch from './switch/Switch'
 import Tabs from './tabs/Tabs'
 import Textarea from './textarea/Textarea'
 import ToggleButton from './toggle-button/ToggleButton'
+import Tooltip from './tooltip/Tooltip'
 
 // define / export all the aviable components
 export {
+  Autocomplete,
   Button,
   Checkbox,
   DatePicker,
@@ -54,6 +59,7 @@ export {
   FormStatus,
   GlobalError,
   GlobalStatus,
+  Heading,
   Icon,
   IconPrimary,
   Input,
@@ -63,6 +69,7 @@ export {
   Modal,
   Notification,
   Number,
+  Pagination,
   ProgressIndicator,
   Radio,
   Section,
@@ -72,11 +79,13 @@ export {
   Switch,
   Tabs,
   Textarea,
-  ToggleButton
+  ToggleButton,
+  Tooltip
 }
 
 export const getComponents = () => {
   return {
+    Autocomplete,
     Button,
     Checkbox,
     DatePicker,
@@ -87,6 +96,7 @@ export const getComponents = () => {
     FormStatus,
     GlobalError,
     GlobalStatus,
+    Heading,
     Icon,
     IconPrimary,
     Input,
@@ -96,6 +106,7 @@ export const getComponents = () => {
     Modal,
     Notification,
     Number,
+    Pagination,
     ProgressIndicator,
     Radio,
     Section,
@@ -105,7 +116,8 @@ export const getComponents = () => {
     Switch,
     Tabs,
     Textarea,
-    ToggleButton
+    ToggleButton,
+    Tooltip
   }
 }
 
@@ -124,8 +136,4 @@ export const enableWebComponents = () => {
       )
     }
   }
-}
-
-export default {
-  enableWebComponents
 }

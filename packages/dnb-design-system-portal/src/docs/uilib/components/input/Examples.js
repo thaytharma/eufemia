@@ -3,30 +3,34 @@
  *
  */
 
-import React, { PureComponent, Fragment } from 'react'
+import React from 'react'
 import ComponentBox from 'Src/shared/tags/ComponentBox'
 import styled from '@emotion/styled'
 
-class Example extends PureComponent {
+class Example extends React.PureComponent {
   render() {
     return (
-      <Fragment>
+      <React.Fragment>
+        <ScreenshotTests />
         <ComponentBox
           title="Placeholder text"
           data-dnb-test="input-placeholder"
         >
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <Input
   label="Label:"
   placeholder="Placeholder text"
 />
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox
           title="Search text placeholder"
           data-dnb-test="input-search"
         >
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <Input
   label="Search:"
   type="search"
@@ -39,13 +43,15 @@ class Example extends PureComponent {
     console.log('Submit:', value)
   }}
 />
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox
           title="Medium and stretched search input"
           data-dnb-test="input-medium"
         >
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <Input
   size="medium"
   type="search"
@@ -55,44 +61,73 @@ class Example extends PureComponent {
     console.log('on_change', value)
   }}
 />
-          `}
+          `
+          }
+        </ComponentBox>
+        <ComponentBox
+          title="Input with icon"
+          description="With left / right aligned text"
+          data-dnb-test="input-icon"
+        >
+          {
+            /* @jsx */ `
+<Input
+  label="Input with icon:"
+  placeholder="Input"
+  label_direction="vertical"
+  icon="check"
+  bottom
+/>
+<Input
+  label="Input with icon:"
+  label_sr_only
+  placeholder="Input with a placeholder asd dsd  asd asd"
+  icon_position="right"
+  icon="check"
+  align="right"
+/>
+          `
+          }
         </ComponentBox>
         <ComponentBox
           title="Disabled input"
           data-dnb-test="input-disabled"
         >
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <Input
   disabled
   label="Disabled input:"
-  id="text-input-disabled"
   placeholder="Disabled Input with a placeholder"
 />
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox title="Show failure status">
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <Input
   label="Show status:"
   status="error"
   value="Shows status with border only"
 />
-          `}
+          `
+          }
         </ComponentBox>
-        <ComponentBox
-          title="With FormStatus"
-          data-dnb-test="input-error"
-        >
-          {/* @jsx */ `
+        <ComponentBox title="With FormStatus" data-dnb-test="input-error">
+          {
+            /* @jsx */ `
 <Input
   label="With FormStatus:"
   status="You have to fill in this field"
   value="Input value with error"
 />
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox title="Input with suffix (additional description)">
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <Input
   label="Short Label:"
   autocomplete="on"
@@ -102,10 +137,12 @@ class Example extends PureComponent {
     console.log('on_change', value)
   }}
 />
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox title="Stretched `Input` in horizontal wrapping `FormRow` and a long label">
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <FormRow
   label="Long label labwl Adipiscing mauris dis proin nec:"
   indent="true"
@@ -114,10 +151,12 @@ class Example extends PureComponent {
 >
   <Input value="I stretch ..." stretch />
 </FormRow>
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox title="Numbers are ligned by using Proportional Lining">
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <Input
   label="My Status:"
   autocomplete="on"
@@ -130,10 +169,12 @@ class Example extends PureComponent {
     console.log('on_change', value)
   }}
 />
-          `}
+          `
+          }
         </ComponentBox>
         <ComponentBox title="Submit Form with Input. Pressing the enter key will trigger a submit.">
-          {/* @jsx */ `
+          {
+            /* @jsx */ `
 <FormSet
   prevent_submit={true}
   on_submit={(event) => {
@@ -161,11 +202,106 @@ class Example extends PureComponent {
     <Button text="Submit" type="submit" />
   </FormRow>
 </FormSet>
-          `}
+          `
+          }
         </ComponentBox>
-      </Fragment>
+      </React.Fragment>
     )
   }
+}
+
+const ScreenshotTests = () => {
+  if (!(typeof window !== 'undefined' && window.IS_TEST)) {
+    return <></>
+  }
+  return (
+    <ComponentBox data-dnb-test="input-align">
+      {
+        /* @jsx */ `
+<FormRow label="Left aligned" vertical>
+  <Input value="Plain" />
+  <Input value="Search" type="search" />
+  <Input value="Search" size="medium" type="search" />
+  <Input value="Search" size="large" type="search" />
+  <Input
+    value="Value Eu pretium sit magnis suscipit cursus dis proin rutrum elementum"
+    icon="calendar"
+  />
+  <Input
+    placeholder="Placeholder Eu pretium sit magnis suscipit cursus dis proin rutrum elementum"
+    icon_position="right"
+    icon="calendar"
+  />
+  <Input
+    size="medium"
+    value="Value"
+    icon="calendar"
+  />
+  <Input
+    size="medium"
+    placeholder="Placeholder"
+    icon_position="right"
+    icon="calendar"
+  />
+  <Input
+    size="large"
+    value="Value"
+    icon="calendar"
+  />
+  <Input
+    size="large"
+    placeholder="Placeholder"
+    icon_position="right"
+    icon="calendar"
+  />
+</FormRow>
+<FormRow label="Right aligned" vertical top>
+  <Input value="Plain" align="right" />
+  <Input value="Search" type="search" align="right" />
+  <Input value="Search" size="medium" type="search" align="right" />
+  <Input value="Search" size="large" type="search" align="right" />
+  <Input
+    value="Value Eu pretium sit magnis suscipit cursus dis proin rutrum elementum"
+    icon="calendar"
+    align="right"
+  />
+  <Input
+    placeholder="Placeholder Eu pretium sit magnis suscipit cursus dis proin rutrum elementum"
+    icon_position="right"
+    icon="calendar"
+    align="right"
+  />
+  <Input
+    size="medium"
+    value="Value"
+    icon="calendar"
+    align="right"
+  />
+  <Input
+    size="medium"
+    placeholder="Placeholder"
+    icon_position="right"
+    icon="calendar"
+    align="right"
+  />
+  <Input
+    size="large"
+    value="Value"
+    icon="calendar"
+    align="right"
+  />
+  <Input
+    size="large"
+    placeholder="Placeholder"
+    icon_position="right"
+    icon="calendar"
+    align="right"
+  />
+</FormRow>
+            `
+      }
+    </ComponentBox>
+  )
 }
 
 const Wrapper = styled.div`
@@ -181,8 +317,10 @@ const Wrapper = styled.div`
 `
 
 export { Example }
-export default () => (
-  <Wrapper>
-    <Example />
-  </Wrapper>
-)
+export default function StyledExample() {
+  return (
+    <Wrapper>
+      <Example />
+    </Wrapper>
+  )
+}

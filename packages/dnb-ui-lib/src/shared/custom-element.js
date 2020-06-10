@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
+import ReactDOM from 'react-dom'
 import { ErrorHandler } from './error-helper'
 
 // import "custom-element-polyfill" - insted of import 'document-register-element' // https://github.com/WebReflection/document-register-element
@@ -51,6 +51,7 @@ export const registerElement = (
       this._customMethodes = {}
       this._customEvents = []
       this._isConnected = false
+      this._props = {}
     }
     connectedCallback() {
       this.updateChildren()
@@ -66,12 +67,15 @@ export const registerElement = (
     }
     // adoptedCallback: Invoked when the custom element is moved to a new document.
     detachedCallback() {
-      unmountComponentAtNode(this)
+      ReactDOM.unmountComponentAtNode(this)
       if (this._children) delete this._children
       if (this._isConnected) delete this._isConnected
       if (this._elementRef) delete this._elementRef
       if (this._customMethodes) delete this._customMethodes
       if (this._customEvents) delete this._customEvents
+
+      this._props = null
+      this._ref = null
     }
     updateChildren() {
       this._children = []
@@ -108,7 +112,7 @@ export const registerElement = (
       }
 
       if (events.length > 0) {
-        events.forEach(eventDef => {
+        events.forEach((eventDef) => {
           // extract the prop name and callback function
           let [type, func] = eventDef.split('=')
           type = EVENT_TRANSLATIONS[type] || type
@@ -122,10 +126,10 @@ export const registerElement = (
                 if (Array.isArray(args[0])) {
                   const elems = []
                   // we have to overwrite the first arg like this - and cant use map/reduce here
-                  args[0].forEach(elem => {
+                  args[0].forEach((elem) => {
                     if (React.isValidElement(elem)) {
                       const rootEl = document.createElement('div') // createDocumentFragment
-                      render(elem, rootEl)
+                      ReactDOM.render(elem, rootEl)
                       elems.push(rootEl)
                     }
                   })
@@ -135,7 +139,7 @@ export const registerElement = (
 
               // call the function, either it in a class or not
               let [scope, fn] = func.split('.')
-              fn = fn ? window[scope][fn] : window[scope] // TODO: remove this because of security notation
+              fn = fn ? window[scope][fn] : window[scope]
               const ret = fn.apply(scope, [...args])
 
               // convert to react if we get an HTMLElement
@@ -147,14 +151,14 @@ export const registerElement = (
                   props = {}
 
                 for (let i = cn.length; i--; ) {
-                  children.push(toVdom(cn[i])) // TODO: remove this because of security notation
+                  children.push(toVdom(cn[i]))
                   // TODO: we may remove this child - need more testing
                   // cn[i].remove()
                 }
 
                 for (let i = a.length; i--; ) {
                   props[PROP_TRANSLATIONS[a[i].name] || a[i].name] =
-                    a[i].value // TODO: remove this because of security notation
+                    a[i].value
                 }
 
                 const nodeName = ret.nodeName.toLowerCase()
@@ -176,10 +180,20 @@ export const registerElement = (
         // do send this event to the react props
         delete props.event
       }
+
       return props
     }
+    setProps(props, value) {
+      if (typeof props === 'string') {
+        props = { [props]: value }
+      }
+      return this.renderElement(props)
+    }
+    getRef() {
+      return this._ref
+    }
     addEvent(eventName, eventCallback) {
-      const eventWrapper = event => eventCallback.apply(this, [event])
+      const eventWrapper = (event) => eventCallback.apply(this, [event])
       this._customEvents.push({ eventName, eventCallback, eventWrapper })
       return eventWrapper
     }
@@ -209,22 +223,18 @@ export const registerElement = (
         }
       })
     }
-    renderElement() {
-      let props = {},
-        i = 0,
-        a = this.attributes
-
-      for (i = a.length; i--; ) {
-        props[a[i].name] = a[i].value // TODO: remove this because of security notation
+    renderElement(props = {}) {
+      const attr = {}
+      for (let i = this.attributes.length; i--; ) {
+        attr[this.attributes[i].name] = this.attributes[i].value
       }
 
-      props = this.connectEvents(props)
+      props = { ...this._props, ...this.connectEvents(attr), ...props }
 
       // we dont allow ids
-      for (i = attributesBlacklist.length; i--; ) {
+      for (let i = attributesBlacklist.length; i--; ) {
         if (props[attributesBlacklist[i]]) {
-          // TODO: remove this because of security notation
-          this.removeAttribute(attributesBlacklist[i]) // TODO: remove this because of security notation
+          this.removeAttribute(attributesBlacklist[i])
         }
       }
 
@@ -244,18 +254,22 @@ export const registerElement = (
         }
       }
 
-      render(<ReactComponent {...props} />, this)
+      this._props = props
+      this._ref = <ReactComponent {...props} />
+      ReactDOM.render(this._ref, this)
+
+      return this
     }
   }
 
   return window.customElements.define(tagName, HtmlClass)
 }
 
-// remove react props witch has uppercase chars
-const filterProps = key =>
+// remove react props which has uppercase chars
+const filterProps = (key) =>
   key && !/[A-Z]/.test(key) && !/children/.test(key)
 
-export const prepareDefaultProps = defaultProps =>
+export const prepareDefaultProps = (defaultProps) =>
   Array.isArray(defaultProps)
     ? defaultProps.filter(filterProps)
     : Object.entries(defaultProps || {})
@@ -277,10 +291,10 @@ const toVdom = (elem, name = null) => {
 
   for (i = a.length; i--; ) {
     // a[i].name = PROP_TRANSLATIONS[a[i].name]||a[i].name
-    props[a[i].name] = a[i].value // TODO: remove this because of security notation
+    props[a[i].name] = a[i].value
   }
   for (i = cn.length; i--; ) {
-    children[i] = toVdom(cn[i]) // TODO: remove this because of security notation
+    children[i] = toVdom(cn[i])
   }
   props.key = `key${Math.random() * 1000}`
 

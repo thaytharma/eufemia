@@ -3,7 +3,7 @@
  *
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
@@ -11,12 +11,12 @@ import {
   Link
   // Hr
 } from 'dnb-ui-lib/src/elements'
-import { Button } from 'dnb-ui-lib/src/components'
+import { Button, Space } from 'dnb-ui-lib/src/components'
 
 const ref = React.createRef()
 const Intro = ({ children }) => {
-  useEffect(() => {
-    const onKeyDownHandler = e => {
+  React.useEffect(() => {
+    const onKeyDownHandler = (e) => {
       if (/textarea|input/i.test(document.activeElement.tagName)) {
         return
       }
@@ -54,7 +54,7 @@ Intro.propTypes = {
 Intro.defaultProps = {}
 
 export const IntroFooter = ({ href, text }) => (
-  <Footer>
+  <Footer top no_collapse>
     <Button href={href} text={text} icon="chevron_right" />
     <Button
       href="/uilib/getting-started"
@@ -71,7 +71,7 @@ IntroFooter.propTypes = {
 }
 IntroFooter.defaultProps = {}
 
-const Footer = styled.div`
+const Footer = styled(Space)`
   display: flex;
   justify-content: space-between;
 `
@@ -97,7 +97,7 @@ const Inner = styled.div`
   width: 70vw;
   min-height: 50vh;
 `
-export const Next = props => (
+export const Next = (props) => (
   <>
     {/* <Hr /> */}
     <div className="dnb-section dnb-section--spacing">

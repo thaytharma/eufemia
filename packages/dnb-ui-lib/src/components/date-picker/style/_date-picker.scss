@@ -55,6 +55,7 @@
 
   &__suffix {
     padding-left: 0.5rem;
+    line-height: var(--line-height-basis);
   }
 
   &__shell {
@@ -188,6 +189,11 @@
     display: flex;
     user-select: none;
     -webkit-user-select: none; // Safari / Touch fix
+
+    // Wrap aleady on 50em, because 40em is too narrow in range mode
+    @media screen and (max-width: 50em) {
+      flex-direction: column;
+    }
   }
 
   &__calendar {
@@ -298,6 +304,7 @@
       top: 0;
       width: var(--date-picker-day-width); // medium size
       height: var(--date-picker-day-width); // medium size
+      white-space: nowrap;
 
       box-shadow: none;
       &__bounding {
@@ -404,6 +411,7 @@
   > .dnb-form-label {
     line-height: var(--line-height-basis);
   }
+  @include formLabelWrap();
 
   &[class*='__status'] {
     align-items: flex-start;
@@ -414,7 +422,7 @@
   }
 
   .dnb-responsive-component & {
-    @media (max-width: 40em) {
+    @media screen and (max-width: 40em) {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
