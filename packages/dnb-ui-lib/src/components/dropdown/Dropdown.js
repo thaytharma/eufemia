@@ -202,16 +202,16 @@ export default class Dropdown extends React.PureComponent {
   }
 
   render() {
+    const { more_menu, prevent_selection, children, data } = this.props
+
     return (
       <DrawerListProvider
         {...this.props}
-        data={this.props.data || this.props.children}
+        data={data || children}
         opened={null}
         tagName="dnb-dropdown"
         ignore_events={false}
-        prevent_selection={
-          this.props.more_menu || this.props.prevent_selection
-        }
+        prevent_selection={more_menu || prevent_selection}
       >
         <DropdownInstance {...this.props} />
       </DrawerListProvider>
@@ -270,11 +270,13 @@ class DropdownInstance extends React.PureComponent {
       this.setVisible()
     }
   }
+
   onBlurHandler = () => {
     if (isTrue(this.props.open_on_focus)) {
       this.setHidden()
     }
   }
+
   toggleVisible = () => {
     if (
       !this.context.drawerList.hidden &&
@@ -285,6 +287,7 @@ class DropdownInstance extends React.PureComponent {
       this.setVisible()
     }
   }
+
   onMouseDownHandler = () => {
     if (
       !this.context.drawerList.hidden &&
@@ -295,6 +298,7 @@ class DropdownInstance extends React.PureComponent {
       this.setVisible()
     }
   }
+
   onTriggerKeyDownHandler = (e) => {
     switch (keycode(e)) {
       case 'enter':
@@ -325,17 +329,19 @@ class DropdownInstance extends React.PureComponent {
       attributes
     })
 
-    clearTimeout(this._focusTimeout)
-    this._focusTimeout = setTimeout(() => {
-      try {
-        const elem = this._refButton.current._ref.current
-        if (elem && typeof elem.focus === 'function') {
-          elem.focus()
+    if (args && args.setFocus) {
+      clearTimeout(this._focusTimeout)
+      this._focusTimeout = setTimeout(() => {
+        try {
+          const elem = this._refButton.current._ref.current
+          if (elem && typeof elem.focus === 'function') {
+            elem.focus({ preventScroll: true })
+          }
+        } catch (e) {
+          // do noting
         }
-      } catch (e) {
-        // do noting
-      }
-    }, 1) // NVDA / Firefox needs a dealy to set this focus
+      }, 1) // NVDA / Firefox needs a dealy to set this focus
+    }
   }
 
   onSelectHandler = (args) => {
@@ -359,7 +365,7 @@ class DropdownInstance extends React.PureComponent {
 
   getTitle(title = null) {
     const { data } = this.context.drawerList
-    if (data?.length > 0) {
+    if (data && data.length > 0) {
       const currentOptionData = getCurrentData(
         this.context.drawerList.selected_item,
         data
@@ -390,7 +396,8 @@ class DropdownInstance extends React.PureComponent {
       size,
       align_dropdown,
       fixed_position,
-      use_mobile_view,
+      use_drawer_on_mobile,
+      enable_body_lock,
       status,
       status_state,
       status_animation,
@@ -429,7 +436,8 @@ class DropdownInstance extends React.PureComponent {
     let { icon, icon_position } = props
     const id = this._id
 
-    const isPopupMenu = isTrue(more_menu) || isTrue(prevent_selection)
+    const isPopupMenu =
+      isTrue(more_menu) || !(titleProp && titleProp.length > 0)
     if (isPopupMenu) {
       icon = icon || (isTrue(more_menu) ? 'more' : 'chevron_down')
       if (icon_position !== 'right' && align_dropdown !== 'right') {
@@ -477,9 +485,9 @@ class DropdownInstance extends React.PureComponent {
       ),
       id,
       disabled,
-      ['aria-haspopup']: 'listbox',
-      ['aria-expanded']: opened,
-      ['aria-controls']: `${id}-drawer-list`,
+      'aria-haspopup': 'listbox',
+      'aria-expanded': opened,
+      'aria-controls': `${id}-drawer-list`,
       ...attributes,
       onFocus: this.onFocusHandler,
       onBlur: this.onBlurHandler,
@@ -592,7 +600,8 @@ class DropdownInstance extends React.PureComponent {
                 independent_width={isPopupMenu}
                 align_drawer={align_dropdown}
                 fixed_position={fixed_position}
-                use_mobile_view={use_mobile_view}
+                use_drawer_on_mobile={use_drawer_on_mobile}
+                enable_body_lock={enable_body_lock}
                 disabled={disabled}
                 max_height={max_height}
                 direction={direction}

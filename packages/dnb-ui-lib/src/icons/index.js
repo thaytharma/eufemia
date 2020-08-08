@@ -12,12 +12,20 @@ import arrow_up from './arrow_up.js'
 import arrow_up_medium from './arrow_up_medium.js'
 import attachment from './attachment.js'
 import attachment_medium from './attachment_medium.js'
+import bankid from './bankid.js'
+import bankid_medium from './bankid_medium.js'
+import bankid_on_mobile from './bankid_on_mobile.js'
+import bankid_on_mobile_medium from './bankid_on_mobile_medium.js'
+import bankid_with_qr from './bankid_with_qr.js'
+import bankid_with_qr_medium from './bankid_with_qr_medium.js'
 import bell from './bell.js'
 import bell_medium from './bell_medium.js'
 import bubble from './bubble.js'
 import bubble_medium from './bubble_medium.js'
 import calendar from './calendar.js'
 import calendar_medium from './calendar_medium.js'
+import chatbot from './chatbot.js'
+import chatbot_medium from './chatbot_medium.js'
 import check from './check.js'
 import check_alt_01 from './check_alt_01.js'
 import check_alt_01_medium from './check_alt_01_medium.js'
@@ -32,6 +40,8 @@ import chevron_up from './chevron_up.js'
 import chevron_up_medium from './chevron_up_medium.js'
 import close from './close.js'
 import close_medium from './close_medium.js'
+import contract from './contract.js'
+import contract_medium from './contract_medium.js'
 import download from './download.js'
 import download_medium from './download_medium.js'
 import exclamation from './exclamation.js'
@@ -52,6 +62,8 @@ import link_out from './link_out.js'
 import link_out_medium from './link_out_medium.js'
 import list from './list.js'
 import list_medium from './list_medium.js'
+import location from './location.js'
+import location_medium from './location_medium.js'
 import log_in from './log_in.js'
 import log_in_medium from './log_in_medium.js'
 import login from './login.js'
@@ -64,6 +76,8 @@ import pay_from from './pay_from.js'
 import pay_from_medium from './pay_from_medium.js'
 import pencil from './pencil.js'
 import pencil_medium from './pencil_medium.js'
+import person from './person.js'
+import person_medium from './person_medium.js'
 import print from './print.js'
 import print_medium from './print_medium.js'
 import question from './question.js'
@@ -84,6 +98,8 @@ import settings from './settings.js'
 import settings_medium from './settings_medium.js'
 import subtract from './subtract.js'
 import subtract_medium from './subtract_medium.js'
+import support from './support.js'
+import support_medium from './support_medium.js'
 import transfer_to from './transfer_to.js'
 import transfer_to_medium from './transfer_to_medium.js'
 import trash from './trash.js'
@@ -96,6 +112,8 @@ import view from './view.js'
 import view_medium from './view_medium.js'
 import view_off from './view_off.js'
 import view_off_medium from './view_off_medium.js'
+import without_bankid from './without_bankid.js'
+import without_bankid_medium from './without_bankid_medium.js'
 
 export {
   add,
@@ -110,12 +128,20 @@ export {
   arrow_up_medium,
   attachment,
   attachment_medium,
+  bankid,
+  bankid_medium,
+  bankid_on_mobile,
+  bankid_on_mobile_medium,
+  bankid_with_qr,
+  bankid_with_qr_medium,
   bell,
   bell_medium,
   bubble,
   bubble_medium,
   calendar,
   calendar_medium,
+  chatbot,
+  chatbot_medium,
   check,
   check_alt_01,
   check_alt_01_medium,
@@ -130,6 +156,8 @@ export {
   chevron_up_medium,
   close,
   close_medium,
+  contract,
+  contract_medium,
   download,
   download_medium,
   exclamation,
@@ -150,6 +178,8 @@ export {
   link_out_medium,
   list,
   list_medium,
+  location,
+  location_medium,
   log_in,
   log_in_medium,
   login,
@@ -162,6 +192,8 @@ export {
   pay_from_medium,
   pencil,
   pencil_medium,
+  person,
+  person_medium,
   print,
   print_medium,
   question,
@@ -182,6 +214,8 @@ export {
   settings_medium,
   subtract,
   subtract_medium,
+  support,
+  support_medium,
   transfer_to,
   transfer_to_medium,
   trash,
@@ -193,5 +227,7 @@ export {
   view,
   view_medium,
   view_off,
-  view_off_medium
+  view_off_medium,
+  without_bankid,
+  without_bankid_medium
 }

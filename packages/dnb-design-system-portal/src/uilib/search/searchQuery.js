@@ -66,15 +66,35 @@ const flatten = (arr) =>
           const first = headings[0]
 
           // has an empty, not valid title, then we grap the first heading (h1)
-          if (
-            !hasTitle(frontmatter) &&
-            first &&
-            (first.depth === 1 || first.depth === 2)
-          ) {
-            headings.shift()
-            frontmatter = {
-              ...frontmatter,
-              title: first.value
+          if (!hasTitle(frontmatter)) {
+            if (first && first.depth === 1) {
+              headings.shift()
+              frontmatter = {
+                ...frontmatter,
+                title: first.value
+              }
+            } else if (hasSearch(frontmatter)) {
+              frontmatter = {
+                ...frontmatter,
+                title: frontmatter.search
+              }
+            } else if (Array.isArray(children)) {
+              const category = children
+                .reverse()
+                .find(({ fields: { slug } }) => fields.slug.includes(slug))
+              let {
+                frontmatter: { title, search }
+              } = category
+
+              if (first && first.depth === 2) {
+                headings.shift()
+                title = `${title || search} > ${first.value}`
+              }
+
+              frontmatter = {
+                ...frontmatter,
+                title
+              }
             }
           }
         }
@@ -107,12 +127,13 @@ const flatten = (arr) =>
     .filter(Boolean)
 
 const hasTitle = (r) => String(r.title || '').length > 0
+const hasSearch = (r) => String(r.search || '').length > 0
 const hasDescription = (r) => String(r.description || '').length > 0
 
 const dev = false
 const currentBranch = getCurrentBranchName()
 const queries =
-  dev || /^(release|beta)$/.test(currentBranch)
+  dev || /^(release|beta|portal)$/.test(currentBranch)
     ? [
         {
           query: docsQuery,

@@ -315,9 +315,15 @@ class AutocompleteInstance extends React.PureComponent {
       if (
         props.input_value !== 'initval' &&
         typeof state.inputValue === 'undefined' &&
-        props.input_value?.length > 0
+        props.input_value &&
+        props.input_value.length > 0
       ) {
         state.inputValue = props.input_value
+      }
+
+      if (props.data !== state.init_data) {
+        state.updateData(props.data)
+        state.init_data = props.data
       }
     }
 
@@ -335,8 +341,10 @@ class AutocompleteInstance extends React.PureComponent {
     this.state = this.state || {}
     this.state._listenForPropChanges = true
     this.state.mode = props.mode
+    this.state.init_data = props.data // only to compare agains new data
+    this.state.updateData = this.updateData // only so we can call setData
 
-    if (context.drawerList?.current_title) {
+    if (context.drawerList && context.drawerList.current_title) {
       this.state.inputValue = context.drawerList.current_title
     }
 
@@ -448,26 +456,28 @@ class AutocompleteInstance extends React.PureComponent {
   runFilterWithSideEffects = (value, options = {}) => {
     // run the filter also on invalid values, so we reset the highlight
     const data = this.runFilter(value, options)
+    const count = this.countData(data)
 
     this.context.drawerList.setState(
       {
-        cache_hash: value + this.countData(data)
+        cache_hash: value + count
       },
       () =>
-        typeof options?.afterSetState === 'function' &&
-        options?.afterSetState(data)
+        options &&
+        typeof options.afterSetState === 'function' &&
+        options.afterSetState(data)
     )
 
     if (value && value.length > 0) {
       // show the "no_options" message
-      if (this.countData(data) === 0) {
+      if (count === 0) {
         if (this.state.mode !== 'async') {
           this.showNoOptionsItem()
         }
-      } else if (this.countData(data) > 0) {
+      } else if (count > 0) {
         this.context.drawerList.setData(this.wrapWithShowAll(data))
 
-        if (this.countData(data) === 1) {
+        if (count === 1) {
           this.context.drawerList.setState({
             active_item: data[0].__id
           })
@@ -548,6 +558,13 @@ class AutocompleteInstance extends React.PureComponent {
     }
 
     return data
+  }
+
+  setInputValue = (inputValue) => {
+    this.setState({
+      inputValue,
+      _listenForPropChanges: false
+    })
   }
 
   emptyData = () => {
@@ -638,7 +655,7 @@ class AutocompleteInstance extends React.PureComponent {
           () => {
             const { typedInputValue } = this.state
 
-            if (typedInputValue?.length > 0) {
+            if (typedInputValue && typedInputValue.length > 0) {
               // run with side effects, to get preselection of active_item
               const filteredData = this.runFilterWithSideEffects(
                 typedInputValue
@@ -707,6 +724,7 @@ class AutocompleteInstance extends React.PureComponent {
       keep_value,
       prevent_selection
     } = this.props
+
     this.setState({
       typedInputValue: null,
       _listenForPropChanges: false
@@ -863,6 +881,7 @@ class AutocompleteInstance extends React.PureComponent {
       setVisible: this.setVisible,
       setHidden: this.setHidden,
       emptyData: this.emptyData,
+      setInputValue: this.setInputValue,
       showNoOptionsItem: this.showNoOptionsItem,
       showIndicatorItem: this.showIndicatorItem,
       showIndicator: this.showIndicator,
@@ -880,7 +899,7 @@ class AutocompleteInstance extends React.PureComponent {
 
   hasShowMore = (data = this.context.drawerList.data) => {
     const lastItem = data.slice(-1)[0]
-    return lastItem?.show_all === true
+    return lastItem && lastItem.show_all === true
   }
 
   countData = (data = this.context.drawerList.data) => {
@@ -910,9 +929,9 @@ class AutocompleteInstance extends React.PureComponent {
   }
 
   hasFilterActive = (data = this.context.drawerList.data) => {
-    return (
-      this.countData(data) !==
-      this.context.drawerList.original_data?.length
+    return !(
+      this.context.drawerList.original_data &&
+      this.context.drawerList.original_data.length === this.countData(data)
     )
   }
 
@@ -951,9 +970,11 @@ class AutocompleteInstance extends React.PureComponent {
       () => {
         // but we reset it right after the rerender
         this.showAllTimeout = setTimeout(() => {
-          this.context?.drawerList?.setState({
-            ignore_events: false // we also have to reset this one
-          })
+          this.context &&
+            this.context.drawerList &&
+            this.context.drawerList.setState({
+              ignore_events: false // we also have to reset this one
+            })
         }, 10) // make sure we reset once the rerender of DrawerList is done, because then we keep the active_item at it's position by using key="down"
       }
     )
@@ -1220,50 +1241,54 @@ class AutocompleteInstance extends React.PureComponent {
   onChangeHandler = (args) => {
     const selected_item = args.selected_item
 
-    if (!isTrue(this.props.keep_open)) {
-      this.setState({
-        skipFocus: true,
-        skipHighlight: true,
-        _listenForPropChanges: false
-      })
+    const { prevent_selection, keep_open } = this.props
 
-      this.setHidden()
-
-      // Do this, so screen readers get a NEW focus later on
-      // So we first need a blur of the input basically
-      try {
-        this.context.drawerList._refUl.current.focus({
-          preventScroll: true
+    if (!isTrue(prevent_selection)) {
+      if (!isTrue(keep_open)) {
+        this.setState({
+          skipFocus: true,
+          skipHighlight: true,
+          _listenForPropChanges: false
         })
-      } catch (e) {
-        // do nothing
-      }
 
-      clearTimeout(this._selectTimeout)
-      this._selectTimeout = setTimeout(() => {
+        this.setHidden()
+
+        // Do this, so screen readers get a NEW focus later on
+        // So we first need a blur of the input basically
+        try {
+          this.context.drawerList._refUl.current.focus({
+            preventScroll: true
+          })
+        } catch (e) {
+          // do nothing
+        }
+
+        clearTimeout(this._selectTimeout)
+        this._selectTimeout = setTimeout(() => {
+          this.setState({
+            inputValue: AutocompleteInstance.getCurrentDataTitle(
+              selected_item,
+              this.context.drawerList.data
+            ),
+            skipFocus: false,
+            _listenForPropChanges: false
+          })
+
+          try {
+            this._refInput.current._ref.current.focus()
+          } catch (e) {
+            // do nothing
+          }
+        }, 200) // so we propely can set the focus "again" we have to have this amount of delay
+      } else {
         this.setState({
           inputValue: AutocompleteInstance.getCurrentDataTitle(
             selected_item,
             this.context.drawerList.data
           ),
-          skipFocus: false,
           _listenForPropChanges: false
         })
-
-        try {
-          this._refInput.current._ref.current.focus()
-        } catch (e) {
-          // do nothing
-        }
-      }, 200) // so we propely can set the focus "again" we have to have this amount of delay
-    } else {
-      this.setState({
-        inputValue: AutocompleteInstance.getCurrentDataTitle(
-          selected_item,
-          this.context.drawerList.data
-        ),
-        _listenForPropChanges: false
-      })
+      }
     }
 
     dispatchCustomElementEvent(this, 'on_change', {
