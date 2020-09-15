@@ -67,6 +67,10 @@ const propTypes = {
     PropTypes.string,
     PropTypes.node
   ]),
+  enable_closest_observer: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool
+  ]),
   opened: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   scrollable: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   min_height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -96,6 +100,7 @@ const defaultProps = {
   enable_body_lock: null,
   page_offset: null,
   observer_element: null,
+  enable_closest_observer: null,
   opened: null,
   scrollable: null,
   min_height: 10, // 10rem = 10x16=160,
@@ -178,15 +183,21 @@ export default class DrawerListProvider extends React.PureComponent {
       }
       return acc
     }, {})
+
+    this.itemSpotsCount = Object.keys(this.itemSpots).length
   }
 
   setScrollObserver() {
-    if (typeof window === 'undefined' || !this._refUl.current) {
+    if (
+      !isTrue(this.props.enable_closest_observer) ||
+      typeof window === 'undefined' ||
+      !this._refUl.current
+    ) {
       return
     }
 
     this.removeScrollObserver()
-    this.refreshScrollObserver()
+    this.itemSpotsCount = 1 // to make sure we recalculate the spots
 
     try {
       let closestToTop = null,
@@ -197,6 +208,11 @@ export default class DrawerListProvider extends React.PureComponent {
       this.setOnScroll = () => {
         if (!this._refUl.current) {
           return // stop here
+        }
+
+        // recalculate the spots
+        if (this.itemSpotsCount <= 1) {
+          this.refreshScrollObserver()
         }
 
         const counts = Object.keys(this.itemSpots)
@@ -422,6 +438,17 @@ export default class DrawerListProvider extends React.PureComponent {
 
       this.correctHiddenView()
       this.setScrollObserver() // because, now we have _refUl!
+      // setTimeout(() => {
+      //   this.refreshScrollObserver()
+      // }, 1)
+
+      const { selected_item, active_item } = this.state
+      this.scrollToAndSetActiveItem(
+        parseFloat(active_item) > -1 ? active_item : selected_item,
+        {
+          scrollTo: false
+        }
+      )
     }, 1)
 
     renderDirection()
@@ -777,7 +804,7 @@ export default class DrawerListProvider extends React.PureComponent {
       case 'esc':
         {
           e.preventDefault() // on edge, we need this prevent to not loose focus after close
-          this.setHidden({ setFocus: true })
+          this.setHidden()
         }
         break
 
@@ -916,16 +943,7 @@ export default class DrawerListProvider extends React.PureComponent {
       },
       () => {
         this.setWrapperElement()
-        this.assignObservers() // do not add a delay here!
-
-        const { selected_item, active_item } = this.state
-
-        this.scrollToAndSetActiveItem(
-          parseFloat(active_item) > -1 ? active_item : selected_item,
-          {
-            scrollTo: false
-          }
-        )
+        this.assignObservers()
       }
     )
 
@@ -1076,7 +1094,7 @@ export default class DrawerListProvider extends React.PureComponent {
 
         const { keep_open } = this.props
         if (!isTrue(keep_open)) {
-          this.setHidden({ setFocus: true })
+          this.setHidden()
         }
       }
 

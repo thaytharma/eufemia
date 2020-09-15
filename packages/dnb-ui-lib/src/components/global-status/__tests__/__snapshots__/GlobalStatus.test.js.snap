@@ -160,6 +160,15 @@ exports[`GlobalStatus scss have to match snapshot 1`] = `
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   /**
+  * Ensure consistency and use the same as HTML reset -> html {...}
+  * between base and code package
+  */
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-break: break-word;
+  /**
   * 1. Remove repeating backgrounds in all browsers (opinionated).
   * 2. Add border box sizing in all browsers (opinionated).
   */
@@ -240,6 +249,15 @@ exports[`GlobalStatus scss have to match snapshot 1`] = `
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /**
+  * Ensure consistency and use the same as HTML reset -> html {...}
+  * between base and code package
+  */
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-break: break-word;
   /**
   * 1. Remove repeating backgrounds in all browsers (opinionated).
   * 2. Add border box sizing in all browsers (opinionated).
@@ -468,6 +486,15 @@ button.dnb-button::-moz-focus-inner {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   /**
+  * Ensure consistency and use the same as HTML reset -> html {...}
+  * between base and code package
+  */
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-break: break-word;
+  /**
   * 1. Remove repeating backgrounds in all browsers (opinionated).
   * 2. Add border box sizing in all browsers (opinionated).
   */
@@ -538,6 +565,15 @@ button.dnb-button::-moz-focus-inner {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /**
+  * Ensure consistency and use the same as HTML reset -> html {...}
+  * between base and code package
+  */
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-break: break-word;
   /**
   * 1. Remove repeating backgrounds in all browsers (opinionated).
   * 2. Add border box sizing in all browsers (opinionated).
@@ -844,7 +880,6 @@ exports[`GlobalStatus snapshot have to match component snapshot 1`] = `
                 >
                   <Icon
                     alt={null}
-                    aria-hidden={true}
                     attributes={null}
                     border={null}
                     className={null}
@@ -861,9 +896,8 @@ exports[`GlobalStatus snapshot have to match component snapshot 1`] = `
                     width={null}
                   >
                     <span
-                      aria-hidden={true}
                       className="dnb-icon dnb-icon--default"
-                      role="img"
+                      role="presentation"
                     >
                       <Component>
                         <ErrorIcon
@@ -872,7 +906,7 @@ exports[`GlobalStatus snapshot have to match component snapshot 1`] = `
                           <svg
                             fill="none"
                             height="32"
-                            role="img"
+                            role="presentation"
                             title={null}
                             viewBox="0 0 32 32"
                             width="32"
@@ -1005,10 +1039,10 @@ exports[`GlobalStatus snapshot have to match component snapshot 1`] = `
                           width={null}
                         >
                           <span
-                            alt="close"
                             aria-hidden={true}
+                            aria-label="close icon"
                             className="dnb-icon dnb-icon--medium dnb-button__icon"
-                            role="img"
+                            role="presentation"
                           >
                             <close_medium>
                               <svg

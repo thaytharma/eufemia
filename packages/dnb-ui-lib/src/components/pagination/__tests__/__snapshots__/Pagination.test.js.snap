@@ -522,10 +522,9 @@ exports[`Pagination bar component have to match snapshot 1`] = `
                     width={null}
                   >
                     <span
-                      alt="chevron left"
-                      aria-label="chevron left"
+                      aria-label="chevron left icon"
                       className="dnb-icon dnb-icon--default dnb-button__icon"
-                      role="img"
+                      role="presentation"
                     >
                       <chevron_left>
                         <svg
@@ -636,10 +635,10 @@ exports[`Pagination bar component have to match snapshot 1`] = `
                     width={null}
                   >
                     <span
-                      alt="chevron right"
                       aria-hidden={true}
+                      aria-label="chevron right icon"
                       className="dnb-icon dnb-icon--default dnb-button__icon"
-                      role="img"
+                      role="presentation"
                     >
                       <chevron_right>
                         <svg
@@ -948,6 +947,15 @@ exports[`Pagination scss have to match snapshot 1`] = `
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   /**
+  * Ensure consistency and use the same as HTML reset -> html {...}
+  * between base and code package
+  */
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-break: break-word;
+  /**
   * 1. Remove repeating backgrounds in all browsers (opinionated).
   * 2. Add border box sizing in all browsers (opinionated).
   */
@@ -1028,6 +1036,15 @@ exports[`Pagination scss have to match snapshot 1`] = `
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /**
+  * Ensure consistency and use the same as HTML reset -> html {...}
+  * between base and code package
+  */
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-break: break-word;
   /**
   * 1. Remove repeating backgrounds in all browsers (opinionated).
   * 2. Add border box sizing in all browsers (opinionated).
@@ -1348,6 +1365,15 @@ button.dnb-button::-moz-focus-inner {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  /**
+  * Ensure consistency and use the same as HTML reset -> html {...}
+  * between base and code package
+  */
+  -moz-tab-size: 4;
+  tab-size: 4;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-break: break-word;
   /**
   * 1. Remove repeating backgrounds in all browsers (opinionated).
   * 2. Add border box sizing in all browsers (opinionated).
