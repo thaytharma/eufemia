@@ -6,8 +6,6 @@
  *
  */
 
-process.env.ROOT_DIR = require('packpath').self()
-
 import { ErrorHandler, log } from '../lib'
 import del from 'del'
 
@@ -24,6 +22,7 @@ import convertSvgToJsx from './tasks/convertSvgToJsx'
 import makeLibStyles from './tasks/makeLibStyles'
 import makeMainStyle from './tasks/makeMainStyle'
 import makePropertiesFile from './tasks/makePropertiesFile'
+import generateTypes from './tasks/generateTypes'
 
 // NB: Deprecated and replaced by Babel only build
 // import makeLibModules from './tasks/makeLibModules'
@@ -39,7 +38,8 @@ export {
   convertSvgToJsx,
   makeLibStyles,
   makeMainStyle,
-  makePropertiesFile
+  makePropertiesFile,
+  generateTypes
 
   // NB: Deprecated and replaced by Babel only build
   // makeLibModules,
@@ -67,7 +67,6 @@ export const runPrepublishTasks = async ({
     await makeLibStyles() // have to run before "makeLibModules"
     await makeMainStyle()
     await makePropertiesFile()
-
     await prepareTemplates()
 
     // NB: Deprecated and replaced by Babel only build

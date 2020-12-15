@@ -20,6 +20,7 @@ exports[`Switch component have to match snapshot 1`] = `
   on_state_update={[Function]}
   readOnly={false}
   size="default"
+  skeleton="skeleton"
   status={null}
   status_animation="status_animation"
   status_state="status_state"
@@ -36,34 +37,26 @@ exports[`Switch component have to match snapshot 1`] = `
       <FormLabel
         class={null}
         className={null}
-        direction={null}
         disabled="disabled"
         element="label"
         for_id="id"
         id="id-label"
         label_direction={null}
-        render_content={null}
+        skeleton="skeleton"
         sr_only={null}
         text="label"
         title={null}
         vertical={null}
       >
-        <Element
+        <label
+          aria-disabled={true}
           className="dnb-form-label"
-          disabled={false}
+          disabled={true}
           htmlFor="id"
           id="id-label"
-          is="label"
         >
-          <label
-            className="dnb-form-label"
-            disabled={false}
-            htmlFor="id"
-            id="id-label"
-          >
-            label
-          </label>
-        </Element>
+          label
+        </label>
       </FormLabel>
       <span
         className="dnb-switch__inner"
@@ -84,7 +77,7 @@ exports[`Switch component have to match snapshot 1`] = `
           >
             <input
               aria-checked={false}
-              aria-describedby=" id-suffix"
+              aria-describedby="id-suffix"
               checked={false}
               className="dnb-switch__input"
               disabled={false}
@@ -140,6 +133,7 @@ exports[`Switch component have to match snapshot 1`] = `
               on_state_update={[Function]}
               readOnly={false}
               size="default"
+              skeleton="skeleton"
               status={null}
               status_animation="status_animation"
               status_state="status_state"
@@ -268,8 +262,11 @@ exports[`Switch scss have to match default theme snapshot 1`] = `
     .dnb-switch__input:not([disabled]):active ~ .dnb-switch__background {
       --border-color: var(--color-emerald-green);
       box-shadow: 0 0 0 0.125rem var(--border-color);
-      /* IE11 fix */
       border-color: transparent; }
+      @media screen and (-ms-high-contrast: none) {
+        html[data-whatinput='keyboard'] .dnb-switch__input:not([disabled]):focus ~ .dnb-switch__background, html[data-whatinput='keyboard']
+        .dnb-switch__input:not([disabled]):active ~ .dnb-switch__background {
+          box-shadow: 0 0 0 0.125rem var(--color-emerald-green); } }
   .dnb-switch__input:not([disabled]):focus ~ .dnb-switch__button .dnb-switch__focus,
   .dnb-switch__input:not([disabled]):active ~ .dnb-switch__button .dnb-switch__focus {
     display: block; }
@@ -292,8 +289,10 @@ exports[`Switch scss have to match default theme snapshot 1`] = `
     background-color: var(--color-fire-red-8);
     --border-color: var(--color-fire-red);
     box-shadow: 0 0 0 0.125rem var(--border-color);
-    /* IE11 fix */
     border-color: transparent; }
+    @media screen and (-ms-high-contrast: none) {
+      .dnb-switch__status--error .dnb-switch__input:not([disabled]):not(:focus):not(:active) ~ .dnb-switch__background {
+        box-shadow: 0 0 0 0.125rem var(--color-fire-red); } }
   .dnb-switch__status--error .dnb-switch__input:not(:focus):not([disabled]):not(:active):checked ~ .dnb-switch__background::after {
     background-color: var(--color-fire-red); }
   .dnb-switch__status--error .dnb-switch__input:not(:focus):not([disabled]):not(:active):not(:checked) ~ .dnb-switch__background::after {
@@ -302,8 +301,10 @@ exports[`Switch scss have to match default theme snapshot 1`] = `
     display: block;
     --border-color: var(--color-fire-red);
     box-shadow: 0 0 0 0.125rem var(--border-color);
-    /* IE11 fix */
     border-color: transparent; }
+    @media screen and (-ms-high-contrast: none) {
+      .dnb-switch__status--error .dnb-switch__input:not([disabled]):not(:focus):not(:active) ~ .dnb-switch__button .dnb-switch__focus {
+        box-shadow: 0 0 0 0.125rem var(--color-fire-red); } }
   .dnb-switch__status--error .dnb-switch__input:not([disabled]):not(:focus):not(:active):checked ~ .dnb-switch__button .dnb-switch__focus {
     transform: rotate(180deg); }
   .dnb-switch > .dnb-form-status {
@@ -469,36 +470,42 @@ legend.dnb-form-label {
  * FormStatus component
  *
  */
+:root {
+  --form-status-radius: 0.25rem; }
+
 .dnb-form-status {
   display: flex; }
   .dnb-form-status__shell {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    border-radius: var(--input-border-radius); }
-  .dnb-form-status--text {
-    padding: calc(0.5rem / 2) 1rem;
+    min-width: inherit;
+    border-radius: var(--form-status-radius); }
+  .dnb-form-status__text {
+    padding: 0.625rem 1rem;
     cursor: text;
     color: inherit;
-    line-height: var(--line-height-basis);
+    line-height: var(--line-height-small);
+    font-size: var(--font-size-small);
     white-space: normal; }
-    .dnb-form-status--text .dnb-anchor {
+    .dnb-form-status__text .dnb-anchor {
       font-size: inherit; }
-  .dnb-icon + .dnb-form-status--text {
+  .dnb-icon + .dnb-form-status__text {
     padding-left: 0.5rem; }
   .dnb-form-status__shell > .dnb-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 1.5em;
-    height: 1.5em;
-    margin-top: 0.25em;
-    margin-left: 0.5em;
-    color: inherit;
-    font-size: var(--font-size-small); }
+    margin: 0.3333333em 0.3333333em 0.3333333em 0.6666666em; }
+  .dnb-form-status__size--large .dnb-form-status__text {
+    padding-top: 1.125rem;
+    padding-bottom: 1.125rem; }
+  .dnb-form-status__size--large .dnb-form-status__shell > .dnb-icon {
+    margin-top: 0.6666666em;
+    margin-bottom: 0.6666666em; }
   .dnb-form-status[hidden] {
     display: none; }
-  .dnb-form-status--fade-in {
+  .dnb-form-status__animation--fade-in {
     overflow: hidden;
     max-height: 0;
     animation: form-status-fade-in 2s ease-out 400ms forwards; }
@@ -590,15 +597,15 @@ legend.dnb-form-label {
     -webkit-user-select: none;
     position: relative;
     display: flex;
-    align-items: center;
-    height: var(--switch-height--medium); }
+    align-items: center; }
   .dnb-switch--large {
     line-height: var(--switch-height--large); }
   .dnb-switch--large .dnb-switch__shell {
     height: var(--switch-height--large); }
   .dnb-switch__row {
     display: inline-flex;
-    align-items: center; }
+    align-items: center;
+    height: var(--switch-height--medium); }
   .dnb-switch__focus, .dnb-switch__button {
     position: absolute;
     z-index: 4;
@@ -627,8 +634,10 @@ legend.dnb-form-label {
     html[data-whatinput='keyboard'] .dnb-switch__focus {
       --border-color: var(--color-emerald-green);
       box-shadow: 0 0 0 0.125rem var(--border-color);
-      /* IE11 fix */
       border-color: transparent; }
+      @media screen and (-ms-high-contrast: none) {
+        html[data-whatinput='keyboard'] .dnb-switch__focus {
+          box-shadow: 0 0 0 0.125rem var(--color-emerald-green); } }
   .dnb-switch__input:not(:checked) ~ .dnb-switch__button {
     transform: translateX(0);
     transform: translateX(calc(1px - 1px - var(--switch-border-width--medium))); }
@@ -665,7 +674,9 @@ legend.dnb-form-label {
   .dnb-switch__input:not([disabled]) {
     cursor: pointer; }
   .dnb-switch .dnb-form-label {
-    margin-right: 0.5rem;
+    padding-right: 0.5rem;
+    margin-right: 0;
+    margin-left: 0;
     margin-bottom: 0; }
   .dnb-switch__order {
     display: inline-flex; }
@@ -687,10 +698,17 @@ legend.dnb-form-label {
     order: 1; }
   .dnb-switch--label-position-right .dnb-switch__order .dnb-form-label {
     order: 2;
-    margin-left: 0.5rem; }
+    padding-left: 0.5rem; }
   .dnb-switch--label-position-right .dnb-switch__order .dnb-form-status {
     order: 3;
     margin-top: 0.5rem; }
+  .dnb-switch.dnb-skeleton .dnb-switch__input[disabled] ~ .dnb-switch__button,
+  .dnb-switch.dnb-skeleton .dnb-switch__input[disabled] ~ .dnb-switch__background::after {
+    border-color: var(--skeleton-color); }
+  .dnb-switch.dnb-skeleton .dnb-switch__input[disabled] ~ .dnb-switch__background {
+    background-color: var(--skeleton-color); }
+  .dnb-switch.dnb-skeleton .dnb-switch__input[disabled]:not(:checked) ~ .dnb-switch__background::after {
+    border-color: var(--skeleton-color--contrast); }
   @media screen and (-ms-high-contrast: none) {
     .dnb-switch {
       vertical-align: text-bottom; }

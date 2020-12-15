@@ -17,6 +17,7 @@ const packpath = require('packpath')
 const {
   DIR,
   headless,
+  defaultViewport,
   testScreenshotOnHost,
   testScreenshotOnPort
 } = require('./jestSetupScreenshots').config
@@ -29,20 +30,26 @@ const startStaticServer = async () => {
         packpath.self(),
         '../dnb-design-system-portal/public/'
       )
-      liveServer.start({
-        host: testScreenshotOnHost,
-        port: testScreenshotOnPort,
-        root,
-        open: false,
-        watch: [],
-        quiet: isCI,
-        wait: 10e3
-      })
-      await waitOn({
-        resources: [
-          `http://${testScreenshotOnHost}:${testScreenshotOnPort}`
-        ]
-      })
+      if (fs.existsSync(root)) {
+        liveServer.start({
+          host: testScreenshotOnHost,
+          port: testScreenshotOnPort,
+          root,
+          open: false,
+          watch: [],
+          quiet: isCI,
+          wait: 10e3
+        })
+        await waitOn({
+          resources: [
+            `http://${testScreenshotOnHost}:${testScreenshotOnPort}`
+          ]
+        })
+      } else {
+        throw new Error(
+          'No /public folder found. Make sure you run "yarn workspace dnb-design-system-portal build" first!'
+        )
+      }
     }
   } catch (e) {
     throw new Error(e)
@@ -54,6 +61,7 @@ module.exports = async function () {
   await startStaticServer()
 
   const browser = await puppeteer.launch({
+    defaultViewport,
     headless,
     devtools: !headless,
     // to get rid of the "libX11-xcb.so" missing problem, we set these flags

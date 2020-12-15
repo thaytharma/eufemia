@@ -37,7 +37,9 @@
   @include coreDefault();
 
   @media print {
+    // Use hard coded colors, because of theming and color swaps
     background-color: white;
+    color: black;
   }
 
   @content;
@@ -45,11 +47,15 @@
 
 @mixin htmlDefault() {
   html {
-    font-size: 100%;
-    @supports (font: -apple-system-body) {
-      font: -apple-system-body; /* stylelint-disable-line */
-    }
     scroll-behavior: smooth;
+    font-size: 100%;
+
+    // IS_SAFARI_MOBILE
+    @supports (-webkit-touch-callout: none) {
+      @supports (font: -apple-system-body) {
+        font: -apple-system-body; /* stylelint-disable-line */
+      }
+    }
   }
 
   // reset ePlatform css

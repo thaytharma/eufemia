@@ -1,3 +1,41 @@
+## December, 15. 2020
+
+Added Eufemia Icon library, with many new icons.
+
+These icons got replaced:
+
+- `search` to `loupe`
+- `settings` to `cog`
+- `print` to `printer`
+- `pencil` to `edit`
+- `view_off` to `hide`
+- `file` to `document`
+- `file_add` to `document_add`
+- `contract` to `document_contract`
+- `link_out` to `launch`
+- `logout` to `log_out`
+- `login` to `log_in`
+- `without_bankid` to `pin_code`
+- `bankid_on_mobile` to `bankid_mobile`
+- `bankid_with_qr` to `bankid_qr`
+- `check_alt_01` removed
+
+  <!-- - `refresh` to `repeat` -->
+  <!-- - `settings` to `cog` -->
+
+## November, 8. 2020
+
+- New [grey colors](/uilib/usage/customisation/colors):
+  - `black-55` (#737373)
+  - `black-20` (#cccccc) which replaces `black-30` (~~#b3b3b3~~)
+  - `black-8` (#ebebeb)
+  - `black-3` (#f8f8f8)
+- New docs about [maintainability](/uilib/getting-started/maintainability).
+- New component [Skeleton](/uilib/components/skeleton)
+- Updated Modal & Drawer UI [Modal & Drawer](/uilib/components/modal)
+- **Ol Lists** do now support the `type` HTML attribute in order to use like _letters_ and _roman numerals_
+- **DNB Medium** font got an enhancement regarding readability on Windows.
+
 ## July, 3. 2020
 
 New [Icons](/icons/secondary):

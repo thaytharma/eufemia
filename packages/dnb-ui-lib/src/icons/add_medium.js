@@ -4,11 +4,16 @@ import React from 'react'
 
 function add_medium(props) {
   return (
-    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
+    <svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M12.75 3.75a.75.75 0 00-1.5 0v7.5h-7.5a.75.75 0 000 1.5h7.5v7.5a.75.75 0 001.5 0v-7.5h7.5a.75.75 0 000-1.5h-7.5v-7.5z"
+        d="M11.25 21a.75.75 0 001.5 0h-1.5zm1.5-18a.75.75 0 00-1.5 0h1.5zM21 12.75a.75.75 0 000-1.5v1.5zm-18-1.5a.75.75 0 000 1.5v-1.5zM12.75 21V3h-1.5v18h1.5zM21 11.25H3v1.5h18v-1.5z"
         fill="#000"
       />
     </svg>

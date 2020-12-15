@@ -23,6 +23,7 @@ exports[`Checkbox component have to match snapshot 1`] = `
         "on_state_update": [Function],
         "readOnly": "readOnly",
         "size": "'default'",
+        "skeleton": "skeleton",
         "status": "status",
         "status_animation": "status_animation",
         "status_state": "status_state",
@@ -34,15 +35,19 @@ exports[`Checkbox component have to match snapshot 1`] = `
   }
   1={
     Object {
-      "displayName": "CheckSVG",
-      "props": Object {},
+      "displayName": "CheckIcon",
+      "props": Object {
+        "size": "size",
+      },
     }
   }
   attributes={null}
+  checked={null}
   class={null}
   className={null}
   custom_element={null}
   custom_method={null}
+  default_state={null}
   disabled={null}
   global_status_id={null}
   id="checkbox"
@@ -52,6 +57,7 @@ exports[`Checkbox component have to match snapshot 1`] = `
   on_state_update={null}
   readOnly={false}
   size={null}
+  skeleton={null}
   status={null}
   status_animation={null}
   status_state="error"
@@ -68,34 +74,25 @@ exports[`Checkbox component have to match snapshot 1`] = `
       <FormLabel
         class={null}
         className={null}
-        direction={null}
         disabled={null}
         element="label"
         for_id="checkbox"
         id="checkbox-label"
         label_direction={null}
-        render_content={null}
+        skeleton={null}
         sr_only={null}
         text="checkbox"
         title={null}
         vertical={null}
       >
-        <Element
+        <label
           className="dnb-form-label"
           disabled={false}
           htmlFor="checkbox"
           id="checkbox-label"
-          is="label"
         >
-          <label
-            className="dnb-form-label"
-            disabled={false}
-            htmlFor="checkbox"
-            id="checkbox-label"
-          >
-            checkbox
-          </label>
-        </Element>
+          checkbox
+        </label>
       </FormLabel>
       <span
         className="dnb-checkbox__inner"
@@ -132,24 +129,26 @@ exports[`Checkbox component have to match snapshot 1`] = `
               className="dnb-checkbox__focus"
             />
           </span>
-          <CheckSVG>
+          <CheckIcon
+            size={null}
+          >
             <svg
               aria-hidden={true}
               className="dnb-checkbox__gfx"
               fill="none"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
+              height={16}
+              viewBox="0 0 16 16"
+              width={16}
             >
               <path
-                d="M1.5 15L7.5 21L22.5 3"
+                d="M1 10L5 14L15 2"
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="1.5"
               />
             </svg>
-          </CheckSVG>
+          </CheckIcon>
         </span>
       </span>
     </span>
@@ -256,8 +255,10 @@ exports[`Checkbox scss have to match default theme snapshot 1`] = `
     display: block;
     --border-color: var(--color-fire-red);
     box-shadow: 0 0 0 0.125rem var(--border-color);
-    /* IE11 fix */
     border-color: transparent; }
+    @media screen and (-ms-high-contrast: none) {
+      .dnb-checkbox__status--error .dnb-checkbox__input:not([disabled]):not(:focus):not(:active) ~ .dnb-checkbox__button .dnb-checkbox__focus {
+        box-shadow: 0 0 0 0.125rem var(--color-fire-red); } }
   .dnb-checkbox__status--error .dnb-checkbox__input:not([disabled]):not(:focus):hover ~ .dnb-checkbox__button {
     border-color: var(--color-fire-red);
     background-color: var(--color-fire-red-8); }
@@ -430,36 +431,42 @@ legend.dnb-form-label {
  * FormStatus component
  *
  */
+:root {
+  --form-status-radius: 0.25rem; }
+
 .dnb-form-status {
   display: flex; }
   .dnb-form-status__shell {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    border-radius: var(--input-border-radius); }
-  .dnb-form-status--text {
-    padding: calc(0.5rem / 2) 1rem;
+    min-width: inherit;
+    border-radius: var(--form-status-radius); }
+  .dnb-form-status__text {
+    padding: 0.625rem 1rem;
     cursor: text;
     color: inherit;
-    line-height: var(--line-height-basis);
+    line-height: var(--line-height-small);
+    font-size: var(--font-size-small);
     white-space: normal; }
-    .dnb-form-status--text .dnb-anchor {
+    .dnb-form-status__text .dnb-anchor {
       font-size: inherit; }
-  .dnb-icon + .dnb-form-status--text {
+  .dnb-icon + .dnb-form-status__text {
     padding-left: 0.5rem; }
   .dnb-form-status__shell > .dnb-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 1.5em;
-    height: 1.5em;
-    margin-top: 0.25em;
-    margin-left: 0.5em;
-    color: inherit;
-    font-size: var(--font-size-small); }
+    margin: 0.3333333em 0.3333333em 0.3333333em 0.6666666em; }
+  .dnb-form-status__size--large .dnb-form-status__text {
+    padding-top: 1.125rem;
+    padding-bottom: 1.125rem; }
+  .dnb-form-status__size--large .dnb-form-status__shell > .dnb-icon {
+    margin-top: 0.6666666em;
+    margin-bottom: 0.6666666em; }
   .dnb-form-status[hidden] {
     display: none; }
-  .dnb-form-status--fade-in {
+  .dnb-form-status__animation--fade-in {
     overflow: hidden;
     max-height: 0;
     animation: form-status-fade-in 2s ease-out 400ms forwards; }
@@ -557,8 +564,10 @@ legend.dnb-form-label {
     html[data-whatinput='keyboard'] .dnb-checkbox__focus {
       --border-color: var(--color-emerald-green);
       box-shadow: 0 0 0 0.125rem var(--border-color);
-      /* IE11 fix */
       border-color: transparent; }
+      @media screen and (-ms-high-contrast: none) {
+        html[data-whatinput='keyboard'] .dnb-checkbox__focus {
+          box-shadow: 0 0 0 0.125rem var(--color-emerald-green); } }
   .dnb-checkbox__focus, .dnb-checkbox__button {
     position: relative;
     z-index: 4;
@@ -599,7 +608,9 @@ legend.dnb-form-label {
   .dnb-checkbox__input:not([disabled]) {
     cursor: pointer; }
   .dnb-checkbox .dnb-form-label {
-    margin-bottom: 0; }
+    margin-bottom: 0;
+    margin-right: 0;
+    margin-left: 0; }
   .dnb-checkbox__order {
     display: inline-flex;
     align-items: baseline; }
@@ -611,8 +622,7 @@ legend.dnb-form-label {
     order: 2; }
   .dnb-checkbox--label-position-left .dnb-checkbox__order .dnb-form-label {
     order: 1;
-    margin-right: 0.5rem;
-    margin-left: 0; }
+    padding-right: 0.5rem; }
   .dnb-checkbox--label-position-left .dnb-checkbox__order .dnb-form-status {
     order: 3;
     margin-top: 0.5rem; }
@@ -620,12 +630,15 @@ legend.dnb-form-label {
     order: 1; }
   .dnb-checkbox--label-position-right .dnb-checkbox__order .dnb-form-label {
     order: 2;
-    margin-right: 0;
-    margin-left: 0.5rem; }
+    padding-left: 0.5rem; }
   .dnb-checkbox--label-position-right .dnb-checkbox__order + .dnb-form-status {
     order: 3;
     vertical-align: top;
     margin-top: 0.5rem; }
+  .dnb-checkbox.dnb-skeleton .dnb-checkbox__input[disabled] ~ .dnb-checkbox__button {
+    border-color: var(--skeleton-color); }
+    .dnb-checkbox.dnb-skeleton .dnb-checkbox__input[disabled] ~ .dnb-checkbox__button::before {
+      border-radius: 0; }
   @media screen and (-ms-high-contrast: none) {
     .dnb-checkbox {
       vertical-align: text-bottom; }
