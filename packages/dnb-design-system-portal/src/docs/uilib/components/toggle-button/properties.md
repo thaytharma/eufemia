@@ -14,10 +14,11 @@ showTabs: true
 | `icon`                                      | _(optional)_ icon to be included in the toggle button.                                                                                                                          |
 | `icon_position`                             | _(optional)_ position of icon inside the toggle button. Set to `left` or `right`. Defaults to `right` if not set.                                                               |
 | `icon_size`                                 | _(optional)_ define icon width and height. Defaults to 16px                                                                                                                     |
-| `status`                                    | _(optional)_ text with a status message. The style defaults to an error message.                                                                                                |
+| `status`                                    | _(optional)_ text with a status message. The style defaults to an error message. You can use `true` to only get the status color, without a message.                            |
 | `status_state`                              | _(optional)_ defines the state of the status. Currently there are two statuses `[error, info]`. Defaults to `error`.                                                            |
 | `global_status_id`                          | _(optional)_ the `status_id` used for the target [GlobalStatus](/uilib/components/global-status).                                                                               |
 | `suffix`                                    | _(optional)_ text describing the content of the ToggleButton more than the label. You can also send in a React component, so it gets wrapped inside the ToggleButton component. |
+| `skeleton`                                  | _(optional)_ if set to `true`, an overlaying skeleton with animation will be shown.                                                                                             |
 | [Space](/uilib/components/space/properties) | _(optional)_ spacing properties like `top` or `bottom` are supported.                                                                                                           |
 
 ## ToggleButton (group) properties
@@ -35,8 +36,9 @@ showTabs: true
 | `label`                                     | _(optional)_ use either the `label` property or provide custom one.                                                                                                                             |
 | `label_direction`                           | _(optional)_ to define the `label` layout direction on how the next element should be placed on. Can be either `vertical` or `horizontal`. Defaults to `horizontal`.                            |
 | `label_sr_only`                             | _(optional)_ use `true` to make the label only readable by screen readers.                                                                                                                      |
-| `vertical`                                  | _(optional)_ will force both `direction` and `label_diretion` to be **vertical** if set to `true`.                                                                                              |
+| `vertical`                                  | _(optional)_ will force both `direction` and `label_direction` to be **vertical** if set to `true`.                                                                                             |
 | `suffix`                                    | _(optional)_ text describing the content of the ToggleButtonGroup more than the label. You can also send in a React component, so it gets wrapped inside the ToggleButtonGroup component.       |
+| `skeleton`                                  | _(optional)_ if set to `true`, an overlaying skeleton with animation will be shown.                                                                                                             |
 | [Space](/uilib/components/space/properties) | _(optional)_ spacing properties like `top` or `bottom` are supported.                                                                                                                           |
 
 ### ToggleButton group Context

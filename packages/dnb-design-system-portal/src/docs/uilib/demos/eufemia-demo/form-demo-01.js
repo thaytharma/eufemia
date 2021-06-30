@@ -3,7 +3,7 @@
  * This demo is mainly to demonstrate the visual part,
  * but includes also some event handling to showcase error messages.
  *
- * It is devided in three parts:
+ * It is divided in three parts:
  *
  * 1. Markup
  * 2. Styles
@@ -19,7 +19,7 @@ import styled from '@emotion/styled'
 import Layout from '../layout/Layout'
 
 // Get Eufemia in
-import { P } from 'dnb-ui-lib/src/elements'
+import { P } from '@dnb/eufemia/src/elements'
 import {
   Heading,
   FormSet,
@@ -33,13 +33,13 @@ import {
   Button,
   Switch,
   Space,
-  GlobalStatus
-} from 'dnb-ui-lib/src/components'
+  GlobalStatus,
+} from '@dnb/eufemia/src/components'
 import {
   save as SaveIcon,
   trash as TrashIcon,
-  attachment as AttachmentIcon
-} from 'dnb-ui-lib/src/icons'
+  attachment as AttachmentIcon,
+} from '@dnb/eufemia/src/icons'
 
 /** -- 1. Markup -- */
 
@@ -55,7 +55,7 @@ const FormDemo = () => (
 )
 export default FormDemo
 
-// A dum header
+// A dummy header
 const Header = () => (
   <>
     <Head>
@@ -68,15 +68,15 @@ const Header = () => (
       </HeaderTitleWrapper>
 
       <StepIndicator
-        active_item={0}
-        use_navigation="true"
+        current_step={0}
+        enable_navigation={true}
         data={[
           {
-            title: 'Information about the complaint'
+            title: 'Information about the complaint',
           },
           {
-            title: 'Summary'
-          }
+            title: 'Summary',
+          },
         ]}
         on_change={(e) => {
           console.log('StepIndicator.on_change', e)
@@ -95,7 +95,7 @@ const MainForm = () => {
     currentErrors,
     resetErrors,
     submitHandler,
-    cancelHandler
+    cancelHandler,
   } = React.useContext(FormContext)
 
   return (
@@ -113,18 +113,18 @@ const MainForm = () => {
             value={currentValues.toggleButtonOptionsValue}
             on_change={({ value: toggleButtonOptionsValue }) =>
               setValues({
-                toggleButtonOptionsValue
+                toggleButtonOptionsValue,
               })
             }
           >
             <ToggleButton text="Unknown transaction" value="first" />
             <ToggleButton
-              text="I did not recieve money from the ATM"
+              text="I did not receive money from the ATM"
               value="second"
             />
-            <ToggleButton text="Goods not recieved" value="third" />
-            <ToggleButton text="Wrong goods recieved" value="fourth" />
-            <ToggleButton text="Fake goods recieved" value="fift" />
+            <ToggleButton text="Goods not received" value="third" />
+            <ToggleButton text="Wrong goods received" value="fourth" />
+            <ToggleButton text="Fake goods received" value="fifth" />
             <ToggleButton text="Double charged" value="sixth" />
             <ToggleButton text="Wrong amount charged" value="seventh" />
             <ToggleButton text="I am after charged" value="eighth" />
@@ -144,7 +144,7 @@ const MainForm = () => {
                 value={currentValues.yesNoQuestionValue}
                 on_change={({ value: yesNoQuestionValue }) =>
                   setValues({
-                    yesNoQuestionValue
+                    yesNoQuestionValue,
                   })
                 }
               >
@@ -162,7 +162,7 @@ const MainForm = () => {
                 value={currentValues.firstInputValue}
                 on_change={({ value: firstInputValue }) =>
                   setValues({
-                    firstInputValue
+                    firstInputValue,
                   })
                 }
               />
@@ -177,7 +177,7 @@ const MainForm = () => {
                 value={currentValues.secondInputValue}
                 on_change={({ value: secondInputValue }) =>
                   setValues({
-                    secondInputValue
+                    secondInputValue,
                   })
                 }
               />
@@ -190,10 +190,10 @@ const MainForm = () => {
                 rows="6"
                 cols="40"
                 label="Do you have additional relevant information about the case?"
-                value={currentValues.textareValue}
-                on_change={({ value: textareValue }) =>
+                value={currentValues.textareaValue}
+                on_change={({ value: textareaValue }) =>
                   setValues({
-                    textareValue
+                    textareaValue,
                   })
                 }
               />
@@ -213,7 +213,7 @@ const MainForm = () => {
           <Attachment>
             <Attachment.FileRow>
               <Icon icon={AttachmentIcon} aria-hidden />
-              {' filname_01.jpg'}
+              {' filename_01.jpg'}
             </Attachment.FileRow>
             <Button
               text="Delete"
@@ -241,7 +241,7 @@ const MainForm = () => {
           checked={currentValues.switchIsChecked}
           on_change={({ checked: switchIsChecked }) =>
             setValues({
-              switchIsChecked
+              switchIsChecked,
             })
           }
           on_change_end={({ checked }) => checked && resetErrors()}
@@ -287,7 +287,7 @@ const WidthLimit = styled.div`
   }
 `
 
-// set the header hight
+// set the header height
 const HeaderSection = styled(Section)`
   display: flex;
   flex-direction: column;
@@ -357,12 +357,12 @@ const defaultValues = {
   yesNoQuestionValue: 'yes',
   firstInputValue: 2000,
   secondInputValue: 200,
-  textareValue:
+  textareaValue:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis.',
-  switchIsChecked: false
+  switchIsChecked: false,
 }
 const defaultErrors = {
-  switchErrorMessage: 'Sorry, this has to be checked.'
+  switchErrorMessage: 'Sorry, this has to be checked.',
 }
 
 // Form Logic and Event handling
@@ -413,7 +413,7 @@ const FormLogic = (props) => {
     handleErrors,
     cancelHandler,
     setValues,
-    resetErrors
+    resetErrors,
   }
 
   return <FormContext.Provider value={formContext} {...props} />

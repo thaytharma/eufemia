@@ -7,9 +7,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CodeBlock from './CodeBlock'
 import styled from '@emotion/styled'
-import { getComponents } from 'dnb-ui-lib/src/components/lib'
-import { getFragments } from 'dnb-ui-lib/src/fragments/lib'
-import { getElements } from 'dnb-ui-lib/src/elements/lib'
+import { getComponents } from '@dnb/eufemia/src/components/lib'
+import { getFragments } from '@dnb/eufemia/src/fragments/lib'
+import { getElements } from '@dnb/eufemia/src/elements/lib'
 
 const ComponentBox = ({ children, hideOnTest, scope = {}, ...rest }) => {
   if (hideOnTest && global.IS_TEST) {
@@ -24,40 +24,23 @@ const ComponentBox = ({ children, hideOnTest, scope = {}, ...rest }) => {
         styled,
         React,
         // TestWrapper,// Not used as of now
-        ...scope
+        ...scope,
       }}
       {...rest}
-      // addToSearchIndex={({ title, hash, location }) => {
-      //   if (hash !== 'demos') {
-      //     console.log('>', title, hash, location.pathname)
-      //   }
-      // }}
     >
-      {children}
+      {typeof children === 'function' ? children() : children}
     </CodeBlock>
   )
 }
 ComponentBox.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
+    .isRequired,
   hideOnTest: PropTypes.bool,
-  scope: PropTypes.object
+  scope: PropTypes.object,
 }
 ComponentBox.defaultProps = {
   hideOnTest: false,
-  scope: {}
+  scope: {},
 }
 
 export default ComponentBox
-
-// Not used as of now
-// export const TestWrapper = ({ children, ...props }) => {
-//   document.documentElement.setAttribute('data-visual-test', true)
-//   return (
-//     <div data-visual-test-wrapper {...props}>
-//       {children}
-//     </div>
-//   )
-// }
-// TestWrapper.propTypes = {
-//   children: PropTypes.node.isRequired
-// }

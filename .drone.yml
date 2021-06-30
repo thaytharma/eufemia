@@ -15,19 +15,21 @@ steps:
   - name: dependencies audit
     image: tujoworker/docker-node-puppeteer
     commands:
-      - yarn workspace dnb-ui-lib audit:ci
+      - yarn workspace @dnb/eufemia audit:ci
     when:
       branch:
         exclude:
           - fix/*
-          - ftr/*
+          - feat/*
+          - feature/*
+          - chore/*
           - eufemia-icons
 
   - name: run integration tests
     image: tujoworker/docker-node-puppeteer
     commands:
-      - yarn workspace dnb-ui-lib lint:ci && yarn workspace dnb-design-system-portal lint:ci
-      - yarn workspace dnb-ui-lib test:ci && yarn workspace dnb-design-system-portal test:ci
+      - yarn workspace @dnb/eufemia lint:ci && yarn workspace dnb-design-system-portal lint:ci
+      - yarn workspace @dnb/eufemia test:ci && yarn workspace dnb-design-system-portal test:ci
 
   - name: run Figma converters
     image: tujoworker/docker-node-puppeteer
@@ -41,7 +43,7 @@ steps:
       FIGMA_TOKEN:
         from_secret: FIGMA_TOKEN
     commands:
-      - yarn workspace dnb-ui-lib prebuild:ci:figma
+      - yarn workspace @dnb/eufemia prebuild:ci:figma
     when:
       branch:
         include:
@@ -57,19 +59,21 @@ steps:
       GH_TOKEN:
         from_secret: GH_TOKEN
     commands:
-      - yarn workspace dnb-ui-lib prebuild:ci
+      - yarn workspace @dnb/eufemia prebuild:ci
     when:
       branch:
         include:
           - release
+          - release-*
           - portal
           - beta
           - alpha
-          - next
-          - develop
+          - main
           - eufemia-icons
-          - ftr/*
           - fix/*
+          - feat/*
+          - feature/*
+          - chore/*
           - rc/*
 
   - name: make build of portal
@@ -95,39 +99,16 @@ steps:
       branch:
         include:
           - release
+          - release-*
           - portal
           - beta
           - alpha
-          - next
-          - develop
+          - main
           - eufemia-icons
-          - ftr/*
           - fix/*
-          - rc/*
-
-  - name: run screenshot tests
-    image: tujoworker/docker-node-puppeteer
-    environment:
-      GH_EMAIL:
-        from_secret: GH_EMAIL
-      GH_NAME:
-        from_secret: GH_NAME
-      GH_TOKEN:
-        from_secret: GH_TOKEN
-    commands:
-      - yarn workspace dnb-ui-lib test:screenshots:ci
-    when:
-      branch:
-        include:
-          - release
-          - portal
-          - beta
-          - alpha
-          - next
-          - develop
-          - eufemia-icons
-          - ftr/*
-          - fix/*
+          - feat/*
+          - feature/*
+          - chore/*
           - rc/*
 
   - name: run Figma post build
@@ -140,11 +121,38 @@ steps:
       GH_TOKEN:
         from_secret: GH_TOKEN
     commands:
-      - yarn workspace dnb-ui-lib postbuild:ci:figma
+      - yarn workspace @dnb/eufemia postbuild:ci:figma
     when:
       branch:
         include:
           - eufemia-icons
+
+  - name: run screenshot tests
+    image: tujoworker/docker-node-puppeteer
+    environment:
+      GH_EMAIL:
+        from_secret: GH_EMAIL
+      GH_NAME:
+        from_secret: GH_NAME
+      GH_TOKEN:
+        from_secret: GH_TOKEN
+    commands:
+      - yarn workspace @dnb/eufemia test:screenshots:ci
+    when:
+      branch:
+        include:
+          - release
+          - release-*
+          - portal
+          - beta
+          - alpha
+          - main
+          - eufemia-icons
+          - fix/*
+          - feat/*
+          - feature/*
+          - chore/*
+          - rc/*
 
   - name: postbuild
     image: tujoworker/docker-node-puppeteer
@@ -156,14 +164,14 @@ steps:
       GH_TOKEN:
         from_secret: GH_TOKEN
     commands:
-      - yarn workspace dnb-ui-lib postbuild:ci
+      - yarn workspace @dnb/eufemia postbuild:ci
     when:
       branch:
         include:
           - release
+          - release-*
           - beta
           - alpha
-          - next
 
   - name: deploy portal
     image: tujoworker/docker-node-puppeteer
@@ -182,6 +190,7 @@ steps:
       branch:
         include:
           - release
+          - release-*
           - portal
 
   - name: publish release
@@ -196,29 +205,16 @@ steps:
       NPM_TOKEN:
         from_secret: NPM_TOKEN
     commands:
-      - yarn workspace dnb-ui-lib publish:ci
+      - yarn workspace @dnb/eufemia publish:ci
     when:
       event:
         - push
       branch:
         include:
           - release
+          - release-*
           - beta
           - alpha
-          - next
-
-  # - name: test release
-  #   image: cypress/browsers:node10.16.0-chrome77
-  #   commands:
-  #     - yarn workspace dnb-design-system-portal cypress:run-ci
-  #   when:
-  #     event:
-  #       - push
-  #     branch:
-  #       include:
-  #         - ftr/*
-  #         # - portal
-  #         # - release
 
   - name: slack
     image: plugins/slack

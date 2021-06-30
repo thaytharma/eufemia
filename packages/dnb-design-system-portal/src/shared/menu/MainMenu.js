@@ -18,23 +18,22 @@ import {
   IconsSvg,
   PrinciplesSvg,
   QuickguideDesignerSvg,
-  DesignSystemSvg
+  DesignSystemSvg,
 } from './MainMenuGraphics'
-import { Logo, Button } from 'dnb-ui-lib/src'
-// import { buildVersion } from '../../../package.json'
-import { version as buildVersion } from '../../../version.json'
+import { Logo, Button } from '@dnb/eufemia/src'
+import version from '../../../version.json'
 import { MainMenuContext } from './MainMenuContext'
 import {
   setPageFocusElement,
-  applyPageFocus
-} from 'dnb-ui-lib/src/shared/helpers'
+  applyPageFocus,
+} from '@dnb/eufemia/src/shared/helpers'
 import { SearchBarInput } from './SearchBar'
 
 class MainWrapper extends React.PureComponent {
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     className: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
   }
   componentDidUpdate(prevProps) {
     if (this.props.isOpen && !prevProps.isOpen) {
@@ -72,7 +71,7 @@ const MainWrapperStyled = styled.nav`
 
   &.is-overlay {
     position: absolute;
-    z-index: 201; /* one more than sticky Bar = styled.div */
+    z-index: 4001; /* one more than sticky Bar = styled.div */
     top: 0;
     left: 0;
     @media (min-height: 55em) {
@@ -203,10 +202,10 @@ const toggleContent = css`
 
 export default class MainMenu extends React.PureComponent {
   static propTypes = {
-    enableOverlay: PropTypes.bool
+    enableOverlay: PropTypes.bool,
   }
   static defaultProps = {
-    enableOverlay: false
+    enableOverlay: false,
   }
   static contextType = MainMenuContext
   constructor(props) {
@@ -276,7 +275,7 @@ export default class MainMenu extends React.PureComponent {
               acc[fields.slug] = {
                 url: `/${fields.slug}/`,
                 ...fields,
-                ...frontmatter
+                ...frontmatter,
               }
               return acc
             },
@@ -328,51 +327,48 @@ export default class MainMenu extends React.PureComponent {
                         <SearchBarInput />
                       </ContentWrapper>
                     ))}
-                  <CardsWrapper
-                    // id="portal-main-menu"
-                    aria-labelledby="toggle-main-menu"
-                  >
+                  <CardsWrapper aria-labelledby="toggle-main-menu">
                     <Card
-                      url={items['design-system'].url}
-                      title={items['design-system'].title}
+                      url={items['design-system']?.url}
+                      title={items['design-system']?.title}
                       about={
                         <>
-                          {items['design-system'].description}
+                          {items['design-system']?.description}
                           <LastUpdated title="Last Change log update">
-                            Updated: {buildVersion}
+                            Updated: {version.buildVersion}
                           </LastUpdated>
                         </>
                       }
                       icon={DesignSystemSvg}
                     />
                     <Card
-                      url={items['uilib'].url}
-                      title={items['uilib'].title}
-                      about={items['uilib'].description}
+                      url={items['uilib']?.url}
+                      title={items['uilib']?.title}
+                      about={items['uilib']?.description}
                       icon={UilibSvg}
                     />
                     <Card
-                      url={items['quickguide-designer'].url}
-                      title={items['quickguide-designer'].title}
-                      about={items['quickguide-designer'].description}
+                      url={items['quickguide-designer']?.url}
+                      title={items['quickguide-designer']?.title}
+                      about={items['quickguide-designer']?.description}
                       icon={QuickguideDesignerSvg}
                     />
                     <Card
-                      url={items['icons'].url}
-                      title={items['icons'].title}
-                      about={items['icons'].description}
+                      url={items['icons']?.url}
+                      title={items['icons']?.title}
+                      about={items['icons']?.description}
                       icon={IconsSvg}
                     />
                     <Card
-                      url={items['brand'].url}
-                      title={items['brand'].title}
-                      about={items['brand'].description}
+                      url={items['brand']?.url}
+                      title={items['brand']?.title}
+                      about={items['brand']?.description}
                       icon={BrandSvg}
                     />
                     <Card
-                      url={items['principles'].url}
-                      title={items['principles'].title}
-                      about={items['principles'].description}
+                      url={items['principles']?.url}
+                      title={items['principles']?.title}
+                      about={items['principles']?.description}
                       icon={PrinciplesSvg}
                     />
                   </CardsWrapper>

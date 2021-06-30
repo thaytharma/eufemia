@@ -10,8 +10,7 @@ import styled from '@emotion/styled'
 export const TextareaExampleRowsCols = () => (
   <Wrapper>
     <ComponentBox data-visual-test="textarea-default">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Default:"
   rows="2"
@@ -21,8 +20,7 @@ export const TextareaExampleRowsCols = () => (
   on_focus={() => { console.log('on_focus') }}
   on_blur={() => { console.log('on_blur') }}
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -30,14 +28,12 @@ export const TextareaExampleRowsCols = () => (
 export const TextareaExamplePlaceholder = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Placeholder:"
   placeholder="Placeholder text"
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -45,8 +41,7 @@ export const TextareaExamplePlaceholder = () => (
 export const TextareaExampleVertical = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Vertical:"
   label_direction="vertical"
@@ -54,8 +49,7 @@ export const TextareaExampleVertical = () => (
   cols="33"
   value="Textarea value with more than 3 lines\\nNewline\\nNewline\\nNewline\\nNewline"
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -63,16 +57,35 @@ export const TextareaExampleVertical = () => (
 export const TextareaExampleStretched = () => (
   <Wrapper>
     <ComponentBox data-visual-test="textarea-stretch">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Horizontal:"
   stretch="true"
   rows="3"
   value="Nec litora inceptos vestibulum id interdum donec gravida."
 />
-          `
-      }
+`}
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const TextareaExampleAutoresize = () => (
+  <Wrapper>
+    <ComponentBox>
+      {() => /* jsx */ `
+<Textarea
+  label="Autogrow:"
+  rows={1}
+  autoresize={true}
+  autoresize_max_rows={4}
+  placeholder="Placeholder"
+  on_key_down={({ rows, event }) => {
+    if (rows >= 4 && event.key === 'Enter') {
+      event.preventDefault()
+    }
+  }}
+/>
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -80,8 +93,7 @@ export const TextareaExampleStretched = () => (
 export const TextareaExampleMaxLength = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Length limit:"
   rows="3"
@@ -90,8 +102,7 @@ export const TextareaExampleMaxLength = () => (
   required
   value="Nec litora inceptos vestibulum id interdum donec gravida."
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -99,16 +110,14 @@ export const TextareaExampleMaxLength = () => (
 export const TextareaExampleFormStatus = () => (
   <Wrapper>
     <ComponentBox data-visual-test="textarea-error">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Error Message:"
   cols="33"
   value="Nec litora inceptos vestibulum id interdum donec gravida."
   status="Message to the user"
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -116,15 +125,13 @@ export const TextareaExampleFormStatus = () => (
 export const TextareaExampleError = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Show status:"
   status="error"
   value="Shows status with border only"
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -132,15 +139,13 @@ export const TextareaExampleError = () => (
 export const TextareaExampleDisabled = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Disabled:"
   disabled
   value="Nec litora inceptos vestibulum id interdum donec gravida."
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -148,15 +153,13 @@ export const TextareaExampleDisabled = () => (
 export const TextareaExampleSuffix = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Textarea
   label="Textarea with suffix:"
   value="Nec litora inceptos vestibulum id interdum donec gravida."
   suffix={<HelpButton title="Modal Title">Modal content</HelpButton>}
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )

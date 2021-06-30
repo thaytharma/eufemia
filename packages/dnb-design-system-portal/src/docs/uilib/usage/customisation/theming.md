@@ -8,13 +8,32 @@ order: 7
 Read the [Styling examples](/uilib/usage/customisation/styling) on how to include styles and a theme.
 This section is about how theming works and how to actually create a custom theme.
 
-## How Themes are built
+## WIP: Ready to use themes
+
+Right now, theres work going on to create Eufemia Themes that utilize both color and spacing and the [Spatial system](/quickguide-designer/spatial-system).
+
+The plan is to extend the documentation here later on on how to select and use a theme inside an application.
+
+### Chrome Extension: Eufemia Theme Manager
+
+Use the [Chrome Browser Extension](https://chrome.google.com/webstore/detail/eufemia-theme-manager/pijolaebmeacaekbhoefjmhogckdcclb) to:
+
+- test themes on web applications
+- create new possible themes
+- look how the outcome would be if a theme would be used
+- and create areas where a different or a modified theme would make more sense
+
+You can also download the [Chrome Browser Extension (ZIP)](https://github.com/dnbexperience/eufemia-theme-manager/raw/main/eufemia-theme-manager-extension/web-ext-artifacts/eufemia_theme_manager-latest.zip), and install it manually in your browser. To do so, go to `chrome://extensions` and drag & drop the downloaded ZIP file in the opened extensions tab.
+
+Contributions are welcome. Heres the [source code](https://github.com/dnbexperience/eufemia-theme-manager).
+
+## How are component themes built
 
 By default, all the HTML Elements (components) are built by separating the "visual styling" parts from the "functional layout" parts. This way we can create new custom visual styles.
 
 Of course, we can still overwrite the functional layout properties to customize our theme even further.
 
-## The easy way
+### The total custom way
 
 Simply do not import **dnb-theme-ui** and create your own visual styles for every component you use in your App.
 
@@ -53,7 +72,7 @@ Maybe the most common ways would be:
 
 The included themes are built using SASS. Simply because we can reuse the _@mixin_'s and variables from SASS.
 
-We have the **Main Theming File**, which is located here: `dnb-ui-lib/src/style/themes/dnb-theme-[THEME].scss`
+We have the **Main Theming File**, which is located here: `dnb-eufemia/src/style/themes/dnb-theme-[THEME].scss`
 
 From here, we "can" reuse some default theming mechanism, just to have a fallback:
 
@@ -63,7 +82,7 @@ From here, we "can" reuse some default theming mechanism, just to have a fallbac
 
 All the additional sub theming files (for every component) are automatically added to the **Main Theming File** by running `$ yarn build`. More on that further down.
 
-If we need a custom theming file for one or more components, we can do so by creating `dnb-ui-lib/src/components/[COMPONENT]/style/dnb-button-theme-[THEME].scss`.
+If we need a custom theming file for one or more components, we can do so by creating `dnb-eufemia/src/components/[COMPONENT]/style/dnb-button-theme-[THEME].scss`.
 
 ### Local Theming setup
 
@@ -76,7 +95,7 @@ Make sure Your project can handle **\*.scss** files.
 
 **1.** make a copy of the [repository](https://github.com/dnbexperience/eufemia). Place it somewhere locally on your machine
 
-**2.** change your command line (Terminal) directory to the sub package `dnb-ui-lib` (_eufemia/packages/dnb-ui-lib_)
+**2.** change your command line (Terminal) directory to the sub package `@dnb/eufemia` (_eufemia/packages/eufemia_)
 
 **3.** make the package ready for development by running:
 
@@ -87,26 +106,26 @@ $ yarn install && yarn build && yarn link
 **4.** on your application root directory, run:
 
 ```bash
-$ yarn link "dnb-ui-lib"
+$ yarn link "@dnb/eufemia"
 ```
 
 **5.** That's it. Now you can use (import/require) the NPM module in your application like:
 
 ```js
-import { Button } from 'dnb-ui-lib/components'
-import 'dnb-ui-lib/style/components'
+import { Button } from 'dnb-eufemia/components'
+import 'dnb-eufemia/style/components'
 
 // See the "src" in the path?
-import 'dnb-ui-lib/src/style/themes/dnb-theme-[MY THEME].scss'
+import 'dnb-eufemia/src/style/themes/dnb-theme-[MY THEME].scss'
 ```
 
-**6.** Don't forget to add `"dnb-ui-lib": "*"` with the respective version (alongside React) to your dependencies:
+**6.** Don't forget to add `"@dnb/eufemia": "*"` with the respective version (alongside React) to your dependencies:
 
 ```json
   "dependencies": {
-    "dnb-ui-lib": "*",
-    "react": "^16",
-    "react-dom": "^16",
+    "@dnb/eufemia": "*",
+    "react": "^17",
+    "react-dom": "^17",
     ...
   }
 ```

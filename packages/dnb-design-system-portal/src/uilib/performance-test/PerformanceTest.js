@@ -15,9 +15,9 @@ import {
   Input,
   IconPrimary as Icon,
   Switch,
-  FormLabel
-} from 'dnb-ui-lib/src/components/lib'
-import { H2, P, Hr } from 'dnb-ui-lib/src/elements'
+  FormLabel,
+} from '@dnb/eufemia/src/components/lib'
+import { H2, P, Hr } from '@dnb/eufemia/src/elements'
 
 // Content
 import text from 'raw-loader!./lipsum.txt'
@@ -31,7 +31,7 @@ export default class PerformanceTest extends React.Component {
     isActive: false,
     countToRender: 20,
     testSpeed: 100,
-    webComponentsEnabled: false
+    webComponentsEnabled: false,
   }
   componentDidMount() {
     if (this.state.webComponentsEnabled) {
@@ -44,7 +44,7 @@ export default class PerformanceTest extends React.Component {
       enableWebComponents()
     }
     this.setState({
-      isActive
+      isActive,
     })
   }
   switchMode = () => {
@@ -53,19 +53,19 @@ export default class PerformanceTest extends React.Component {
       enableWebComponents()
     }
     this.setState({
-      webComponentsEnabled
+      webComponentsEnabled,
     })
   }
   onNewTestSpeed = ({ value: testSpeed }) => {
     testSpeed = parseFloat(testSpeed)
     if (testSpeed < 100) testSpeed = 100
     this.setState({
-      testSpeed
+      testSpeed,
     })
   }
   onNewCountToRender = ({ value: countToRender }) => {
     this.setState({
-      countToRender
+      countToRender,
     })
   }
   render() {
@@ -73,7 +73,7 @@ export default class PerformanceTest extends React.Component {
     const params = {
       isActive: this.state.isActive,
       testSpeed: this.state.testSpeed,
-      webComponentsEnabled: this.state.webComponentsEnabled
+      webComponentsEnabled: this.state.webComponentsEnabled,
     }
     for (let i = 0, l = this.state.countToRender; i < l; ++i) {
       this.components.push(<ButtonTest key={'button' + i} {...params} />)
@@ -99,9 +99,9 @@ export default class PerformanceTest extends React.Component {
           </FormRow>
 
           <FormRow>
-            <FormLabel for_id="swith_mode" text="Web Components" />{' '}
+            <FormLabel for_id="switch_mode" text="Web Components" />{' '}
             <Switch
-              id="swith_mode"
+              id="switch_mode"
               on_change={this.switchMode}
               checked={this.state.webComponentsEnabled}
             />
@@ -159,11 +159,11 @@ class ButtonTest extends React.Component {
   state = {
     icon: 'question',
     text: 'Custom Element with icon',
-    disabled: false
+    disabled: false,
   }
   static propTypes = {
     isActive: PropTypes.bool.isRequired,
-    testSpeed: PropTypes.number.isRequired
+    testSpeed: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props)
@@ -219,7 +219,7 @@ class ButtonTest extends React.Component {
     this.setState({
       text: String(Math.random() * 1000000),
       icon: listOfIcons[Math.floor(Math.random() * listOfIcons.length)],
-      disabled: Math.random() > 0.5
+      disabled: Math.random() > 0.5,
     })
   }
   componentWillUnmount() {
@@ -263,12 +263,12 @@ const InputWrap = React.forwardRef(
 class InputTest extends React.Component {
   state = {
     value: '0',
-    placeholder: 'Write someting',
-    disabled: false
+    placeholder: 'Write something',
+    disabled: false,
   }
   static propTypes = {
     isActive: PropTypes.bool.isRequired,
-    testSpeed: PropTypes.number.isRequired
+    testSpeed: PropTypes.number.isRequired,
   }
   constructor(props) {
     super(props)
@@ -318,14 +318,14 @@ class InputTest extends React.Component {
         ReactTestUtils.Simulate.keyDown(elem, {
           key: 'Enter',
           keyCode: 13,
-          which: 13
+          which: 13,
         })
       }
     }
     this.setState({
-      placeholder: 'Write someting New',
+      placeholder: 'Write something New',
       value: String(Math.random() * 1000000),
-      disabled: Math.random() > 0.5
+      disabled: Math.random() > 0.5,
     })
   }
   componentWillUnmount() {
@@ -371,16 +371,16 @@ const IconWrap = ({
   )
 const listOfIcons = ['chevron-right', 'question', 'chevron-left']
 IconWrap.propTypes = {
-  webComponentsEnabled: PropTypes.bool.isRequired
+  webComponentsEnabled: PropTypes.bool.isRequired,
 }
 class IconTest extends React.Component {
   state = {
     icon: 'chevron-right',
-    size: 200
+    size: 200,
   }
   static propTypes = {
     isActive: PropTypes.bool.isRequired,
-    testSpeed: PropTypes.number.isRequired
+    testSpeed: PropTypes.number.isRequired,
   }
   componentDidMount() {
     this.updateComponents()
@@ -404,7 +404,7 @@ class IconTest extends React.Component {
     if (!this.props.isActive) return
     this.setState({
       icon: listOfIcons[Math.floor(Math.random() * listOfIcons.length)],
-      size: 200
+      size: 200,
     })
   }
   componentWillUnmount() {

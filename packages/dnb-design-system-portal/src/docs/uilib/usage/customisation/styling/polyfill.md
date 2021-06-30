@@ -23,7 +23,7 @@ Use [postcss-preset-env](https://github.com/csstools/postcss-preset-env). Exampl
         stage: 0,
         preserve: true,
         browsers: ['last 2 versions', 'explorer >= 11'],
-        importFrom: [require.resolve('dnb-ui-lib/style/dnb-ui-properties.css')]
+        importFrom: [require.resolve('@dnb/eufemia/style/dnb-ui-properties.css')]
       })
     ]
   }
@@ -56,12 +56,12 @@ cssVars()
 
 But on large applications, the polyfill lacks in stability, therefore we made and recommend using the approach by using the Stylis Plugin method. Se examples below.
 
-### Properties
+### CSS Properties (variables)
 
 You can also import all the main properties as a JavaScript Object:
 
 ```js
-import properties from 'dnb-ui-lib/style/properties'
+import properties from '@dnb/eufemia/style/properties'
 // properties gives you { '--color-sea-green': '#007272', ... }
 ```
 
@@ -70,7 +70,7 @@ import properties from 'dnb-ui-lib/style/properties'
 Is supported from v5 of [styled-components](https://www.styled-components.com) and above.
 
 ```jsx
-import stylisPlugin from 'dnb-ui-lib/style/stylis'
+import stylisPlugin from '@dnb/eufemia/style/stylis'
 import { StyleSheetManager } from 'styled-components'
 
 render(
@@ -83,11 +83,11 @@ render(
 #### Add custom properties:
 
 ```jsx
-import { withProperties } from 'dnb-ui-lib/style/stylis'
+import { withProperties } from '@dnb/eufemia/style/stylis'
 import { StyleSheetManager } from 'styled-components'
 
 const stylisPlugin = withProperties({
-  '--custom-property': 'CSS value'
+  '--custom-property': 'CSS value',
 })
 
 render(
@@ -100,13 +100,13 @@ render(
 ### Emotion
 
 ```jsx
-import stylisPlugin from 'dnb-ui-lib/style/stylis'
+import stylisPlugin from '@dnb/eufemia/style/stylis'
 import { CacheProvider } from '@emotion/react'
 import createEmotionCache from '@emotion/cache'
 
 const emotionCache = createEmotionCache({
   key: 'my-prefix-key',
-  stylisPlugins: [stylisPlugin]
+  stylisPlugins: [stylisPlugin],
 })
 
 render(

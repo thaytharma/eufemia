@@ -10,18 +10,19 @@ import Link from '../parts/Link'
 import { StaticQuery, graphql } from 'gatsby'
 import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
-import { resetLevels } from 'dnb-ui-lib/src/components/Heading'
-import Context from 'dnb-ui-lib/src/shared/Context'
+import { resetLevels } from '@dnb/eufemia/src/components/Heading'
+import Context from '@dnb/eufemia/src/shared/Context'
 import { SidebarMenuContext } from './SidebarMenuContext'
-// import { MainMenuToggleButton } from './ToggleMainMenu'
-import { createSkeletonClass } from 'dnb-ui-lib/src/components/skeleton/SkeletonHelper'
-import { Icon } from 'dnb-ui-lib/src/components'
+import { createSkeletonClass } from '@dnb/eufemia/src/components/skeleton/SkeletonHelper'
+import { Icon } from '@dnb/eufemia/src/components'
+import { MediaQuery } from '@dnb/eufemia/src/shared'
 import graphics from './SidebarGraphics'
 import keycode from 'keycode'
 import {
   setPageFocusElement,
-  applyPageFocus
-} from 'dnb-ui-lib/src/shared/helpers'
+  applyPageFocus,
+} from '@dnb/eufemia/src/shared/helpers'
+import PortalToolsMenu from './PortalToolsMenu'
 
 const StyledListItem = styled.li`
   list-style: none;
@@ -189,7 +190,7 @@ const StyledListItem = styled.li`
 
     font-size: 0.4375rem; /* safari handles rem value incorrectly */
     line-height: 1.3125rem; /* same as height + 1px */
-    font-weight: var(--font-weight-default);
+    font-weight: var(--font-weight-basis);
     text-align: center;
     text-transform: uppercase;
     color: var(--color-black);
@@ -240,7 +241,7 @@ const Navigation = styled.nav`
   overscroll-behavior: contain;
   -ms-overflow-style: none;
 
-  /* make the sidemenu accsible for screenreaders on mobile devices  */
+  /* make the sidemenu accessible for screen readers on mobile devices  */
   @media screen and (max-width: 50em) {
     position: relative;
     height: auto;
@@ -259,7 +260,7 @@ const Navigation = styled.nav`
   }
 
   /*
-    God for a mobile menu insted
+    God for a mobile menu instead
     make sure that Content main "styled.main" gets the same max-width
   */
   @media screen and (max-width: 50em) {
@@ -305,15 +306,15 @@ const Navigation = styled.nav`
   }
 `
 
-const showAlwaysMenuItems = [] // like "uilib" som someting like that
+const showAlwaysMenuItems = [] // like "uilib" something like that
 
 export default class SidebarLayout extends React.PureComponent {
   static propTypes = {
     location: PropTypes.object.isRequired,
-    showAll: PropTypes.bool
+    showAll: PropTypes.bool,
   }
   static defaultProps = {
-    showAll: false
+    showAll: false,
   }
   static contextType = SidebarMenuContext
 
@@ -331,7 +332,7 @@ export default class SidebarLayout extends React.PureComponent {
         this.scrollToLastPosition()
 
         this._scrollRef.current.onscroll = (e) => {
-          if (this.bussyOnSettingNewPos) return
+          if (this.busySettingNewPos) return
           clearTimeout(delayBuff)
           delayBuff = setTimeout(() => {
             try {
@@ -363,7 +364,7 @@ export default class SidebarLayout extends React.PureComponent {
 
   scrollToLastPosition() {
     if (this._scrollRef.current) {
-      this.bussyOnSettingNewPos = true
+      this.busySettingNewPos = true
       const lastPos = this.getLastPosition()
       if (lastPos > 0) {
         this._scrollRef.current.scrollTop = lastPos
@@ -371,7 +372,7 @@ export default class SidebarLayout extends React.PureComponent {
         this.scrollToActiveItem()
       }
       setTimeout(() => {
-        this.bussyOnSettingNewPos = false
+        this.busySettingNewPos = false
       }, 10)
     }
   }
@@ -389,7 +390,7 @@ export default class SidebarLayout extends React.PureComponent {
         if (window.scrollTo) {
           window.scrollTo({
             top,
-            behavior: 'smooth'
+            behavior: 'smooth',
           })
         } else {
           window.scrollTop = top
@@ -428,10 +429,13 @@ export default class SidebarLayout extends React.PureComponent {
               }
 
               --delay: 0; /* polyfill fallback */
+
+              /* stylelint-disable */
               --aside-width: 30vw; /* IE fix */
               --aside-width: calc(25vw + 5rem);
+              /* stylelint-enable */
 
-              /* 2.5rem - but we dont want it to be responsive */
+              /* 2.5rem - but we don't want it to be responsive */
               --level-icon-adjust: -40px;
               --level: 2vw;
 
@@ -481,7 +485,7 @@ export default class SidebarLayout extends React.PureComponent {
               location,
               allMdx,
               showAll,
-              pathPrefix
+              pathPrefix,
             })
               .filter(({ title, menuTitle }) => title || menuTitle)
 
@@ -522,7 +526,7 @@ export default class SidebarLayout extends React.PureComponent {
                     path,
                     level,
                     active,
-                    inside
+                    inside,
                   },
                   nr
                 ) => {
@@ -535,7 +539,7 @@ export default class SidebarLayout extends React.PureComponent {
                     inside,
                     to: path,
                     onOffsetTop: (offsetTop) =>
-                      (this.offsetTop = offsetTop)
+                      (this.offsetTop = offsetTop),
                   }
 
                   return (
@@ -562,29 +566,37 @@ export default class SidebarLayout extends React.PureComponent {
             }
 
             return (
-              <>
-                <Navigation
-                  id="portal-sidebar-menu"
-                  aria-labelledby="toggle-sidebar-menu"
-                  className={classnames(
-                    // 'dnb-core-style',
-                    isOpen && 'show-mobile-menu',
-                    isClosing && 'hide-mobile-menu'
-                  )}
-                  ref={this._scrollRef}
-                >
-                  <ul className="dev-grid">{nav}</ul>
-                  {isOpen && (
-                    <Global
-                      styles={css`
-                        .dnb-app-content {
-                          display: none !important;
-                        }
-                      `}
-                    />
-                  )}
-                </Navigation>
-              </>
+              <Navigation
+                id="portal-sidebar-menu"
+                aria-labelledby="toggle-sidebar-menu"
+                className={classnames(
+                  'dnb-scrollbar-appearance',
+                  isOpen && 'show-mobile-menu',
+                  isClosing && 'hide-mobile-menu'
+                )}
+                ref={this._scrollRef}
+              >
+                <MediaQuery when={{ min: 0, max: 'medium' }}>
+                  <PortalToolsMenu
+                    trigger_text="Portal Tools"
+                    trigger_icon="chevron_right"
+                    trigger_icon_position="right"
+                    tooltipPosition="bottom"
+                    left="large"
+                    top="large"
+                  />
+                </MediaQuery>
+                <ul className="dev-grid">{nav}</ul>
+                {isOpen && (
+                  <Global
+                    styles={css`
+                      .dnb-app-content {
+                        display: none !important;
+                      }
+                    `}
+                  />
+                )}
+              </Navigation>
             )
           }}
         />
@@ -606,7 +618,7 @@ class ListItem extends React.PureComponent {
     status: PropTypes.string,
     icon: PropTypes.string,
     active: PropTypes.bool,
-    inside: PropTypes.bool
+    inside: PropTypes.bool,
   }
   static defaultProps = {
     className: null,
@@ -616,7 +628,7 @@ class ListItem extends React.PureComponent {
     nr: null,
     status: null,
     icon: null,
-    onOffsetTop: null
+    onOffsetTop: null,
   }
 
   constructor(props) {
@@ -639,7 +651,7 @@ class ListItem extends React.PureComponent {
       nr,
       status,
       icon,
-      children
+      children,
     } = this.props
 
     const statusTitle =
@@ -648,9 +660,9 @@ class ListItem extends React.PureComponent {
         new: 'New',
         beta: 'Beta',
         wip: 'Work in Progress',
-        cs: 'Comming soon',
+        cs: 'Coming soon',
         dep: 'Deprecated',
-        imp: 'Needs improvement'
+        imp: 'Needs improvement',
       }[status]
 
     const params = {}
@@ -671,7 +683,7 @@ class ListItem extends React.PureComponent {
         style={{
           '--delay': `${
             nr !== null && nr < 20 ? nr * 12 : 0 // random(1, 160)
-          }ms`
+          }ms`,
         }}
       >
         <Link
@@ -730,8 +742,8 @@ const prepareNav = ({ location, allMdx, showAll, pathPrefix }) => {
     .map(
       ({
         node: {
-          fields: { slug }
-        }
+          fields: { slug },
+        },
       }) => slug
     )
     .filter((slug) => slug !== '/')
@@ -758,7 +770,7 @@ const prepareNav = ({ location, allMdx, showAll, pathPrefix }) => {
           ) {
             return {
               ...acc,
-              [`/${prefix}`]: [...acc[`/${prefix}`], cur]
+              [`/${prefix}`]: [...acc[`/${prefix}`], cur],
             }
           } else {
             return { ...acc, items: [...acc.items, cur] }
@@ -780,13 +792,13 @@ const prepareNav = ({ location, allMdx, showAll, pathPrefix }) => {
       const {
         node: {
           fields: { slug },
-          frontmatter: { title, order, ...rest }
-        }
+          frontmatter: { title, order, ...rest },
+        },
       } = allMdx.edges.find(
         ({
           node: {
-            fields: { slug }
-          }
+            fields: { slug },
+          },
         }) => slug === slugPath
       )
 
@@ -802,7 +814,7 @@ const prepareNav = ({ location, allMdx, showAll, pathPrefix }) => {
       const sub = parts.slice(0, parts.length - 1).join('/')
 
       subCache[sub] = subCache[sub] || {
-        count: 1
+        count: 1,
       }
       levelCache[item.level] = levelCache[item.level] || {}
       const count = subCache[sub].count++
@@ -825,7 +837,7 @@ const prepareNav = ({ location, allMdx, showAll, pathPrefix }) => {
     })
 
   list
-    // reorder regarding to potensial manua defined order
+    // reorder regarding potential manually defined order
     .sort(({ _order: oA }, { _order: oB }) =>
       oA < oB ? -1 : oA > oB ? 1 : 0
     )

@@ -11,7 +11,7 @@ The image element associated with the class `dnb-img` does not have much opinion
 As of now, the React image "element" (Img) does provide a `figure` element with the `role="img"` and an `img` tag inside. This is mainly to support the [Skeleton](/uilib/components/skeleton) provider.
 
 ```jsx
-import { Img } from 'dnb-ui-lib/elements'
+import { Img } from '@dnb/eufemia/elements'
 
 render(<Img alt="..." src="..." width="100" height="100" />)
 ```
@@ -41,20 +41,15 @@ render(<CustomImage />)
 
 <ComponentBox data-visual-test="image-no-source" useRender hideCode>
 {`
-const StyledImg = styled(Img)\`
-  border-radius: 1rem;
-\`
-const CustomImage = () => {
-	return (
-    <StyledImg
-      width="100"
-      height="100"
-      alt="Alt text"
-      src="https://invalid"
-    />
-	)
-}
-render(<CustomImage />)
+const MyImg = Img
+render(
+  <MyImg
+    width="100"
+    height="100"
+    alt="Alt text"
+    src="https://invalid"
+  />
+)
 `}
 </ComponentBox>
 

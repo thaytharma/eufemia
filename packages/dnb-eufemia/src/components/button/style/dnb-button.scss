@@ -1,0 +1,17 @@
+/*
+* DNB Button
+*
+*/
+
+@import '../../../style/components/imports.scss';
+
+// import dependencies
+@import '../../icon/style/dnb-icon.scss';
+// @import '../../tooltip/style/dnb-tooltip.scss'; // TODO: considder to include this in future
+@import '../../form-status/style/dnb-form-status.scss';
+
+.dnb-button {
+  @include componentReset();
+}
+
+@import './_button.scss';

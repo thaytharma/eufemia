@@ -1,0 +1,9 @@
+{
+  "reject": [
+    "eslint",
+    "react",
+    "react-dom",
+    "node-sass",
+    "puppeteer"
+  ]
+}

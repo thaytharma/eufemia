@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-standard",
+    "stylelint-config-prettier"
+  ],
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "rules": {
+    "declaration-empty-line-before": null,
+    "at-rule-no-unknown": null,
+    "no-invalid-position-at-import-rule": null
+  }
+}

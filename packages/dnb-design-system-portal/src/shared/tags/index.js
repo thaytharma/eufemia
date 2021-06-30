@@ -4,7 +4,7 @@
 
 import React from 'react'
 import CodeBlock from './CodeBlock'
-import { Checkbox, Input } from 'dnb-ui-lib/src/components'
+import { Checkbox, Input } from '@dnb/eufemia/src/components'
 import {
   Ul,
   Ol,
@@ -13,10 +13,10 @@ import {
   P,
   Hr,
   Blockquote,
-  Code
-} from 'dnb-ui-lib/src/elements'
-import Element from 'dnb-ui-lib/src/elements/Element'
+  Code,
+} from '@dnb/eufemia/src/elements'
 import Table from './Table'
+// import Element from '@dnb/eufemia/src/elements/Element'
 // import Img from './Img'
 // import Tag from './Tag' // use it like so: <Tag is="p" {...props} />
 import Tabbar from './Tabbar'
@@ -49,7 +49,7 @@ export default {
     }
   },
   table: Table,
-  pre: (props) => <Element is="div" {...props} />,
+  // pre: (props) => <Element is="div" {...props} />,// Not needed. Makes skeletons not that good looking
   code: (...props) => CodeBlock(...props),
   inlineCode: ({ ...props }) => {
     if (props.inline) {
@@ -68,5 +68,5 @@ export default {
   p: (props) => <P {...props} />,
   paragraph: (props) => <P {...props} />,
   blockquote: (props) => <Blockquote {...props} />,
-  hr: (props) => <Hr light {...props} />
+  hr: (props) => <Hr light {...props} />,
 }

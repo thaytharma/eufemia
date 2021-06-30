@@ -5,6 +5,7 @@
 
 import React from 'react'
 import ComponentBox from 'Src/shared/tags/ComponentBox'
+import { Autocomplete, IconPrimary } from '@dnb/eufemia/src/components'
 import styled from '@emotion/styled'
 
 const Wrapper = styled.div`
@@ -22,14 +23,13 @@ const Wrapper = styled.div`
 export const AutocompleteDefaultExample = () => (
   <Wrapper>
     <ComponentBox scope={{ topMovies }}>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Autocomplete
   data={topMovies}
   label="Label:"
+  icon={false}
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -40,8 +40,7 @@ export const AutocompleteWithCustomTitle = () => (
       data-visual-test="autocomplete-closed"
       scope={{ topMovies }}
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Autocomplete
   data={topMovies}
   label="Label:"
@@ -50,8 +49,7 @@ export const AutocompleteWithCustomTitle = () => (
     console.log('on_change', data)
   }}
 />
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -59,8 +57,7 @@ export const AutocompleteWithCustomTitle = () => (
 export const AutocompleteDynamicallyUpdatedData = () => (
   <Wrapper>
     <ComponentBox scope={{ topMovies }} useRender>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 const onTypeHandler = ({
   value,
   showIndicator,
@@ -77,7 +74,7 @@ const onTypeHandler = ({
 
       console.log('debounced value:', value)
 
-      // simualte server delay
+      // simulate server delay
       const timeout = setTimeout(() => {
 
         // update the drawerList
@@ -94,13 +91,11 @@ const onTypeHandler = ({
 }
 render(<Autocomplete
   mode="async"
-  prevent_selection="true"
   on_type={onTypeHandler}
   no_scroll_animation="true"
   placeholder="Search ..."
 />)
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -108,8 +103,7 @@ render(<Autocomplete
 export const AutocompleteFirstFocusUpdate = () => (
   <Wrapper>
     <ComponentBox scope={{ topMovies }} useRender>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 const onFocusHandler = ({ updateData, dataList, showIndicatorItem }) => {
   if(!dataList.length){
     showIndicatorItem()
@@ -127,8 +121,7 @@ render(<Autocomplete
   }}
   on_focus={onFocusHandler}
 />)
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -139,8 +132,7 @@ export const AutocompleteToggleExample = () => (
       data-visual-test="autocomplete-drawer-button"
       scope={{ topMovies }}
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Autocomplete
   label="Label:"
   show_submit_button="true"
@@ -150,8 +142,7 @@ export const AutocompleteToggleExample = () => (
 >
   {() => (topMovies)}
 </Autocomplete>
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -162,8 +153,7 @@ export const AutocompletePredefinedInput = () => (
       data-visual-test="autocomplete-drawer-search"
       scope={{ topMovies }}
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Autocomplete
   label="Label:"
   input_value="the pa ther"
@@ -174,8 +164,7 @@ export const AutocompletePredefinedInput = () => (
 >
   {() => (topMovies)}
 </Autocomplete>
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -186,8 +175,7 @@ export const AutocompleteDifferentSizes = () => (
       data-visual-test="autocomplete-sizes"
       scope={{ topMovies }}
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <FormRow direction="vertical">
   <Autocomplete
     label="Label:"
@@ -208,8 +196,7 @@ export const AutocompleteDifferentSizes = () => (
     data={() => (topMovies)}
   />
 </FormRow>
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -221,8 +208,7 @@ export const AutocompleteCustomWidth = () => (
       scope={{ topMovies }}
       useRender
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 const CustomWidthOne = styled(Autocomplete)\`
   .dnb-autocomplete__shell {
     width: 10rem;
@@ -268,8 +254,7 @@ render(<FormRow direction="vertical">
     data={topMovies}
   />
 </FormRow>)
-          `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -285,8 +270,7 @@ export const AutocompleteOpened = () => {
         scope={{ topMovies }}
         hideCode
       >
-        {
-          /* @jsx */ `
+        {() => /* jsx */ `
 <Autocomplete
   label="Label:"
   input_value="lord"
@@ -306,15 +290,22 @@ export const AutocompleteOpened = () => {
   data={topMovies}
   className="focus-trigger"
 />
-        `
-        }
+`}
       </ComponentBox>
     </Wrapper>
   )
 }
 
 const topMovies = [
-  { content: 'The Shawshank Redemption', year: 1994 },
+  {
+    content: (
+      <Autocomplete.HorizontalItem>
+        <IconPrimary size="medium" icon="bell" right="x-small" />
+        The Shawshank Redemption
+      </Autocomplete.HorizontalItem>
+    ),
+    year: 1994,
+  },
   { content: 'The Godfather', year: 1972 },
   { content: 'The Godfather: Part II', year: 1974 },
   { content: 'The Dark Knight', year: 2008 },
@@ -326,11 +317,11 @@ const topMovies = [
   { content: 'Fight Club', year: 1999 },
   {
     content: 'The Lord of the Rings: The Fellowship of the Ring',
-    year: 2001
+    year: 2001,
   },
   {
     content: 'Star Wars: Episode V - The Empire Strikes Back',
-    year: 1980
+    year: 1980,
   },
   { content: 'Forrest Gump', year: 1994 },
   { content: 'Inception', year: 2010 },
@@ -375,7 +366,7 @@ const topMovies = [
   {
     content:
       'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
-    year: 1964
+    year: 1964,
   },
   { content: 'The Great Dictator', year: 1940 },
   { content: 'Cinema Paradiso', year: 1988 },
@@ -423,5 +414,5 @@ const topMovies = [
   { content: 'Inglourious Basterds', year: 2009 },
   { content: 'Snatch', year: 2000 },
   { content: '3 Idiots', year: 2009 },
-  { content: 'Monty Python and the Holy Grail', year: 1975 }
+  { content: 'Monty Python and the Holy Grail', year: 1975 },
 ]

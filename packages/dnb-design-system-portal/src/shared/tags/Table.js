@@ -6,15 +6,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // import Color from 'color'
-import { Table as TableElement } from 'dnb-ui-lib/src/elements'
+import { Table as TableElement } from '@dnb/eufemia/src/elements'
 
 export default class Table extends React.PureComponent {
   static propTypes = {
-    children: PropTypes.node.isRequired,
-    selectable: PropTypes.bool
+    selectable: PropTypes.bool,
+    children: PropTypes.node,
   }
   static defaultProps = {
-    selectable: false
+    selectable: false,
+    children: null,
   }
   render() {
     // make sure we get the table children
@@ -105,7 +106,7 @@ const recursiveMap = (children, func = null) => {
 
     if (child.props.children) {
       child = React.cloneElement(child, {
-        children: recursiveMap(child.props.children, func)
+        children: recursiveMap(child.props.children, func),
       })
     }
 
@@ -115,7 +116,7 @@ const recursiveMap = (children, func = null) => {
 
 const prepareWithSameColor = (hex) => ({
   color: hex,
-  background: hex
+  background: hex,
 })
 
 // Not used anymore

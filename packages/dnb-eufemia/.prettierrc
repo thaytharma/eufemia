@@ -1,0 +1,44 @@
+{
+  "printWidth": 75,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "bracketSpacing": true,
+  "useTabs": false,
+  "semi": false,
+  "jsxBracketSameLine": false,
+  "trailingComma": "es5",
+  "overrides": [
+    {
+      "files": "*.d.ts",
+      "options": {
+        "semi": true,
+        "trailingComma": "none"
+      }
+    },
+    {
+      "files": "*.tsx",
+      "options": {
+        "semi": true,
+        "trailingComma": "none"
+      }
+    },
+    {
+      "files": "*.scss",
+      "options": {
+        "singleQuote": true
+      }
+    },
+    {
+      "files": ".babelrc",
+      "options": {
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "html"
+      }
+    }
+  ]
+}

@@ -3,18 +3,16 @@
  *
  */
 
-import { Heading, Button, Tabs } from 'dnb-ui-lib/src'
+import { Heading, Button, Tabs } from '@dnb/eufemia/src'
 import Code, { CodeRenderer } from './Code'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-
-import { CloseButton } from 'dnb-ui-lib/src/components/modal'
 import Link from 'gatsby-link'
 import PropTypes from 'prop-types'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { navigate, parsePath } from 'gatsby'
-import { fullscreen as fullscreenIcon } from 'dnb-ui-lib/src/icons/secondary_icons'
+import { fullscreen as fullscreenIcon } from '@dnb/eufemia/src/icons/secondary_icons'
 
 const pathPrefix = __PATH_PREFIX__ // eslint-disable-line
 
@@ -26,7 +24,7 @@ const getLocation = () => {
   return {
     ...parsePath(pathname.replace(new RegExp(pathPrefix || '', 'g'), '')),
     search,
-    hash
+    hash,
   }
 }
 
@@ -62,13 +60,13 @@ class ItemWrapper extends React.PureComponent {
     callback: PropTypes.shape({
       demo: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
       info: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-      code: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
+      code: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     }),
     hideTabs: PropTypes.bool,
     defaultTab: PropTypes.string,
     title: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    tabs: PropTypes.array
+    tabs: PropTypes.array,
   }
   static defaultProps = {
     ExampleCode: null,
@@ -78,11 +76,11 @@ class ItemWrapper extends React.PureComponent {
     tabs: [
       { title: 'Demo', key: 'demo' },
       { title: 'Details', key: 'info' },
-      { title: 'Markup', key: 'code' }
-    ]
+      { title: 'Markup', key: 'code' },
+    ],
   }
   state = {
-    wasFullscreen: null
+    wasFullscreen: null,
   }
   constructor(props) {
     super(props)
@@ -99,7 +97,7 @@ class ItemWrapper extends React.PureComponent {
       ({ key }) => key === activeTabKey
     )
     this.setState({
-      activeTabKey: isValid ? activeTabKey : this.props.defaultTab
+      activeTabKey: isValid ? activeTabKey : this.props.defaultTab,
     })
   }
   isActive(tabKey) {
@@ -109,7 +107,7 @@ class ItemWrapper extends React.PureComponent {
     const location = getLocation()
     if (location)
       this.setState({
-        wasFullscreen: /fullscreen/.test(location.search)
+        wasFullscreen: /fullscreen/.test(location.search),
       })
   }
   // componentWillUnmount() {
@@ -139,7 +137,7 @@ class ItemWrapper extends React.PureComponent {
       Details,
       DemoComponent,
       CodeComponent,
-      callback: Additional
+      callback: Additional,
     } = this.props
 
     // Prerender the Details component
@@ -244,10 +242,12 @@ class ItemWrapper extends React.PureComponent {
                   <TabsList>
                     <Tabs />
                     {this.state.wasFullscreen ? (
-                      <CloseButton
-                        style_type="cross"
-                        title="Quit Fullscreen"
+                      <Button
                         on_click={this.quitFullscreen}
+                        variant="secondary"
+                        title="Quit Fullscreen"
+                        icon="close"
+                        className="fullscreen"
                       />
                     ) : (
                       <Button

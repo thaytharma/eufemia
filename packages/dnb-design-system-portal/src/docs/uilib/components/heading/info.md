@@ -8,12 +8,12 @@ The Heading component is a helper to create automated semantic headings within a
 
 > Basically, only assistive technologies do have need for semantic headings. But they need them correct.
 
-How does it work? The heading leveling is handled synchronously. But you can easily isolate one level, or a part by using a context provider: `<Heading.Level ...`. This alows you to later, asynchronous, add new headings inside. You can nest several contexts inside each.
+How does it work? The heading leveling is handled synchronously. But you can easily isolate one level, or a part by using a context provider: `<Heading.Level ...`. This allows you to later, asynchronous, add new headings inside. You can nest several contexts inside each.
 
 The first code example is without using context provider. To handle levels in batches or asynchron, use a `Heading.Level` context provider.
 
 ```jsx
-import { Heading } from 'dnb-ui-lib/components'
+import { Heading } from '@dnb/eufemia/components'
 
 render(
   <article>
@@ -45,7 +45,7 @@ render(
 For the visual part, we simply use [typography styles](/uilib/typography/heading) with the `size` property, e.g. `size="x-large"`
 
 ```jsx
-import { Heading } from 'dnb-ui-lib/components'
+import { Heading } from '@dnb/eufemia/components'
 
 render(
   <Heading increase size="xx-large">
@@ -74,7 +74,7 @@ In order to control leveling of headings systematically, you can make use of the
 They are completely optional. But can help out to solve some kinds of challenges or logic.
 
 ```jsx
-import { Heading } from 'dnb-ui-lib/components'
+import { Heading } from '@dnb/eufemia/components'
 
 render(
   <article>
@@ -92,7 +92,7 @@ render(
 )
 ```
 
-_TODO:_ Integrationn with the [global Provider](/uilib/usage/customisation/provider).
+_TODO:_ Integration with the [global Provider](/uilib/usage/customisation/provider).
 
 ### Skip auto correction and warnings
 
@@ -101,7 +101,7 @@ First, warnings will not show up in production builds. And to skip the auto corr
 ### Heading levels interceptor modification
 
 ```js
-import { resetLevels, setNextLevel } from 'dnb-ui-lib/components/Heading'
+import { resetLevels, setNextLevel } from '@dnb/eufemia/components/Heading'
 
 // e.g. during Gatsby route change
 export const onRouteUpdate = () => {
@@ -115,7 +115,7 @@ export const onRouteUpdate = () => {
 setNextLevel(3)
 ```
 
-**Limitations:** `resetLevels` and `setNextLevel` does not change contexts with an entry level highter than one (1).
+**Limitations:** `resetLevels` and `setNextLevel` does not change contexts with an entry level higher than one (1).
 In order to change also contexts, you can set `overwriteContext` to true:
 
 ```js
@@ -134,7 +134,7 @@ You could additionally define "what is a page change" and what not, by using the
 You may still consider of using the basic elements. But keep in mind, you have to define headings responsibly.
 
 ```jsx
-import { H1, H2 } from 'dnb-ui-lib/elements'
+import { H1, H2 } from '@dnb/eufemia/elements'
 
 render(
   <article>

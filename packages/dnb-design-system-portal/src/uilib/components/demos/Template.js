@@ -3,7 +3,7 @@
  * Do not change the content!
  *
  * "Component" Demo setup
- * Ready for imporing in page
+ * Ready for importing in page
  *
  */
 
@@ -11,10 +11,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ItemWrapper from '../../../shared/parts/uilib/ItemWrapper'
 import DemoComponent, {
-  Example as CodeComponent
-} from 'dnb-ui-lib/src/components/template/Example'
-import Description from 'dnb-ui-lib/src/components/template/description.md'
-import Details from 'dnb-ui-lib/src/components/template/details.md'
+  Example as CodeComponent,
+} from '@dnb/eufemia/src/components/template/Example'
+import Description from '@dnb/eufemia/src/components/template/description.md'
+import Details from '@dnb/eufemia/src/components/template/details.md'
 import ExampleCode from 'raw-loader!../examples/Template.txt'
 
 export default class TemplateDemo extends React.PureComponent {
@@ -25,7 +25,7 @@ export default class TemplateDemo extends React.PureComponent {
     Details: PropTypes.func,
     DemoComponent: PropTypes.func,
     CodeComponent: PropTypes.func,
-    hideTabs: PropTypes.bool
+    hideTabs: PropTypes.bool,
   }
   static defaultProps = {
     title: 'Template',
@@ -36,7 +36,7 @@ export default class TemplateDemo extends React.PureComponent {
     DemoComponent,
     CodeComponent,
     callback: CodeComponent.AdditionalCallback || null,
-    hideTabs: false
+    hideTabs: false,
   }
   render() {
     return <ItemWrapper {...TemplateDemo.defaultProps} {...this.props} />

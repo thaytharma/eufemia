@@ -20,7 +20,7 @@ Now that we got a picture about [what Eufemia aims to strive against](/uilib/get
 
 Eufemia is build upon using a tree shaped system pattern. Where one system uses a sub-system (or parts of it) in order to shape its full existence. E.g. the Button component uses the color system, spacing system, the typography system, a naming system (properties, file names) and the icon system.
 
-Some systems are low level systems (like a naming system) and some are hight level systems (like components). Both types of systems we thread as our building blocks.
+Some systems are low level systems (like a naming system) and some are high level systems (like components). Both types of systems we thread as our building blocks.
 
 ## Using the building blocks
 
@@ -40,7 +40,7 @@ In order to both serve ready to use components and make them as flexible as poss
 - Render prop pattern
 - Hooks pattern
 
-It will vary when and where these patterns are used. And some patterns, like the property pattern, is used by almost every component.
+It will vary when and where these extensions are used. And some extensions, like the property pattern, is used by almost every component.
 
 Overall, the reuse of existing adapters and APIs and using components for what they are designed for to be used, will allow Eufemia to be able to further develop and be maintainable.
 

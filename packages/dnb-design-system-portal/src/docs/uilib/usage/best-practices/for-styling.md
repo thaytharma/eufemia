@@ -38,7 +38,7 @@ This helps coworkers quickly find and understand the sentence and meaning of the
 
   /* -- 3. Fonts & Typography -- */
   font-family: var(--font-family-default);
-  font-weight: var(--font-weight-default);
+  font-weight: var(--font-weight-basis);
   font-size: var(--font-size-large);
   color: var(--color-sea-green);
 
@@ -61,4 +61,4 @@ Here is a list of what we should use as layout and styling units to embrace the 
 - **`px`**: Use _pixels_ on visual helper lines and borders. Borders don't need necessarily to be responsive.
 - **`viewport units and percentage`**: Use these units to make layout and component widths responsive. Use also for placing and positioning layout wrappers which can give a better user experience.
 
-Use _em_ for CSS `@media` queries for the best browser compatibility. Read more about [viewport units, Media Queries and breakpoints](/uilib/usage/layout#media-queries-and-breakpoints).
+Use _em_ for CSS `@media` queries for the best browser compatibility. Read more about [viewport units, Media Queries and breakpoints](/uilib/usage/layout/media-queries).

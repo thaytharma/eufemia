@@ -25,12 +25,12 @@ export default class MdxTemplate extends React.PureComponent {
           body,
           frontmatter: { title, description, fullscreen, showTabs },
           tableOfContents,
-          children
+          children,
         },
         site: {
-          siteMetadata: { title: mainTitle, description: mainDescription }
-        }
-      }
+          siteMetadata: { title: mainTitle, description: mainDescription },
+        },
+      },
     } = this.props
 
     if (location.href && location.href.includes('data-visual-test')) {
@@ -72,8 +72,8 @@ export default class MdxTemplate extends React.PureComponent {
             <Tabbar
               key="tabbar"
               location={location}
-              {...(child.frontmatter || {})}
-              usePath={'/' + (child.fields && child.fields.slug)}
+              {...(child?.frontmatter || {})}
+              usePath={'/' + (child?.fields?.slug || '')}
             />
           )}
 
@@ -91,19 +91,19 @@ export default class MdxTemplate extends React.PureComponent {
 MdxTemplate.propTypes = {
   location: PropTypes.object.isRequired,
   pageContext: PropTypes.shape({
-    fullscreen: PropTypes.bool
+    fullscreen: PropTypes.bool,
   }).isRequired,
   data: PropTypes.shape({
     mdx: PropTypes.shape({
       body: PropTypes.string.isRequired,
       frontmatter: PropTypes.object.isRequired,
       tableOfContents: PropTypes.object.isRequired,
-      children: PropTypes.array.isRequired
+      children: PropTypes.array.isRequired,
     }).isRequired,
     site: PropTypes.shape({
-      siteMetadata: PropTypes.object.isRequired
-    }).isRequired
-  }).isRequired
+      siteMetadata: PropTypes.object.isRequired,
+    }).isRequired,
+  }).isRequired,
 }
 
 export const pageQuery = graphql`

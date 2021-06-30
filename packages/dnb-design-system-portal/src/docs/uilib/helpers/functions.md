@@ -17,22 +17,22 @@ All components have various function helpers, you also can use in projects. This
 import {
   makeUniqueId,
   toPascalCase,
-  toCamcelCase,
+  toCamelCase,
   ...
-} from 'dnb-ui-lib/shared/component-helper'
+} from '@dnb/eufemia/shared/component-helper'
 ```
 
-| Function                  | Description                                                                                                                   | Parameters                                                                       | Return            |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
-| `InteractionInvalidation` | Invalidates DOM elements to be accessible for a keyboard or a screen reader. Is used by the [Modal](/uilib/components/modal). | [See example](#interactioninvalidation-example)                                  | `Void`            |
-| `isTrue`                  | Checks if a value is Truthy or Falsy.                                                                                         | `[String or Boolean or Number]`                                                  | `Boolean`         |
-| `isTouchDevice`           | Checks if the target device has touch support.                                                                                |                                                                                  | `Boolean`         |
-| `toPascalCase`            | Transforms a string containing from **nake_case** to a [PascalCase](!/uilib/development/naming).                              | `[String]`                                                                       | `String`          |
-| `toCamcelCase`            | Transforms a string containing from **nake_case** to a [pascalCase](!/uilib/development/naming).                              | `[String]`                                                                       | `String`          |
-| `detectOutsideClick`      | Detects an click outside of the defined target HTML `element` and will then emit the `callback`.                              | `[element, callback({ event })]`                                                 | `Void`            |
-| `filterProps`             | Filters out unwanted entries from either an object or array.                                                                  | `[props={object or array}, remove={object or array}, allowed={object or array}]` | `object or array` |
-| `makeUniqueId`            | Creates a truly unique hash.                                                                                                  | `[prefix='', length=8]`                                                          | `String`          |
-| `slugify`                 | Breaks down phrases of words to be URI compatible. Removes special characters.                                                | `[String]`                                                                       | `String`          |
+| Function                  | Description                                                                                                                                   | Parameters                                                                       | Return            |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
+| `InteractionInvalidation` | Invalidates DOM elements to be accessible for a keyboard or a screen reader. Is used by the [Modal](/uilib/components/modal).                 | [See example](#interactioninvalidation-example)                                  | `Void`            |
+| `isTrue`                  | Checks if a value is Truthy or Falsy.                                                                                                         | `[String or Boolean or Number]`                                                  | `Boolean`         |
+| `isTouchDevice`           | Checks if the target device has touch support.                                                                                                |                                                                                  | `Boolean`         |
+| `toPascalCase`            | Transforms a string containing from **snake_case** to a [PascalCase](!/uilib/development/naming).                                             | `[String]`                                                                       | `String`          |
+| `toCamelCase`             | Transforms a string containing from **snake_case** to a [pascalCase](!/uilib/development/naming).                                             | `[String]`                                                                       | `String`          |
+| `detectOutsideClick`      | Detects an click outside of the defined target HTML `element` and will then emit the `callback`. You can also provide an array with elements. | `[element, callback({ event })]`                                                 | `Void`            |
+| `filterProps`             | Filters out unwanted entries from either an object or array.                                                                                  | `[props={object or array}, remove={object or array}, allowed={object or array}]` | `object or array` |
+| `makeUniqueId`            | Creates a truly unique hash.                                                                                                                  | `[prefix='', length=8]`                                                          | `String`          |
+| `slugify`                 | Breaks down phrases of words to be URI compatible. Removes special characters.                                                                | `[String]`                                                                       | `String`          |
 
 ### General helpers
 
@@ -40,7 +40,7 @@ import {
 import {
   isIE11,
   ...
-} from 'dnb-ui-lib/shared/helpers'
+} from '@dnb/eufemia/shared/helpers'
 ```
 
 | Function                 | Description                                                                                                                     | Parameters                                                                                              | Return     |
@@ -71,7 +71,7 @@ import {
 #### InteractionInvalidation example
 
 ```js
-import { InteractionInvalidation } from 'dnb-ui-lib/shared/component-helper'
+import { InteractionInvalidation } from '@dnb/eufemia/shared/component-helper'
 
 const instance = new InteractionInvalidation()
 
@@ -91,7 +91,7 @@ instance.revert()
 #### `scrollToLocationHashId` example
 
 ```js
-import { scrollToLocationHashId } from 'dnb-ui-lib/shared/helpers'
+import { scrollToLocationHashId } from '@dnb/eufemia/shared/helpers'
 
 // in case there is a #hash in the url
 const elem = scrollToLocationHashId({
@@ -103,6 +103,6 @@ const elem = scrollToLocationHashId({
     } catch (e) {
       //
     }
-  }
+  },
 })
 ```

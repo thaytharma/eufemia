@@ -18,31 +18,30 @@ const Wrapper = styled.div`
   justify-content: center;
 `
 const WrapperInner = styled.div`
-  /* for large screesn */
+  /* for large screens */
   width: 100%; /* 84vw ~ 60rem */
   max-width: 60rem;
   padding: 0 1rem;
 
-  /* for small screesn */
+  /* for small screens */
   @media screen and (max-width: 40em) {
     padding: 0 0.5rem;
   }
 `
-const Main = styled.main``
 
 const LayoutWrapper = ({ children }) => {
   return (
     <Wrapper className="dnb-core-style">
       <WrapperInner>
         {/* <header className="app-header">header</header> */}
-        <Main role="main">{children}</Main>
+        <main role="main">{children}</main>
         {/* <footer className="app-footer">Happy Eufemia {'🖋'}</footer> */}
       </WrapperInner>
     </Wrapper>
   )
 }
 LayoutWrapper.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 }
 
 export default LayoutWrapper

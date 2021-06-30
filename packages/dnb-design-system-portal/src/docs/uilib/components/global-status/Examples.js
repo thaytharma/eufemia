@@ -8,8 +8,7 @@ import ComponentBox from 'Src/shared/tags/ComponentBox'
 
 export const GlobalStatusError = () => (
   <ComponentBox data-visual-test="global-status">
-    {
-      /* @jsx */ `
+    {() => /* jsx */ `
 <GlobalStatus
   title="Custom Title"
   text="Failure text"
@@ -25,15 +24,13 @@ export const GlobalStatusError = () => (
   no_animation="true"
   id="demo-1"
 />
-    `
-    }
+`}
   </ComponentBox>
 )
 
 export const GlobalStatusInfo = () => (
   <ComponentBox data-visual-test="global-status-info">
-    {
-      /* @jsx */ `
+    {() => /* jsx */ `
 <GlobalStatus
   state="info"
   title="Custom info title ..."
@@ -44,15 +41,13 @@ export const GlobalStatusInfo = () => (
   no_animation="true"
   id="demo-4"
 />
-    `
-    }
+`}
   </ComponentBox>
 )
 
 export const GlobalStatusCoupling = () => (
   <ComponentBox useRender>
-    {
-      /* @jsx */ `
+    {() => /* jsx */ `
 const InputWithError = () => {
   const [errorMessage, setErrorMessage] = React.useState(null)
   return (
@@ -71,15 +66,13 @@ const InputWithError = () => {
 render(
   <InputWithError />
 )
-    `
-    }
+`}
   </ComponentBox>
 )
 
 export const GlobalStatusAddRemoveItems = () => (
-  <ComponentBox noFragments={false}>
-    {
-      /* @jsx */ `
+  <ComponentBox noFragments={false} hideCode>
+    {() => /* jsx */ `
 () => {
   const [count, toggleUpdateStatus] = React.useState(0)
   return (
@@ -132,15 +125,13 @@ export const GlobalStatusAddRemoveItems = () => (
     </>
   )
 }
-    `
-    }
+`}
   </ComponentBox>
 )
 
 export const GlobalStatusScrolling = () => (
-  <ComponentBox>
-    {
-      /* @jsx */ `
+  <ComponentBox hideCode>
+    {() => /* jsx */ `
 <Button
   text="Scroll to main GlobalStatus"
   on_click={() => {
@@ -151,15 +142,13 @@ export const GlobalStatusScrolling = () => (
     })
   }}
 />
-      `
-    }
+`}
   </ComponentBox>
 )
 
 export const GlobalStatusUpdate = () => (
-  <ComponentBox useRender>
-    {
-      /* @jsx */ `
+  <ComponentBox useRender hideCode>
+    {() => /* jsx */ `
 const Context = React.createContext()
 
 const UpdateDemo = () => {
@@ -232,8 +221,8 @@ const UpdateDemoTools = () => {
     setVisibility
   } = React.useContext(Context)
 
+// Only to demonstrate the usage of an interceptor situation
   const inst = React.useRef()
-
   React.useEffect(() => {
     if (!inst.current) {
       inst.current = GlobalStatus.create({
@@ -243,36 +232,31 @@ const UpdateDemoTools = () => {
         status_id: 'custom-item',
         show: false
       })
+
+      inst.current.update({
+        on_show: () => {
+          console.log('on_show')
+          if (!isVisible) {
+            setVisibility(true)
+          }
+        },
+        on_hide: () => {
+          console.log('on_hide')
+          setVisibility(false)
+        },
+        on_close: () => {
+          console.log('on_close')
+          setVisibility(false)
+        }
+      })
     }
 
     inst.current.update({
       show: isVisible
     })
+
   }, [isVisible])
   React.useEffect(() => () => inst.current.remove(), [])
-
-  React.useEffect(
-    () =>
-      inst.current.update({
-        on_show: () => {
-          console.log('on_show')
-          if (!isVisible) {
-            showAsVisible(true)
-          }
-        },
-        on_hide: () => {
-          console.log('on_hide')
-          showAsVisible(false)
-        },
-        on_close: () => {
-          console.log('on_close')
-          showAsVisible(false)
-        }
-      }),
-    []
-  )
-
-  const [showAs, showAsVisible] = React.useState(isVisible)
 
   return (
     <Section top spacing style_type="divider">
@@ -280,21 +264,19 @@ const UpdateDemoTools = () => {
         text="Toggle"
         variant="checkbox"
         right
-        checked={showAs}
+        checked={isVisible}
         on_change={({ checked }) => {
-          setVisibility((s) => !s)
-          showAsVisible(checked)
+          setVisibility(checked)
         }}
       />
       <Button
         text="Reset"
         variant="tertiary"
+        icon="reset"
         disabled={!(errorA || errorB)}
         on_click={() => {
           setErrorA(null)
           setErrorB(null)
-          showAsVisible(false)
-          setVisibility(false)
         }}
       />
     </Section>
@@ -302,7 +284,6 @@ const UpdateDemoTools = () => {
 }
 
 render(<UpdateDemo />)
-      `
-    }
+`}
   </ComponentBox>
 )

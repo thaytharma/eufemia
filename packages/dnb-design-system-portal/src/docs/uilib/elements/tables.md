@@ -9,7 +9,7 @@ import { css, Global } from '@emotion/react'
 
 ## Tables
 
-The following table has a default style. But in future, there will be several patterns and styles to choose from.
+The following table has a default style. But in future, there will be several extensions and styles to choose from.
 
 You may consider using `table-layout: fixed;`. You can use the modifier class in doing so: `.dnb-table--fixed`
 
@@ -148,7 +148,7 @@ To enhance or manipulate the the table style, you can make use of a couple helpe
 
 <ComponentBox hideCode data-visual-test="table-sticky">
 {`
-<Table sticky="true" sticky_offset="4rem" className="dnb-table--fixed">
+<Table sticky={true} sticky_offset="4rem" className="dnb-table--fixed">
   <caption className="dnb-sr-only">A Table Caption</caption>
   <thead>
     <tr>

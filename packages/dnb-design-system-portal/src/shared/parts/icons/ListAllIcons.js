@@ -4,13 +4,13 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Icon } from 'dnb-ui-lib/src/components'
-import { P } from 'dnb-ui-lib/src/elements'
-import * as PrimaryIcons from 'dnb-ui-lib/src/icons/primary_icons'
-import * as SecondaryIcons from 'dnb-ui-lib/src/icons/secondary_icons'
-import * as PrimaryIconsMedium from 'dnb-ui-lib/src/icons/primary_icons_medium'
-import * as SecondaryIconsMedium from 'dnb-ui-lib/src/icons/secondary_icons_medium'
-import iconsMetaData from 'dnb-ui-lib/src/icons/icons-meta.json'
+import { Icon } from '@dnb/eufemia/src/components'
+import { P } from '@dnb/eufemia/src/elements'
+import * as PrimaryIcons from '@dnb/eufemia/src/icons/primary_icons'
+import * as SecondaryIcons from '@dnb/eufemia/src/icons/secondary_icons'
+import * as PrimaryIconsMedium from '@dnb/eufemia/src/icons/primary_icons_medium'
+import * as SecondaryIconsMedium from '@dnb/eufemia/src/icons/secondary_icons_medium'
+import iconsMetaData from '@dnb/eufemia/src/icons/icons-meta.json'
 import styled from '@emotion/styled'
 import AutoLinkHeader from '../../tags/AutoLinkHeader'
 
@@ -52,11 +52,11 @@ export default class ListAllIcons extends React.PureComponent {
   state = { iconsToRender: [] }
   static propTypes = {
     groupBy: PropTypes.string,
-    variant: PropTypes.string
+    variant: PropTypes.string,
   }
   static defaultProps = {
     groupBy: null,
-    variant: null
+    variant: null,
   }
   constructor(props) {
     super(props)
@@ -80,9 +80,18 @@ export default class ListAllIcons extends React.PureComponent {
   }
   renderListItem(icons) {
     return icons.map(({ iconName, Svg, variant, tags }) => {
-      const SvgMedium = (variant === 'primary'
-        ? PrimaryIconsMedium
-        : SecondaryIconsMedium)[`${iconName}_medium`]
+      const SvgMedium = (
+        variant === 'primary' ? PrimaryIconsMedium : SecondaryIconsMedium
+      )[`${iconName}_medium`]
+
+      // remove duplications
+      tags = tags.filter((item, index) => {
+        if (item === iconName) {
+          return false
+        }
+        return tags.indexOf(item) === index
+      })
+
       return (
         <ListItem key={iconName}>
           <ListItemInner>

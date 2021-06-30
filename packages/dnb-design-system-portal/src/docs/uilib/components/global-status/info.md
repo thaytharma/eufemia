@@ -33,7 +33,7 @@ Normally, You only want to have **one** `GlobalStatus` inside Your application. 
 <Input global_status_id="other-global-status" ... />
 ```
 
-But You can also make use of the [FormSet](/uilib/components/form-set) or [FormRow](/uilib/components/form-row) which will send along the `global_status_id` the underlaying/wrapped components, like:
+But You can also make use of the [FormSet](/uilib/components/form-set) or [FormRow](/uilib/components/form-row) which will send along the `global_status_id` the underlying/wrapped components, like:
 
 ```jsx
 <GlobalStatus id="other-global-status" />
@@ -63,20 +63,30 @@ Beside the automated connection between the error states of form components ([Fo
 
 ### JavaScript (interceptor situation)
 
+You can access and manipulate an existing GlobalStatus from outside of the React render tree.
+
+1. Given you have already defined a GlobalStatus in JSX:
+
+```jsx
+<GlobalStatus id="other-global-status" />
+```
+
+2. Then you can control it from within a JavaScript context when ever you need to:
+
 ```js
-import { GlobalStatus } from 'dnb-ui-lib/components'
+import { GlobalStatus } from '@dnb/eufemia/components'
 
 // 1. Update / extend the the status like so:
 const statusOne = GlobalStatus.create({
   id: 'other-global-status', // or main
   status_id: 'custom-id-1',
   text: 'New Text',
-  item: 'Item from status #1'
+  item: 'Item from status #1',
 })
 
 // 2. and removes "custom-id-1" again if needed
 statusOne.update({
-  text: 'Updated Text'
+  text: 'Updated Text',
 })
 
 // 3. and removes "custom-id-1" again if needed
@@ -86,7 +96,7 @@ statusOne.remove()
 ### JSX
 
 ```jsx
-import { GlobalStatus } from 'dnb-ui-lib/components'
+import { GlobalStatus } from '@dnb/eufemia/components'
 
 // 1. Place it under the header bar
 <GlobalStatus text="Optional default text" />
@@ -106,7 +116,7 @@ import { GlobalStatus } from 'dnb-ui-lib/components'
 If You need an additional `GlobalStatus`, define a custom ID (custom-status):
 
 ```jsx
-import { GlobalStatus } from 'dnb-ui-lib/components'
+import { GlobalStatus } from '@dnb/eufemia/components'
 
 // 1. Place it somewhere in Your application
 <GlobalStatus id="custom-status" />

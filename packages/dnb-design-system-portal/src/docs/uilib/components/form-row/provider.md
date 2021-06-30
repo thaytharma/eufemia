@@ -7,10 +7,10 @@ showTabs: true
 If You are using React, You can make use of a [Provider](/uilib/usage/customisation/provider) to support properties for all nested `FormRow`s, like:
 
 ```jsx
-import Provider from 'dnb-ui-lib/shared/Provider'
+import Provider from '@dnb/eufemia/shared/Provider'
 
 render(
-  <Provider formRow={{ vertical: true }}>
+  <Provider FormRow={{ vertical: true }}>
     <App>
       ...
       <FormRow>Everything is vertical now</FormRow>

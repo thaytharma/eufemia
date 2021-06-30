@@ -1,4 +1,3 @@
-Wrapper
 /**
  * UI lib Component Example
  *
@@ -6,7 +5,7 @@ Wrapper
 
 import React from 'react'
 import ComponentBox from 'Src/shared/tags/ComponentBox'
-import InputPassword from 'dnb-ui-lib/src/components/input/InputPassword'
+import InputPassword from '@dnb/eufemia/src/components/input/InputPassword'
 import styled from '@emotion/styled'
 
 const Wrapper = styled.div`
@@ -24,14 +23,12 @@ const Wrapper = styled.div`
 export const InputExampleDefault = () => (
   <Wrapper>
     <ComponentBox data-visual-test="input-placeholder">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   label="Label:"
   placeholder="Placeholder text"
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -39,12 +36,10 @@ export const InputExampleDefault = () => (
 export const InputExampleSearch = () => (
   <Wrapper>
     <ComponentBox data-visual-test="input-search">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   label="Search:"
   type="search"
-  submit_button_title="Search"
   placeholder="Search text placeholder"
   on_change={({ value }) => {
     console.log('on_change', value)
@@ -53,8 +48,7 @@ export const InputExampleSearch = () => (
     console.log('Submit:', value)
   }}
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -62,8 +56,7 @@ export const InputExampleSearch = () => (
 export const InputExampleMedium = () => (
   <Wrapper>
     <ComponentBox data-visual-test="input-medium">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   size="medium"
   type="search"
@@ -73,8 +66,7 @@ export const InputExampleMedium = () => (
     console.log('on_change', value)
   }}
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -82,8 +74,7 @@ export const InputExampleMedium = () => (
 export const InputExampleWithIcon = () => (
   <Wrapper>
     <ComponentBox data-visual-test="input-icon">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   label="Input with icon:"
   placeholder="Input"
@@ -94,13 +85,12 @@ export const InputExampleWithIcon = () => (
 <Input
   label="Input with icon:"
   label_sr_only
-  placeholder="Input with a placeholder asd dsd  asd asd"
+  placeholder="Input with a placeholder"
   icon_position="right"
   icon="check"
   align="right"
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -108,15 +98,13 @@ export const InputExampleWithIcon = () => (
 export const InputExampleDisabled = () => (
   <Wrapper>
     <ComponentBox data-visual-test="input-disabled">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   disabled
   label="Disabled input:"
   placeholder="Disabled Input with a placeholder"
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -124,15 +112,13 @@ export const InputExampleDisabled = () => (
 export const InputExampleFailureStatus = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   label="Show status:"
   status="error"
   value="Shows status with border only"
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -140,15 +126,13 @@ export const InputExampleFailureStatus = () => (
 export const InputExampleFormStatus = () => (
   <Wrapper>
     <ComponentBox data-visual-test="input-error">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   label="With FormStatus:"
   status="You have to fill in this field"
   value="Input value with error"
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -156,8 +140,7 @@ export const InputExampleFormStatus = () => (
 export const InputExampleSuffix = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
   label={<Space element="span" className="dnb-h--large">Fødselsnummer</Space>}
   label_direction="vertical"
@@ -168,8 +151,7 @@ export const InputExampleSuffix = () => (
     console.log('on_change', value)
   }}
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -177,8 +159,7 @@ export const InputExampleSuffix = () => (
 export const InputExampleStretched = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <FormRow
   label="Long label labwl Adipiscing mauris dis proin nec:"
   indent="true"
@@ -187,8 +168,7 @@ export const InputExampleStretched = () => (
 >
   <Input value="I stretch ..." stretch />
 </FormRow>
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -196,22 +176,20 @@ export const InputExampleStretched = () => (
 export const InputExampleNumbers = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Input
-  label="My Status:"
+  label="Label:"
   autocomplete="on"
   placeholder="Placeholder text"
-  status="Numbers are ligned by using Proportional Lining"
+  status="Numbers are using DNB Mono (monospace)"
   status_state="info"
-  status_animation="fade-in"
-  value="This is the value 1234567890"
+  value="1234567890"
   on_change={({ value }) => {
     console.log('on_change', value)
+    return String(value).toUpperCase()
   }}
 />
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -219,8 +197,7 @@ export const InputExampleNumbers = () => (
 export const InputExampleSubmit = () => (
   <Wrapper>
     <ComponentBox>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <FormSet
   prevent_submit={true}
   on_submit={(event) => {
@@ -248,8 +225,7 @@ export const InputExampleSubmit = () => (
     <Button text="Submit" type="submit" />
   </FormRow>
 </FormSet>
-`
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -260,11 +236,10 @@ export const InputExamplePassword = () => (
       scope={{ InputPassword }}
       data-visual-test="input-password"
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <InputPassword
   label="Label:"
-  placeholder="A palceholder text"
+  placeholder="A placeholder text"
   on_change={({ value }) => {
     console.log('on_change:', value)
   }}
@@ -275,8 +250,36 @@ export const InputExamplePassword = () => (
     console.log('on_hide_password')
   }}
 />
-`
-      }
+`}
+    </ComponentBox>
+  </Wrapper>
+)
+
+export const InputExampleClear = () => (
+  <Wrapper>
+    <ComponentBox data-visual-test="input-clear">
+      {() => /* jsx */ `
+<FormRow direction="vertical">
+  <Input
+    clear={true}
+    value="Value ..."
+    size="medium"
+  />
+  <Input
+    clear={true}
+    value="Value ..."
+    type="search"
+    top
+  />
+  <Input
+    clear={true}
+    value="Value ..."
+    icon="loupe"
+    type="search"
+    top
+  />
+</FormRow>
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -288,8 +291,7 @@ export const ScreenshotTests = () => {
   return (
     <Wrapper>
       <ComponentBox data-visual-test="input-align">
-        {
-          /* @jsx */ `
+        {() => /* jsx */ `
 <FormRow label="Left aligned" vertical>
   <Input value="Plain" />
   <Input value="Search" type="search" />
@@ -370,8 +372,7 @@ export const ScreenshotTests = () => {
     align="right"
   />
 </FormRow>
-`
-        }
+`}
       </ComponentBox>
     </Wrapper>
   )

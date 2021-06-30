@@ -1,0 +1,15 @@
+/*
+* DNB Modal
+*
+*/
+
+@import '../../../style/components/imports.scss';
+
+// import dependencies
+@import '../../button/style/dnb-button.scss';
+
+.dnb-modal__content {
+  @include componentReset();
+}
+
+@import './_modal.scss';

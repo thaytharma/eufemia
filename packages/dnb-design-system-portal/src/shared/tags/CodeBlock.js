@@ -10,25 +10,23 @@ import styled from '@emotion/styled'
 import Highlight, { Prism, defaultProps } from 'prism-react-renderer'
 import ReactMarkdown from 'react-markdown'
 import Tag from './Tag'
-import renderers from './index'
-import Code from '../parts/uilib/Code'
-import { Button } from 'dnb-ui-lib/src/components'
-import { P } from 'dnb-ui-lib/src/elements'
-import { makeUniqueId } from 'dnb-ui-lib/src/shared/component-helper'
-import { Context } from 'dnb-ui-lib/src/shared'
+import components from './index'
+import { Button } from '@dnb/eufemia/src/components'
+import { P } from '@dnb/eufemia/src/elements'
+import { makeUniqueId } from '@dnb/eufemia/src/shared/component-helper'
+import { Context } from '@dnb/eufemia/src/shared'
 import AutoLinkHeader from './AutoLinkHeader'
-import { createSkeletonClass } from 'dnb-ui-lib/src/components/skeleton/SkeletonHelper'
+import { createSkeletonClass } from '@dnb/eufemia/src/components/skeleton/SkeletonHelper'
 
 import {
-  generateElement,
   LiveProvider,
   LiveEditor,
   LiveError,
-  LivePreview
+  LivePreview,
 } from 'react-live'
 
 // this theme is replaced my a css one
-import prismTheme from 'dnb-ui-lib/src/style/themes/theme-ui/prism/dnb-prism-theme'
+import prismTheme from '@dnb/eufemia/src/style/themes/theme-ui/prism/dnb-prism-theme'
 
 const Wrapper = styled.div`
   margin-bottom: 2rem;
@@ -43,6 +41,8 @@ const CodeBlock = ({
   reactLive: isReactLive,
   ...props
 }) => {
+  const context = React.useContext(Context)
+
   if (!language) {
     language =
       (String(props && props.className).match(/language-(.*)$|\s/) ||
@@ -51,7 +51,7 @@ const CodeBlock = ({
 
   if (((props && props.scope) || isReactLive) && language === 'jsx') {
     return (
-      <Wrapper>
+      <Wrapper className={createSkeletonClass('code', context.skeleton)}>
         <LiveCode code={exampleCode} {...props} />
       </Wrapper>
     )
@@ -64,7 +64,9 @@ const CodeBlock = ({
         theme={prismTheme}
       >
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <Wrapper>
+          <Wrapper
+            className={createSkeletonClass('code', context.skeleton)}
+          >
             <Tag is="pre" className={className} css={style}>
               {cleanTokens(tokens).map((line, i) => (
                 /* eslint-disable react/jsx-key */
@@ -99,9 +101,7 @@ class LiveCode extends React.PureComponent {
     hideToolbar: PropTypes.bool,
     hideCode: PropTypes.bool,
     hidePreview: PropTypes.bool,
-    showSyntax: PropTypes.bool,
-    hideSyntaxButton: PropTypes.bool,
-    language: PropTypes.string
+    language: PropTypes.string,
   }
 
   static defaultProps = {
@@ -115,31 +115,18 @@ class LiveCode extends React.PureComponent {
     hideToolbar: false,
     hideCode: false,
     hidePreview: false,
-    showSyntax: false,
-    hideSyntaxButton: null,
-    language: 'jsx'
+    language: 'jsx',
   }
 
   constructor(props) {
     super(props)
-    const {
-      code,
-      hideToolbar,
-      hideCode,
-      hidePreview,
-      showSyntax,
-      useRender,
-      hideSyntaxButton
-    } = props
+    const { code, hideToolbar, hideCode, hidePreview } = props
 
     this.state = {
       code,
       hideToolbar,
       hideCode,
       hidePreview,
-      showSyntax,
-      hideSyntaxButton:
-        hideSyntaxButton === null ? useRender : hideSyntaxButton
     }
 
     this._refEditor = React.createRef()
@@ -150,9 +137,6 @@ class LiveCode extends React.PureComponent {
   }
   togglePreview = () => {
     this.setState(() => ({ hidePreview: !this.state.hidePreview }))
-  }
-  toggleSyntax = () => {
-    this.setState(() => ({ showSyntax: !this.state.showSyntax }))
   }
 
   prepareCode(code) {
@@ -165,7 +149,6 @@ class LiveCode extends React.PureComponent {
     ) {
       code = code.replace(/\s+data-visual-test="[^"]*"/g, '') // remove test data
     }
-    // code = code.replace(/^\s*$(?:\r\n?|\n)/gm, '') // remove empty lines
     return code
   }
 
@@ -184,21 +167,12 @@ class LiveCode extends React.PureComponent {
       hideToolbar: _hideToolbar, // eslint-disable-line
       hideCode: _hideCode, // eslint-disable-line
       hidePreview: _hidePreview, // eslint-disable-line
-      showSyntax: _showSyntax, // eslint-disable-line
-      hideSyntaxButton: _hideSyntaxButton, // eslint-disable-line
       'data-visual-test': visualTest, // eslint-disable-line
 
       ...props
     } = this.props
 
-    const {
-      code,
-      hideToolbar,
-      hideCode,
-      hidePreview,
-      showSyntax,
-      hideSyntaxButton
-    } = this.state
+    const { code, hideToolbar, hideCode, hidePreview } = this.state
 
     const codeToUse =
       typeof code === 'string' ? this.prepareCode(code) : null
@@ -238,22 +212,22 @@ class LiveCode extends React.PureComponent {
                   addToSearchIndex={addToSearchIndex}
                 >
                   <ReactMarkdown
-                    source={title}
-                    escapeHtml={false}
-                    renderers={{
-                      ...renderers,
-                      paragraph: ({ children }) => children
+                    // eslint-disable-next-line react/no-children-prop
+                    children={title}
+                    components={{
+                      ...components,
+                      paragraph: ({ children }) => children,
                     }}
                   />
                 </AutoLinkHeader>
               )}
               {description && (
                 <ReactMarkdown
-                  source={description}
-                  escapeHtml={false}
-                  renderers={{
-                    ...renderers,
-                    paragraph: ({ children }) => <P>{children}</P>
+                  // eslint-disable-next-line react/no-children-prop
+                  children={description}
+                  components={{
+                    ...components,
+                    paragraph: ({ children }) => <P>{children}</P>,
                   }}
                 />
               )}
@@ -265,9 +239,9 @@ class LiveCode extends React.PureComponent {
                 />
                 {!global.IS_TEST && caption && (
                   <ReactMarkdown
-                    source={caption}
-                    escapeHtml={false}
-                    renderers={renderers}
+                    // eslint-disable-next-line react/no-children-prop
+                    children={caption}
+                    components={components}
                     className="example-caption"
                   />
                 )}
@@ -291,7 +265,7 @@ class LiveCode extends React.PureComponent {
                 ignoreTabKey
                 padding={0}
                 style={{
-                  font: 'inherit'
+                  font: 'inherit',
                 }}
                 onChange={(code) => {
                   this.setState({ code })
@@ -339,17 +313,6 @@ class LiveCode extends React.PureComponent {
           )}
           {!global.IS_TEST && !hideToolbar && (
             <Toolbar className="dnb-live-toolbar">
-              {!hideCode && !hideSyntaxButton && (
-                <Button
-                  className="toggle-button"
-                  on_click={this.toggleSyntax}
-                  variant="secondary"
-                  text="Syntax"
-                  title="Toggle Syntax"
-                  icon={`chevron-${!showSyntax ? 'down' : 'up'}`}
-                  size="medium"
-                />
-              )}
               {this.props.hideCode && (
                 <Button
                   className="toggle-button"
@@ -357,7 +320,7 @@ class LiveCode extends React.PureComponent {
                   variant="secondary"
                   text="Code"
                   title="Toggle Code Snippet"
-                  icon={`chevron-${hideCode ? 'down' : 'up'}`}
+                  icon={`arrow-${hideCode ? 'down' : 'up'}`}
                   size="medium"
                 />
               )}
@@ -368,24 +331,11 @@ class LiveCode extends React.PureComponent {
                   variant="secondary"
                   text="Preview"
                   title="Toggle Preview"
-                  icon={`chevron-${!hidePreview ? 'down' : 'up'}`}
+                  icon={`arrow-${!hidePreview ? 'down' : 'up'}`}
                   size="medium"
                 />
               )}
             </Toolbar>
-          )}
-          {!global.IS_TEST && showSyntax && (
-            <Syntax>
-              <Code
-                source={generateElement({
-                  code:
-                    !useRender && noFragments
-                      ? `<>${codeToUse}</>`
-                      : codeToUse,
-                  scope
-                })}
-              />
-            </Syntax>
           )}
         </LiveProvider>
       </LiveCodeEditor>
@@ -406,17 +356,19 @@ const LiveCodeEditor = styled.div`
     position: relative;
     margin-bottom: 4rem;
 
+    transition: box-shadow 0.2s ease-out;
+
     &::after {
       content: '';
       position: absolute;
-      top: calc(-0.5rem + 1px);
-      left: 45%;
+      top: calc(-0.75rem + 1px);
+      left: 1rem;
 
       width: 0;
       height: 0;
 
       border-style: solid;
-      border-width: 0 0.4375rem 0.5rem;
+      border-width: 0 0.75rem 0.75rem;
       border-color: transparent transparent #222 transparent;
 
       opacity: 1;
@@ -462,10 +414,6 @@ const Toolbar = styled.div`
   }
 `
 
-const Syntax = styled.div`
-  margin-top: 1rem;
-`
-
 /** Removes the last token from a code example if it's empty. */
 const cleanTokens = (tokens) => {
   const tokensLength = tokens.length
@@ -481,7 +429,8 @@ const cleanTokens = (tokens) => {
 
 Prism.languages.insertBefore('jsx', 'template-string', {
   'styled-template-string': {
-    pattern: /(styled(\.\w+|\([^)]*\))(\.\w+(\([^)]*\))*)*|css|injectGlobal|keyframes|css={)`(?:\$\{[^}]+\}|\\\\|\\?[^\\])*?`/,
+    pattern:
+      /(styled(\.\w+|\([^)]*\))(\.\w+(\([^)]*\))*)*|css|injectGlobal|keyframes|css={)`(?:\$\{[^}]+\}|\\\\|\\?[^\\])*?`/,
     lookbehind: true,
     greedy: true,
     inside: {
@@ -490,16 +439,16 @@ Prism.languages.insertBefore('jsx', 'template-string', {
         inside: {
           'interpolation-punctuation': {
             pattern: /^\$\{|\}$/,
-            alias: 'punctuation'
+            alias: 'punctuation',
           },
-          rest: Prism.languages.jsx
-        }
+          rest: Prism.languages.jsx,
+        },
       },
       string: {
         pattern: /[^$;]+/,
         inside: Prism.languages.css,
-        alias: 'language-css'
-      }
-    }
-  }
+        alias: 'language-css',
+      },
+    },
+  },
 })

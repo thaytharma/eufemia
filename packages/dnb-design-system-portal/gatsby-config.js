@@ -9,7 +9,7 @@ const siteMetadata = {
   name: 'Eufemia',
   description:
     'Eufemia Design System is the go to place for all who has to design, develop and make digital WEB applications for DNB.',
-  repoUrl: 'https://github.com/dnbexperience/eufemia/'
+  repoUrl: 'https://github.com/dnbexperience/eufemia/',
 }
 const plugins = [
   {
@@ -23,18 +23,18 @@ const plugins = [
         {
           src: '/android-chrome-192x192.png',
           sizes: '192x192',
-          type: 'image/png'
+          type: 'image/png',
         },
         {
           src: '/android-chrome-512x512.png',
           sizes: '512x512',
-          type: 'image/png'
-        }
+          type: 'image/png',
+        },
       ],
       theme_color: '#007272',
       background_color: '#007272',
-      display: 'standalone'
-    }
+      display: 'standalone',
+    },
   },
   'gatsby-plugin-meta-redirect',
   'gatsby-plugin-catch-links',
@@ -45,15 +45,16 @@ const plugins = [
     options: {
       ignore: ['**/*.md', '**/Examples.js', '**/*_not_in_use*'],
       path: `${__dirname}/src/docs`, // for .js files
-      name: 'docs'
-    }
+      name: 'docs',
+    },
   },
   {
     resolve: 'gatsby-source-filesystem',
     options: {
       path: `${__dirname}/src/docs`, //for .md (mdx) files
-      name: 'docs'
-    }
+      name: 'docs',
+      ignore: ['**/*_not_in_use*'],
+    },
   },
   {
     resolve: 'gatsby-plugin-mdx',
@@ -66,15 +67,15 @@ const plugins = [
         {
           resolve: 'gatsby-remark-images',
           options: {
-            maxWidth: 1024
+            maxWidth: 1024,
             // showCaptions: true
             // sizeByPixelDensity: true
             // linkImagesToOriginal: true
             // wrapperStyle: {}
-          }
-        }
-      ]
-      // Imports in here are globally aviable in *.md files
+          },
+        },
+      ],
+      // Imports in here are globally available in *.md files
       // globalScope: `
       //   import Img from 'Tags/Img'
       //   export default { Img }
@@ -82,31 +83,32 @@ const plugins = [
       // defaultLayouts: {
       //   // default: require.resolve('./src/templates/mdx.js')
       // }
-    }
+    },
   },
-  'gatsby-plugin-sass',
-  'gatsby-plugin-emotion',
   {
-    resolve: 'gatsby-plugin-postcss',
+    resolve: 'gatsby-plugin-sass',
     options: {
-      postCssPlugins: require('dnb-ui-lib/scripts/prepub/config/postcssConfig')(
-        {
-          IE11: false
-        }
-      )
-    }
+      postCssPlugins:
+        process.env.NODE_ENV === 'production'
+          ? require('@dnb/eufemia/scripts/prepub/config/postcssConfig')({
+              IE11: true,
+            })
+          : [],
+    },
   },
+  'gatsby-plugin-emotion',
   // this (optional) plugin enables Progressive Web App + Offline functionality
   // To learn more, visit: https://gatsby.app/offline
   {
     resolve: 'gatsby-plugin-offline',
     options: {
       workboxConfig: {
-        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
-      }
-    }
-  }
-]
+        globPatterns: ['*.html'],
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+      },
+    },
+  },
+].filter(Boolean)
 
 // used for algolia search
 const queries = require('./src/uilib/search/searchQuery')
@@ -119,21 +121,20 @@ if (queries) {
       apiKey: process.env.ALGOLIA_API_KEY,
       indexName: process.env.ALGOLIA_INDEX_NAME, // for all queries
       queries,
-      chunkSize: 10000 // default: 1000
-    }
+      chunkSize: 10000, // default: 1000
+    },
   })
 }
 
 module.exports = {
   flags: {
-    FAST_REFRESH: true,
-    // FAST_DEV: true,
-    // DEV_SSR: true,
-    // LAZY_IMAGES: true,
-    // QUERY_ON_DEMAND: true,
-    PRESERVE_WEBPACK_CACHE: true
+    // because of the local visual tests,
+    // we disable the SSR features.
+    // The reason? every page takes longer time to render.
+    DEV_SSR: false,
+    FAST_DEV: false,
   },
   pathPrefix,
   siteMetadata,
-  plugins
+  plugins,
 }

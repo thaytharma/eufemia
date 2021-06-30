@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import { Img as Image } from 'dnb-ui-lib/src/elements'
+import { Img as Image } from '@dnb/eufemia/src/elements'
 
 const Img = ({
   className,
@@ -11,7 +11,7 @@ const Img = ({
   size,
   width,
   height,
-  caption
+  caption,
 }) => {
   if (size === 'auto') {
     width = '100%'
@@ -37,7 +37,7 @@ Img.propTypes = {
   size: PropTypes.string,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  caption: PropTypes.string
+  caption: PropTypes.string,
 }
 Img.defaultProps = {
   className: null,
@@ -47,7 +47,7 @@ Img.defaultProps = {
   size: null,
   height: null,
   width: null,
-  children: null
+  children: null,
 }
 
 export default Img

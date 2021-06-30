@@ -13,17 +13,17 @@ import MainMenu from '../menu/MainMenu'
 import Sidebar from '../menu/SidebarMenu'
 import StickyMenuBar from '../menu/StickyMenuBar'
 import { markdownStyle } from './Markdown'
-import { buildVersion } from '../../../package.json'
+import packageJson from '../../../package.json'
 import { MainMenuProvider } from '../menu/MainMenuContext'
 import { SidebarMenuProvider } from '../menu/SidebarMenuContext'
 import ToggleGrid from '../menu/ToggleGrid'
 import {
   setPageFocusElement,
-  scrollToLocationHashId
-} from 'dnb-ui-lib/src/shared/helpers'
-import { Context } from 'dnb-ui-lib/src/shared'
-import { Logo, GlobalStatus } from 'dnb-ui-lib/src/components'
-import { createSkeletonClass } from 'dnb-ui-lib/src/components/skeleton/SkeletonHelper'
+  scrollToLocationHashId,
+} from '@dnb/eufemia/src/shared/helpers'
+import { Context } from '@dnb/eufemia/src/shared'
+import { Logo, GlobalStatus } from '@dnb/eufemia/src/components'
+import { createSkeletonClass } from '@dnb/eufemia/src/components/skeleton/SkeletonHelper'
 
 export function scrollToAnimation() {
   // if url hash is defined, scroll to the id
@@ -37,7 +37,7 @@ export function scrollToAnimation() {
       } catch (e) {
         //
       }
-    }
+    },
   })
 }
 
@@ -46,12 +46,12 @@ class Layout extends React.PureComponent {
     fullscreen: PropTypes.bool,
     hideSidebar: PropTypes.bool,
     children: PropTypes.node.isRequired,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
     fullscreen: false,
-    hideSidebar: false
+    hideSidebar: false,
   }
 
   constructor(props) {
@@ -86,7 +86,7 @@ class Layout extends React.PureComponent {
     return (
       fullscreen ||
       (typeof location !== 'undefined' &&
-        /fullscreen/.test(location.search))
+        /fullscreen|data-visual-test/.test(location.search))
     )
   }
 
@@ -107,30 +107,28 @@ class Layout extends React.PureComponent {
 
         <MainMenuProvider>
           <SidebarMenuProvider>
-            <ToggleSkeleton>
-              {!fs && <StickyMenuBar />}
-              {!fs && <MainMenu enableOverlay />}
+            {!fs && <StickyMenuBar />}
+            {!fs && <MainMenu enableOverlay />}
 
-              <Wrapper className="content-wrapper">
-                {!fs && !hideSidebar && (
-                  <Sidebar location={location} showAll={false} />
-                )}
+            <Wrapper className="content-wrapper">
+              {!fs && !hideSidebar && (
+                <Sidebar location={location} showAll={false} />
+              )}
 
-                <Content key="content" fullscreen={fs}>
-                  <MainContent key="main" ref={this._mainRef}>
-                    <GlobalStatus id="main-status" />
+              <Content key="content" fullscreen={fs}>
+                <MainContent key="main" ref={this._mainRef}>
+                  <GlobalStatus id="main-status" />
 
-                    <div key="grid" className="dev-grid">
-                      {children}
-                    </div>
-                  </MainContent>
+                  <div key="grid" className="dev-grid">
+                    {children}
+                  </div>
+                </MainContent>
 
-                  <Footer />
-                </Content>
+                <Footer />
+              </Content>
 
-                {fs && <ToggleGrid hidden />}
-              </Wrapper>
-            </ToggleSkeleton>
+              {fs && <ToggleGrid hidden />}
+            </Wrapper>
           </SidebarMenuProvider>
         </MainMenuProvider>
       </>
@@ -167,15 +165,15 @@ const Content = ({ className, fullscreen, children }) => (
 Content.propTypes = {
   fullscreen: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 Content.defaultProps = {
-  className: null
+  className: null,
 }
 
 const ContentWrapper = styled.div`
   position: relative;
-  z-index: 2; /* heigher than styled.aside */
+  z-index: 2; /* higher than styled.aside */
 
   width: 100%;
 
@@ -183,7 +181,7 @@ const ContentWrapper = styled.div`
   margin-left: var(--aside-width);
   padding: 0;
 
-  /* we use padding here, insted of margin,
+  /* we use padding here, instead of margin,
   because applyPageFocus is else scrolling the page unwanted
   height of StickyMenuBar - 1px border */
   padding-top: 4rem;
@@ -258,10 +256,6 @@ const FooterWrapper = styled.footer`
   small {
     padding: 0 2rem;
   }
-
-  .toggle-grid {
-    margin-left: 1rem;
-  }
 `
 const Footer = () => {
   const { skeleton } = React.useContext(Context)
@@ -269,7 +263,7 @@ const Footer = () => {
     <FooterWrapper>
       <Logo height="40" color="white" />
       <small className={createSkeletonClass('font', skeleton)}>
-        Last Portal update: {buildVersion}
+        Last Portal update: {packageJson.buildVersion}
         <Link
           to="/license"
           className="dnb-anchor dnb-anchor--contrast dnb-anchor--no-underline"
@@ -280,51 +274,4 @@ const Footer = () => {
       <span />
     </FooterWrapper>
   )
-}
-
-let skeletonCount = 0
-let skeletonTimeout = null
-function ToggleSkeleton(props) {
-  const { update, skeleton } = React.useContext(Context)
-
-  const params = {
-    onMouseDown: (e) => {
-      const x = e.clientX
-      const y = e.clientY
-      if (x < 20 && y < 20) {
-        e.preventDefault()
-        e.stopPropagation()
-        skeletonCount++
-        clearTimeout(skeletonTimeout)
-        skeletonTimeout = setTimeout(() => {
-          skeletonCount = 0
-        }, 1e3)
-        if (skeletonCount >= 3) {
-          skeletonCount = 0
-          update({ skeleton: !skeleton })
-          setSkeletonEnabled(!skeleton)
-        }
-      }
-    }
-  }
-
-  return (
-    <div
-      key="skeleton"
-      className="skeleton-enabler"
-      {...params}
-      {...props}
-    />
-  )
-}
-
-export function setSkeletonEnabled(skeleton) {
-  try {
-    window.localStorage.setItem(
-      'skeleton-enabled',
-      skeleton ? true : false
-    )
-  } catch (e) {
-    //
-  }
 }

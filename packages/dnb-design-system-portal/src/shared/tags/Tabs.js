@@ -8,9 +8,8 @@ import PropTypes from 'prop-types'
 
 import { css } from '@emotion/react'
 import { navigate, parsePath } from 'gatsby'
-import { CloseButton } from 'dnb-ui-lib/src/components/modal'
-import { fullscreen as fullscreenIcon } from 'dnb-ui-lib/src/icons/secondary_icons'
-import { Button, Tabs } from 'dnb-ui-lib/src'
+import { fullscreen as fullscreenIcon } from '@dnb/eufemia/src/icons/secondary_icons'
+import { Button, Tabs } from '@dnb/eufemia/src'
 
 const pathPrefix = __PATH_PREFIX__ // eslint-disable-line
 
@@ -22,7 +21,7 @@ const getLocation = () => {
   return {
     ...parsePath(pathname.replace(new RegExp(pathPrefix || '', 'g'), '')),
     search,
-    hash
+    hash,
   }
 }
 
@@ -47,18 +46,18 @@ const tabsWrapperStyle = css`
 class CustomTabs extends React.PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    tabs: PropTypes.array
+    tabs: PropTypes.array,
   }
   static defaultProps = {
     tabs: [
       { title: 'Demos', key: 'tab-demos' },
       { title: 'Properties', key: 'tab-properties' },
-      { title: 'Events', key: 'tab-events' }
-    ]
+      { title: 'Events', key: 'tab-events' },
+    ],
   }
   state = {
     activeTabKey: 'tab-demos',
-    wasFullscreen: null
+    wasFullscreen: null,
   }
   constructor(props) {
     super(props)
@@ -69,7 +68,7 @@ class CustomTabs extends React.PureComponent {
   }
   openTab = ({ key }) => {
     this.setState({
-      activeTabKey: key
+      activeTabKey: key,
     })
   }
   isActive(tabKey) {
@@ -102,10 +101,12 @@ class CustomTabs extends React.PureComponent {
               <TabsList>
                 <Tabs />
                 {this.state.wasFullscreen ? (
-                  <CloseButton
-                    style_type="cross"
-                    title="Quit Fullscreen"
+                  <Button
                     on_click={this.quitFullscreen}
+                    variant="secondary"
+                    title="Quit Fullscreen"
+                    icon="close"
+                    className="fullscreen"
                   />
                 ) : (
                   <Button

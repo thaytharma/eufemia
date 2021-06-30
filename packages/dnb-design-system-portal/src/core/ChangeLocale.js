@@ -1,8 +1,8 @@
 import React from 'react'
-// import { ToggleButton } from 'dnb-ui-lib/src'
-import { Dropdown } from 'dnb-ui-lib/src'
+// import { ToggleButton } from '@dnb/eufemia/src'
+import { Dropdown } from '@dnb/eufemia/src'
 
-import Context from 'dnb-ui-lib/src/shared/Context'
+import Context from '@dnb/eufemia/src/shared/Context'
 import { setLang } from './portalProviders'
 
 export default function ChangeLocale({ showUS, ...props }) {
@@ -26,7 +26,7 @@ export default function ChangeLocale({ showUS, ...props }) {
 
   const date = {
     'nb-NO': 'Norsk',
-    'en-GB': 'English (GB)'
+    'en-GB': 'English (GB)',
   }
   if (showUS) {
     date['en-US'] = 'English (US)'

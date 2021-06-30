@@ -21,7 +21,7 @@ The `<hr />` tag in HTML stands for horizontal rule and is used to insert a hori
 
 <ComponentBox hideCode useRender data-visual-test="hr-default">
 {`
-// import { Hr } from 'dnb-ui-lib/elements'
+// import { Hr } from '@dnb/eufemia/elements'
 render(<>
   Something
   <Hr />
@@ -36,7 +36,7 @@ Use the modifier `dnb-hr--fullscreen` to get a full screen rule. You can also se
 
 <ComponentBox hideCode useRender data-visual-test="hr-fullscreen">
 {`
-// import { Hr } from 'dnb-ui-lib/elements'
+// import { Hr } from '@dnb/eufemia/elements'
 render(<>
   Something
   <Hr fullscreen />
@@ -51,24 +51,20 @@ Use the modifier `dnb-hr--light` to get a `0.5px` rule. You can also set just `l
 
 <ComponentBox hideCode useRender data-visual-test="hr-thickness">
 {`
-// import { Hr } from 'dnb-ui-lib/elements'
+// import { Hr } from '@dnb/eufemia/elements'
 render(<>
   <Dl>
     <Dt>Light 0.5px</Dt>
     <Dd><Hr light /></Dd>
-    <Dd>{' '}</Dd>
   </Dl>
   <Dl>
     <Dt>Default 1px</Dt>
     <Dd><Hr /></Dd>
-    <Dd>{' '}</Dd>
   </Dl>
   <Dl>
     <Dt>Medium 1.5px</Dt>
     <Dd><Hr medium /></Dd>
-    <Dd>{' '}</Dd>
   </Dl>
-  {' '}
 </>)
 `}
 </ComponentBox>

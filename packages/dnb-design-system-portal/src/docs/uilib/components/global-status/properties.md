@@ -13,7 +13,7 @@ showTabs: true
 | `icon`                                      | _(optional)_ the icon show before the status title. Defaults to `exclamation`.                                                                                                                           |
 | `state`                                     | _(optional)_ defines the visual appearance of the status. There are two main statuses `error` and `info`. The default status is `error`.                                                                 |
 | `icon_size`                                 | _(optional)_ the icon size of the title icon shows. Defaults to `medium`.                                                                                                                                |
-| `show`                                      | _(optional)_ set to `true` to manually make the global status visible. Defaults to `false`.                                                                                                              |
+| `show`                                      | _(optional)_ set to `true` or `false` to manually make the global status visible. Defaults to `show`.                                                                                                    |
 | `autoclose`                                 | _(optional)_ set to `true` to automatically close the global status if there are no more left items in the provider stack. Defaults to `true`.                                                           |
 | `autoscroll`                                | _(optional)_ set to `true` to automatically scroll the page to the appeared global status. Defaults to `true`.                                                                                           |
 | `no_animation`                              | _(optional)_ set to `true` to disable the show/hide/slide/fade/grow/shrink animation. Defaults to `false`.                                                                                               |
@@ -33,7 +33,7 @@ const items = ['Item #1', 'Item #2']
 // advanced
 const items = [
   { text: 'Item #1', status_id: 'id-1' },
-  { text: 'Item #2', status_id: 'id-2', status_anchor_url: 'https://' }
+  { text: 'Item #2', status_id: 'id-2', status_anchor_url: 'https://' },
 ]
 ```
 
@@ -51,12 +51,12 @@ In React You can make use of the helper components, the function as a kind of a 
 The goal is to update the content (properties/events) of the target GlobalStatus.
 
 ```jsx
-// Place the status where ever You have to
+// Place the status where ever you have to.
 <GlobalStatus id="custom-id" />
 
-// Manipu the status later on. Every property is optional.
+// Manipulate the status later on. Every property is optional.
 <GlobalStatus.Add id="custom-id" status_id="status-1" item="Item #1" text="New Text" />
-<GlobalStatus.Add id="custom-id" status_id="status-2" item="Item #2" title="New Titel" />
+<GlobalStatus.Add id="custom-id" status_id="status-2" item="Item #2" title="New Title" />
 <GlobalStatus.Add id="custom-id" status_id="status-3" item="Item #3" />
 
 // or update the status.

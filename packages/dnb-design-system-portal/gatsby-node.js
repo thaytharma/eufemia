@@ -4,6 +4,18 @@
  */
 
 const path = require('path')
+const {
+  createNewVersion,
+  createNewChangelogVersion,
+} = require('./scripts/version.js')
+
+exports.onPreInit = async () => {
+  console.log('onPreBuild', process.env.NODE_ENV)
+  if (process.env.NODE_ENV === 'production') {
+    await createNewVersion()
+    await createNewChangelogVersion()
+  }
+}
 
 exports.onCreateNode = ({ node, ...props }) => {
   if (node.internal.type === 'Mdx') {
@@ -11,14 +23,14 @@ exports.onCreateNode = ({ node, ...props }) => {
   }
 }
 
-// find the root child wich has a frontmatter.title
+// find the root child which has a frontmatter.title
 // so the Tabbar can use the mother title
 global.nodesCache = global.nodesCache || {}
 function createMdxNode({
   node,
   getNodesByType,
   getNode, //getNodeAndSavePathDependency could be an option
-  actions
+  actions,
 }) {
   const { createNodeField } = actions
 
@@ -28,7 +40,7 @@ function createMdxNode({
   createNodeField({
     name: 'slug',
     node,
-    value: slug
+    value: slug,
   })
 
   // to make sure we get nodes which has not been there during the run
@@ -54,7 +66,7 @@ function createMdxNode({
     createNodeField({
       node: categoryMdx,
       name: 'tag',
-      value: 'category'
+      value: 'category',
     })
     createParentChildLink({ parent: node, child: categoryMdx })
   }
@@ -64,7 +76,7 @@ function createMdxNode({
 
   // have this check in place only to skip not needed parts
   if (
-    /uilib\/(components|patterns|elements|helpers|typography)/.test(
+    /uilib\/(components|extensions|elements|helpers|typography)/.test(
       motherDir
     )
   ) {
@@ -77,12 +89,12 @@ function createMdxNode({
     for (let i = 0, l = parts.length; i < l; ++i) {
       motherMdx = global.nodesCache['/' + parts.join('/')]
 
-      // ohh we got motherMdx, thats fine
+      // ohh we got motherMdx, that's fine
       if (
         motherMdx &&
         motherMdx.frontmatter &&
         motherMdx.frontmatter.title &&
-        motherMdx.frontmatter.title.length > 0 // we dont need to crawler nodes which has a title
+        motherMdx.frontmatter.title.length > 0 // we don't need to crawler nodes which has a title
       ) {
         break
       }
@@ -102,7 +114,7 @@ function createMdxNode({
       createNodeField({
         node: motherMdx,
         name: 'tag',
-        value: 'mother'
+        value: 'mother',
       })
       createParentChildLink({ parent: node, child: motherMdx })
     }
@@ -152,8 +164,8 @@ async function createPages({ graphql, actions }) {
         context: {
           id: node.id,
           prev,
-          next
-        }
+          next,
+        },
       })
     }
   })
@@ -192,7 +204,7 @@ async function createRedirects({ graphql, actions }) {
     if (node && node.fields && node.fields.slug) {
       acc.push({
         fromItems: node.frontmatter.redirect_from,
-        toPath: node.fields.slug
+        toPath: node.fields.slug,
       })
     }
     return acc
@@ -205,7 +217,7 @@ async function createRedirects({ graphql, actions }) {
         fromPath,
         toPath: `/${toPath}`,
         isPermanent: true,
-        redirectInBrowser: true
+        redirectInBrowser: true,
       }
       createRedirect(config)
       createRedirect({ ...config, fromPath: `${fromPath}/` })
@@ -216,6 +228,7 @@ async function createRedirects({ graphql, actions }) {
 exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
+      fallback: { path: require.resolve('path-browserify') }, // was added during webpack 4 to 5 migration
       modules: [path.resolve(__dirname, 'src'), 'node_modules'],
       alias: {
         Root: path.resolve(__dirname),
@@ -223,8 +236,8 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         Pages: path.resolve(__dirname, 'src/docs'),
         Docs: path.resolve(__dirname, 'src/docs'),
         Tags: path.resolve(__dirname, 'src/shared/tags'),
-        Parts: path.resolve(__dirname, 'src/shared/parts')
-      }
-    }
+        Parts: path.resolve(__dirname, 'src/shared/parts'),
+      },
+    },
   })
 }

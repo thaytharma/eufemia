@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 
 const ChangeStylesOfSkipLink = styled.div`
   margin: 3rem 0;
-  a.dnb-skip-link-demo {
+  a.dnb-skip-link--active {
     position: relative;
     top: 0;
     left: 0;
@@ -14,7 +14,7 @@ const ChangeStylesOfSkipLink = styled.div`
   }
 `
 
-export default () => {
+export default function SkipLinkExample() {
   const onClick = (e) => {
     try {
       document.querySelector('a.dnb-skip-link').focus()
@@ -26,7 +26,7 @@ export default () => {
   return (
     <ChangeStylesOfSkipLink>
       <a
-        className="dnb-skip-link-demo"
+        className="dnb-skip-link--active"
         onClick={onClick}
         href="#dnb-app-content"
       >

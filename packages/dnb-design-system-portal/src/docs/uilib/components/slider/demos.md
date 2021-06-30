@@ -3,14 +3,14 @@ showTabs: true
 ---
 
 import ComponentBox from 'Tags/ComponentBox'
-import 'dnb-ui-lib/src/components/slider/style/dnb-range.scss'
+import '@dnb/eufemia/src/components/slider/style/dnb-range.scss'
 
 ## Demos
 
 ### Default Slider
 
 <ComponentBox data-visual-test="slider-default">
-	{/* @jsx */ `
+	{() => /* jsx */ `
 <Slider
   min={0}
   max={100}
@@ -24,7 +24,7 @@ import 'dnb-ui-lib/src/components/slider/style/dnb-range.scss'
 ### Vertical slider with steps of 10
 
 <ComponentBox data-visual-test="slider-vertical" useRender>
-	{/* @jsx */ `
+	{() => /* jsx */ `
 const VerticalWrapper = styled.div\`
   display: inline-flex;
   flex-direction: column;
@@ -48,7 +48,7 @@ render(<VerticalWrapper>
 ### Horizontal and vertical slider in sync with input field
 
 <ComponentBox useRender>
-	{/* @jsx */ `
+	{() => /* jsx */ `
 const Component = () => {
   const [value, setValue] = React.useState(70)
   return (<>
@@ -98,7 +98,7 @@ render(<Component />)
 ### Slider with suffix
 
 <ComponentBox>
-	{/* @jsx */ `
+	{() => /* jsx */ `
 <Slider
   min={0}
   max={100}
@@ -111,10 +111,10 @@ render(<Component />)
 
 ### Native Range Slider
 
-In order to get the styles, import also: `dnb-ui-lib/components/slider/style/dnb-range.min.css`
+In order to get the styles, import also: `@dnb/eufemia/components/slider/style/dnb-range.min.css`
 
 <ComponentBox>
-	{/* @jsx */ `
+	{() => /* jsx */ `
 <FormRow>
   <FormLabel for_id="range-slider">
     Native Range Slider

@@ -8,11 +8,11 @@ import PropTypes from 'prop-types'
 import Link from 'gatsby-link'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Button } from 'dnb-ui-lib/src'
-import { IS_IE11 } from 'dnb-ui-lib/src/shared/helpers'
+import { Button } from '@dnb/eufemia/src'
+import { IS_IE11 } from '@dnb/eufemia/src/shared/helpers'
 import { MainMenuContext } from './MainMenuContext'
 import classnames from 'classnames'
-import { P } from 'dnb-ui-lib/src/elements'
+import { P } from '@dnb/eufemia/src/elements'
 
 const CardWrapper = styled.div`
   width: calc(33.333333% - 1rem);
@@ -108,7 +108,7 @@ const linkStyle = css`
   color: rgba(0, 0, 0, 0.75);
   text-decoration: none;
   text-align: center;
-  font-weight: var(--font-weight-default);
+  font-weight: var(--font-weight-basis);
 
   background-color: var(--color-white);
   transition: background-color 0.5s ease;
@@ -164,10 +164,10 @@ export default class Card extends React.PureComponent {
     title: PropTypes.string.isRequired,
     about: PropTypes.oneOfType([PropTypes.node, PropTypes.string])
       .isRequired,
-    icon: PropTypes.func.isRequired
+    icon: PropTypes.func.isRequired,
   }
   static defaultProps = {
-    customStyle: null
+    customStyle: null,
   }
   isSelected() {
     if (typeof window !== 'undefined') {
@@ -209,7 +209,9 @@ export default class Card extends React.PureComponent {
               isClosing && 'hide-cards'
             )}
             style={{
-              '--delay': `${isClosing ? random(1, 400) : random(1, 200)}ms`
+              '--delay': `${
+                isClosing ? random(1, 400) : random(1, 200)
+              }ms`,
             }}
           >
             <Anchor

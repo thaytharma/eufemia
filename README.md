@@ -1,7 +1,7 @@
 # DNB Design System
 
 This is a mono repo and uses **yarn workspaces** to manage the sub packages/workspaces.
-Some of the included packages/workspaces are `dnb-design-guide` and `dnb-ui-lib`. Read more about the purposes of them in the respective packages `readme.md` files.
+Some of the included packages/workspaces are `dnb-design-system-portal` and `dnb-eufemia`. Read more about the purposes of them in the respective packages `README.md` files.
 
 ## DNB Eufemia Portal
 
@@ -20,11 +20,11 @@ Install [Node.js](https://nodejs.org) and [yarn](https://yarnpkg.com).
 1.  Clone this repo to your local machine `git clone [repo]`
 1.  cd into the main directory and run `yarn install`
 
-#### Use `develop` and the _GitHub Flow_
+#### Use `main` and the _GitHub Flow_
 
-1.  Make sure You run `git checkout develop` - as **develop** is the working branch
-1.  Make your own branch in case You are making a pull request into **develop**
+1.  Make sure You run `git checkout main` - as **main** is the working branch
+1.  Make your own branch in case You are making a pull request into **main**
 
 ### Releases
 
-The CI will handle new releases once the changes (by a Pull Request) gets merged from `origin/develop` into the `origin/release` branch.
+The CI will handle new releases once the changes (by a Pull Request) gets merged from `origin/main` into the `origin/release` branch.

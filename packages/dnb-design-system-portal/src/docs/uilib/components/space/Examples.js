@@ -6,9 +6,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ComponentBox from '../../../../shared/tags/ComponentBox'
-// import { Space } from 'dnb-ui-lib/src/components'
+// import { Space } from '@dnb/eufemia/src/components'
 import styled from '@emotion/styled'
-import { Space } from 'dnb-ui-lib/src/components'
+import { Space } from '@dnb/eufemia/src/components'
 
 export const SpaceExamplesMethod1 = () => (
   <TestStyles>
@@ -16,15 +16,13 @@ export const SpaceExamplesMethod1 = () => (
       data-visual-test="spacing-method-space"
       scope={{ RedBox }}
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <RedBox>
   <Space top="large x-small">
     <Input label="Input:" />
   </Space>
 </RedBox>
-          `
-      }
+`}
     </ComponentBox>
   </TestStyles>
 )
@@ -32,16 +30,14 @@ export const SpaceExamplesMethod1 = () => (
 export const SpaceExamplesMethod2 = () => (
   <TestStyles>
     <ComponentBox data-visual-test="spacing-method-form-row">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <FormRow>
   <Input label="Input A:" />
 </FormRow>
 <FormRow top="medium">
   <Input label="Input B:" />
 </FormRow>
-          `
-      }
+`}
     </ComponentBox>
   </TestStyles>
 )
@@ -49,14 +45,12 @@ export const SpaceExamplesMethod2 = () => (
 export const SpaceExamplesMethod3 = () => (
   <TestStyles>
     <ComponentBox data-visual-test="spacing-method-component">
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <FormRow>
   <Input label="Input A:" right="small" />
   <Input label="Input B:" />
 </FormRow>
-          `
-      }
+`}
     </ComponentBox>
   </TestStyles>
 )
@@ -64,8 +58,7 @@ export const SpaceExamplesMethod3 = () => (
 export const SpaceExampleMarginCollapse = () => (
   <TestStyles>
     <ComponentBox hideCode scope={{ RedBox, Vertical }}>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Vertical>
   <RedBox>
     <Space bottom="small">
@@ -78,8 +71,7 @@ export const SpaceExampleMarginCollapse = () => (
     </Space>
   </RedBox>
 </Vertical>
-          `
-      }
+`}
     </ComponentBox>
   </TestStyles>
 )
@@ -87,8 +79,7 @@ export const SpaceExampleMarginCollapse = () => (
 export const SpaceExampleMargins = () => (
   <TestStyles>
     <ComponentBox data-visual-test="spacing-margins" hideCode>
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Space top="large x-small" right="2.5" bottom="2.5rem" left="40px" >
   <details>
     <summary>
@@ -97,8 +88,7 @@ export const SpaceExampleMargins = () => (
     And this are my CSS classes: <code className="dnb-code">dnb-space dnb-space__top--large dnb-space__top--x-small dnb-space__right--large dnb-space__right--x-small dnb-space__bottom--large dnb-space__bottom--x-small dnb-space__left--large dnb-space__left--x-small</code>
   </details>
 </Space>
-          `
-      }
+`}
     </ComponentBox>
   </TestStyles>
 )
@@ -111,13 +101,7 @@ export const SpaceVisualTestPatterns = () => (
       hideCode
       useRender
     >
-      {
-        /* @jsx */ `
-const listOfBoxes = []
-for (let i = 0, c = 0, l = 20; i <= l; i++) {
-  listOfBoxes.push(String(c))
-  c += 0.5
-}
+      {() => /* jsx */ `
 const TestCase = (props) => {
   return <CustomStyle {...props}>{listOfBoxes.map((v) => (
     <Space key={v} top={v}>
@@ -125,17 +109,21 @@ const TestCase = (props) => {
     </Space>
   ))}</CustomStyle>
 }
+const listOfBoxes = []
+for (let i = 0, c = 0, l = 20; i <= l; i++) {
+  listOfBoxes.push(String(c))
+  c += 0.5
+}
 render(
   <div className="spacing-patterns">
-    <P bottom small>With <Code>dnb-core-style</Code></P>
+    <P bottom>With <Code>dnb-core-style</Code></P>
     <TestCase className="dnb-core-style" />
     
-    <P top bottom small>Without</P>
+    <P top bottom>Without</P>
     <TestCase />
   </div>
 )
-        `
-      }
+`}
     </ComponentBox>
   </TestStyles>
 )
@@ -152,31 +140,35 @@ export const SpaceVisualTestElements = () =>
         hideCode
         useRender
       >
-        {
-          /* @jsx */ `
+        {() => /* jsx */ `
 const listOfBoxes = []
 for (let i = 0, c = 0, l = 10; i <= l; i++) {
   listOfBoxes.push(String(c))
   c += 1
 }
 const TestCase = (props) => {
-  return <CustomStyle {...props}>{listOfBoxes.map((v) => (
-    <Button key={v} left="x-small" top={v} size="small">
-      <MagicBox />
-    </Button>
-  ))}</CustomStyle>
+  return <CustomStyle {...props}>
+    {listOfBoxes.map((v) => (
+      <Button
+        key={v}
+        left="x-small"
+        top={v}
+        size="small"
+        custom_content={<MagicBox />}
+      />
+    ))}
+  </CustomStyle>
 }
 render(
   <div className="spacing-elements">
-    <P bottom small>With <Code>dnb-core-style</Code></P>
+    <P bottom>With <Code>dnb-core-style</Code></P>
     <TestCase className="dnb-core-style" />
     
-    <P top bottom small>Without</P>
+    <P top bottom>Without</P>
     <TestCase />
   </div>
 )
-        `
-        }
+`}
       </ComponentBox>
     </TestStyles>
   )
@@ -214,10 +206,10 @@ const RedBox = ({ children }) => {
   )
 }
 RedBox.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 }
 RedBox.defaultProps = {
-  children: null
+  children: null,
 }
 
 const Block = styled.div`
@@ -282,15 +274,37 @@ const MagicBox = ({ label, ...rest }) => {
   const [title, setTitle] = React.useState(null)
 
   React.useEffect(() => {
-    if (!label) {
-      const spaceInPixels = window
-        .getComputedStyle(ref.current.parentElement)
-        .getPropertyValue('margin-top')
-      const spaceInRem = `${parseFloat(spaceInPixels) / 16}`
-      setLabel(spaceInRem)
+    let _isMounted = true
+    const init = () => {
+      if (_isMounted) {
+        try {
+          if (!label) {
+            const spaceInPixels = window
+              .getComputedStyle(ref.current.parentElement)
+              .getPropertyValue('margin-top')
+            const spaceInRem = `${parseFloat(spaceInPixels) / 16}`
+            setLabel(spaceInRem)
 
-      const title = ref.current.parentElement.getAttribute('class')
-      setTitle(title)
+            const title = ref.current.parentElement.getAttribute('class')
+            setTitle(title)
+          }
+        } catch (e) {
+          console.warn(e)
+        }
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      init()
+    } else if (typeof window !== 'undefined') {
+      window.addEventListener('load', init)
+    }
+
+    return () => {
+      _isMounted = false
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('load', init)
+      }
     }
   }, [label, ref])
 
@@ -305,11 +319,11 @@ MagicBox.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
-    PropTypes.node
-  ])
+    PropTypes.node,
+  ]),
 }
 MagicBox.defaultProps = {
-  label: null
+  label: null,
 }
 
 const VisualSpace = ({ label, children, ...rest }) => {
@@ -321,24 +335,45 @@ const VisualSpace = ({ label, children, ...rest }) => {
 
   React.useEffect(() => {
     if (!label) {
-      try {
-        const style = window.getComputedStyle(ref.current.children[0])
-        const top = parseFloat(style.getPropertyValue('margin-top'))
-        const bottom = parseFloat(style.getPropertyValue('margin-bottom'))
-        let spaceInPixels = top
+      let _isMounted = true
+      const init = () => {
+        if (_isMounted) {
+          try {
+            const elem = ref.current
+            const style = window.getComputedStyle(elem.children[0])
+            const top = parseFloat(style.getPropertyValue('margin-top'))
+            const bottom = parseFloat(
+              style.getPropertyValue('margin-bottom')
+            )
+            let spaceInPixels = top
 
-        if (bottom > 0) {
-          spaceInPixels = bottom
-          setDirection('bottom')
+            if (bottom > 0) {
+              spaceInPixels = bottom
+              setDirection('bottom')
+            }
+
+            const spaceInRem = `${spaceInPixels / 16}`
+            setLabel(spaceInRem)
+
+            const title = elem.parentElement.getAttribute('class')
+            setTitle(title)
+          } catch (e) {
+            console.warn(e)
+          }
         }
+      }
 
-        const spaceInRem = `${spaceInPixels / 16}`
-        setLabel(spaceInRem)
+      if (document.readyState === 'complete') {
+        init()
+      } else if (typeof window !== 'undefined') {
+        window.addEventListener('load', init)
+      }
 
-        const title = ref.current.parentElement.getAttribute('class')
-        setTitle(title)
-      } catch (e) {
-        console.warn(e)
+      return () => {
+        _isMounted = false
+        if (typeof window !== 'undefined') {
+          window.removeEventListener('load', init)
+        }
       }
     }
   }, [label, ref])
@@ -361,13 +396,13 @@ VisualSpace.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
-    PropTypes.node
+    PropTypes.node,
   ]),
-  children: PropTypes.node
+  children: PropTypes.node,
 }
 VisualSpace.defaultProps = {
   label: null,
-  children: null
+  children: null,
 }
 
 export { MagicBox, VisualSpace }

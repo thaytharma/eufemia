@@ -19,7 +19,7 @@ At DNB we are currently using Streamline icons as our source for off-the-shelf v
 
 The icons are in SVG format and are optimized for performance and to have the smallest footprint possible in the package build process.
 
-The sources are located in the [assets folder](https://unpkg.com/dnb-ui-lib@latest/assets/icons/).
+The sources are located in the [assets folder](https://unpkg.com/@dnb/eufemia@latest/assets/icons/).
 
 They also exists as [React Components](/uilib/components/icon) to be easily integrated, without need of an additional SVG file loader.
 
@@ -27,11 +27,19 @@ They also exists as [React Components](/uilib/components/icon) to be easily inte
 
 Eufemia SVG icons do simply inherit the used color. In case you don't can use the [Icon component](/uilib/components/icon), you have to handle colors by yourself.
 
-**Example color usage of CSS**
+### Change SVG border color
+
+```css
+.selector svg {
+  color: var(--custom-color);
+}
+```
+
+### Example color usage
 
 ```css
 color: var(--custom-color);
-svg {
+.selector svg {
   color: inherit;
   fill: currentColor;
   stroke: currentColor;

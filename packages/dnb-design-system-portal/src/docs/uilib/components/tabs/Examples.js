@@ -6,24 +6,38 @@
 import React from 'react'
 import ComponentBox from 'Src/shared/tags/ComponentBox'
 
-import Input from 'dnb-ui-lib/src/components/input/Input'
+import Input from '@dnb/eufemia/src/components/input/Input'
 import styled from '@emotion/styled'
 import { Location, Router, navigate } from '@reach/router'
 import { BrowserRouter, Route, withRouter } from 'react-router-dom'
 
-// export class Example extends React.PureComponent {
-//   static AdditionalCallback = {
-//     info: ({ CodeRenderer }) => (
-//       <React.Fragment>
-//         <h3>Data Structure</h3>
-//         <CodeRenderer language="json">{dataBlob}</CodeRenderer>
-//       </React.Fragment>
-//     )
-//   }
-//   render() {
-//     return null
-//   }
-// }
+export const TabsExampleContentOutside = () => (
+  <Wrapper>
+    <ComponentBox>
+      {() => /* jsx */ `
+<Tabs
+  id="unique-linked-id"
+  data={[
+    {
+      title: 'One',
+      key: 'one'
+    },
+    {
+      title: 'Two',
+      key: 'two'
+    }
+  ]}
+/>
+
+<Tabs.Content id="unique-linked-id">
+  {({ key }) => {
+    return <H2>{ key }</H2>
+  }}
+</Tabs.Content>
+`}
+    </ComponentBox>
+  </Wrapper>
+)
 
 export const TabsExampleContentObject = () => (
   <Wrapper>
@@ -31,10 +45,8 @@ export const TabsExampleContentObject = () => (
       scope={{ exampleContent }}
       data-visual-test="tabs-tablist"
       useRender
-      hideSyntaxButton
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 const data = [
   { title: 'First', key: 'first' },
   { title: 'Second', key: 'second' },
@@ -46,8 +58,7 @@ render(
     { exampleContent /* See Example Content below */ }
   </Tabs>
 )
-  `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -58,8 +69,7 @@ export const TabsExampleUsingData = () => (
       data-visual-test="tabs-clickhandler"
       scope={{ exampleContent }}
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Tabs
   data={{
     first: {
@@ -82,8 +92,7 @@ export const TabsExampleUsingData = () => (
     console.log('on_change', selected_key)
   }}
 />
-  `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -94,32 +103,28 @@ export const TabsExampleScrollable = () => (
       data-visual-test="tabs-tablist-scrollable"
       scope={{ manyTabs, manyTabsContent }}
     >
-      {
-        /* @jsx */ `
+      {() => /* jsx */ `
 <Tabs data={manyTabs}>
   { manyTabsContent }
 </Tabs>
-  `
-      }
+`}
     </ComponentBox>
   </MaxWidth>
 )
 
 export const TabsExampleLeftAligned = () => (
   <Wrapper>
-    <ComponentBox>
-      {
-        /* @jsx */ `
-<Tabs section_style="mint-green">
+    <ComponentBox data-visual-test="tabs-section-styles">
+      {() => /* jsx */ `
+<Tabs tabs_style="mint-green" content_style="black-3">
   <Tabs.Content title="First">
-    <H2>First</H2>
+    <H2 top={0} bottom>First</H2>
   </Tabs.Content>
   <Tabs.Content title="Second">
-    <H2>Second</H2>
+    <H2 top={0} bottom>Second</H2>
   </Tabs.Content>
 </Tabs>
-  `
-      }
+`}
     </ComponentBox>
   </Wrapper>
 )
@@ -128,7 +133,7 @@ export class TabsExampleRightAligned extends React.PureComponent {
   state = { activeTabKey: 'second' }
   openTab = ({ key }) => {
     this.setState({
-      activeTabKey: key
+      activeTabKey: key,
     })
   }
   isActive(tabKey) {
@@ -144,8 +149,7 @@ export class TabsExampleRightAligned extends React.PureComponent {
           data-visual-test="tabs-tablist-right-aligned"
           scope={{ exampleContent, activeTabKey, openTab, data }}
         >
-          {
-            /* @jsx */ `
+          {() => /* jsx */ `
 <Tabs
   selected_key={activeTabKey}
   align="right"
@@ -168,8 +172,7 @@ export class TabsExampleRightAligned extends React.PureComponent {
 >
   { exampleContent /* See Example Content below */ }
 </Tabs>
-      `
-          }
+`}
         </ComponentBox>
       </Wrapper>
     )
@@ -183,10 +186,8 @@ export const TabsExampleReactRouterNavigation = () =>
         title=""
         scope={{ BrowserRouter, Route, withRouter }}
         useRender
-        hideSyntaxButton
       >
-        {
-          /* @jsx */ `
+        {() => /* jsx */ `
 // import { Router, Route, withRouter } from 'react-router-dom'
 const tabsData = [
   { title: 'Home', key: 'home' },
@@ -203,7 +204,7 @@ const TabsNav = withRouter(({ history, location }) => (
     data={tabsData}
     selected_key={(/path=(.*)/g.exec(location.search)||[null,''])[1]}
     on_change={({ key }) => history.push('?path=' + key)}
-    section_style="mint-green"
+    tabs_style="mint-green"
   >
     {/* 1. Use either key method */}
     {tabsContent}
@@ -217,8 +218,7 @@ const TabsNav = withRouter(({ history, location }) => (
   </Tabs>
 ))
 render(<BrowserRouter><TabsNav /></BrowserRouter>)
-  `
-        }
+`}
       </ComponentBox>
     </Wrapper>
   )
@@ -226,13 +226,8 @@ render(<BrowserRouter><TabsNav /></BrowserRouter>)
 export const TabsExampleReachRouterNavigation = () =>
   typeof window === 'undefined' ? null : (
     <Wrapper>
-      <ComponentBox
-        scope={{ Location, Router, navigate }}
-        useRender
-        hideSyntaxButton
-      >
-        {
-          /* @jsx */ `
+      <ComponentBox scope={{ Location, Router, navigate }} useRender>
+        {() => /* jsx */ `
 // import { Location, Router, navigate } from '@reach/router'
 const Home = () => <H2>Home</H2>
 const About = () => <H2>About</H2>
@@ -249,7 +244,7 @@ render(
         ]}
         selected_key={pathname}
         on_change={({ key }) => navigate(key)}
-        section_style="mint-green"
+        tabs_style="mint-green"
       >
         <React.Suspense fallback={<em>Loading ...</em>}>
           <Router>
@@ -263,8 +258,7 @@ render(
     }}
   </Location>
 )
-`
-        }
+`}
       </ComponentBox>
     </Wrapper>
   )
@@ -278,14 +272,14 @@ const exampleContent = {
       <p>Paragraph 2</p>
     </>
   ),
-  fourth: 'Fourth as a string only'
+  fourth: 'Fourth as a string only',
 }
 
 const data = [
   { title: 'First', key: 'first' },
   { title: 'Second', key: 'second' },
   { title: 'Third', key: 'third', disabled: true },
-  { title: 'Fourth', key: 'fourth' }
+  { title: 'Fourth', key: 'fourth' },
 ]
 const manyTabs = [
   { title: 'First', key: 'first' },
@@ -297,7 +291,7 @@ const manyTabs = [
   { title: 'Seventh', key: 'seventh' },
   { title: 'Eighth', key: 'eighth' },
   { title: 'Ninth', key: 'ninth' },
-  { title: 'Tenth', key: 'tenth' }
+  { title: 'Tenth', key: 'tenth' },
 ]
 const manyTabsContent = manyTabs.reduce((acc, { title, key }) => {
   acc[key] = title

@@ -4,6 +4,7 @@ showTabs: true
 
 import {
 PaginationExampleDefault,
+PaginationExampleWithCallback,
 PaginationExampleCentered,
 PaginationExampleInfinityLoadButton,
 PaginationExampleInfinityIndicator,
@@ -17,9 +18,13 @@ PaginationExampleInfinityTable,
 
 <PaginationExampleDefault />
 
+If you need to access methods provided by the render prop arguments.
+
+<PaginationExampleWithCallback />
+
 ### Centered Pagination with random delay
 
-Note that we keep the hight of the previous page. All pages can for sure have their own height.
+Note that we keep the height of the previous page. All pages can for sure have their own height.
 
 <PaginationExampleCentered />
 
@@ -39,6 +44,6 @@ A load button is shown on the bottom by having `use_load_button={true}` - but he
 
 ### Advanced Table infinity scroller
 
-You can find the code either on [GitHub](https://github.com/dnbexperience/eufemia/blob/develop/packages/dnb-design-system-portal/src/docs/uilib/components/pagination/PaginationTableExample.js) or on [CodeSandbox](https://codesandbox.io/s/eufemia-table-pagination-infinity-546f7)
+You can find the code either on [GitHub](https://github.com/dnbexperience/eufemia/tree/main/packages/dnb-design-system-portal/src/docs/uilib/components/pagination/Examples.js) or on [CodeSandbox](https://codesandbox.io/s/eufemia-table-pagination-infinity-546f7)
 
 <PaginationExampleInfinityTable />
