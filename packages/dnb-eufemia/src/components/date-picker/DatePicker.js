@@ -13,7 +13,6 @@ import {
   extendPropsWithContext,
   registerElement,
   dispatchCustomElementEvent,
-  detectOutsideClick,
   getStatusState,
   combineDescribedBy,
   validateDOMAttributes,
@@ -33,6 +32,7 @@ import enLocale from 'date-fns/locale/en-GB'
 import Context from '../../shared/Context'
 import Suffix from '../../shared/helpers/Suffix'
 import FormLabel from '../form-label/FormLabel'
+import Modal from '../modal/Modal'
 import FormStatus from '../form-status/FormStatus'
 import DatePickerProvider from './DatePickerProvider'
 import DatePickerRange from './DatePickerRange'
@@ -171,6 +171,10 @@ export default class DatePicker extends React.PureComponent {
     no_animation: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     direction: PropTypes.oneOf(['auto', 'top', 'bottom']),
     align_picker: PropTypes.oneOf(['auto', 'left', 'right']),
+    calendar_amount: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     class: PropTypes.string,
     className: PropTypes.string,
 
@@ -244,6 +248,7 @@ export default class DatePicker extends React.PureComponent {
     no_animation: false,
     direction: 'auto',
     align_picker: null,
+    calendar_amount: 1,
     class: null,
     className: null,
 
@@ -295,52 +300,52 @@ export default class DatePicker extends React.PureComponent {
     this._submitButtonRef = React.createRef()
   }
 
-  setTrianglePosition = () => {
-    const { show_input, align_picker } = this.props
-    if (
-      isTrue(show_input) &&
-      this._triangleRef.current &&
-      this._innerRef.current
-    ) {
-      try {
-        const shellWidth = this._innerRef.current
-          .querySelector('.dnb-input__shell')
-          .getBoundingClientRect().width
-        const buttonWidth = this._innerRef.current
-          .querySelector('.dnb-input__submit-button__button')
-          .getBoundingClientRect().width
-        if (align_picker === 'right') {
-          const distance = buttonWidth / 2 - 8
-          this._triangleRef.current.style.marginRight = `${
-            distance / 16
-          }rem`
-        } else {
-          const distance = shellWidth - buttonWidth / 2 - 8
-          this._triangleRef.current.style.marginLeft = `${
-            distance / 16
-          }rem`
-        }
-      } catch (e) {
-        warn(e)
-      }
-    }
-  }
+  // setTrianglePosition = () => {
+  //   const { show_input, align_picker } = this.props
+  //   if (
+  //     isTrue(show_input) &&
+  //     this._triangleRef.current &&
+  //     this._innerRef.current
+  //   ) {
+  //     try {
+  //       const shellWidth = this._innerRef.current
+  //         .querySelector('.dnb-input__shell')
+  //         .getBoundingClientRect().width
+  //       const buttonWidth = this._innerRef.current
+  //         .querySelector('.dnb-input__submit-button__button')
+  //         .getBoundingClientRect().width
+  //       if (align_picker === 'right') {
+  //         const distance = buttonWidth / 2 - 8
+  //         this._triangleRef.current.style.marginRight = `${
+  //           distance / 16
+  //         }rem`
+  //       } else {
+  //         const distance = shellWidth - buttonWidth / 2 - 8
+  //         this._triangleRef.current.style.marginLeft = `${
+  //           distance / 16
+  //         }rem`
+  //       }
+  //     } catch (e) {
+  //       warn(e)
+  //     }
+  //   }
+  // }
 
-  setOutsideClickHandler = () => {
-    this.outsideClick = detectOutsideClick(this._innerRef.current, (e) => {
-      this.hidePicker({ focusOnHide: e?.event?.key })
-    })
-  }
+  // setOutsideClickHandler = () => {
+  //   this.outsideClick = detectOutsideClick(this._innerRef.current, (e) => {
+  //     this.hidePicker({ focusOnHide: e?.event?.key })
+  //   })
+  // }
 
-  removeOutsideClickHandler() {
-    if (this.outsideClick) {
-      this.outsideClick.remove()
-    }
-  }
+  // removeOutsideClickHandler() {
+  //   if (this.outsideClick) {
+  //     this.outsideClick.remove()
+  //   }
+  // }
 
   componentWillUnmount() {
     clearTimeout(this._hideTimeout)
-    this.removeOutsideClickHandler()
+    // this.removeOutsideClickHandler()
   }
 
   onPickerChange = ({ hidePicker = true, ...args }) => {
@@ -396,8 +401,8 @@ export default class DatePicker extends React.PureComponent {
     })
     dispatchCustomElementEvent(this, 'on_show', this.getReturnObject(args))
 
-    this.setTrianglePosition()
-    this.setOutsideClickHandler()
+    // this.setTrianglePosition()
+    // this.setOutsideClickHandler()
   }
 
   hidePicker = (args) => {
@@ -444,7 +449,7 @@ export default class DatePicker extends React.PureComponent {
       isTrue(this.props.no_animation) ? 1 : DatePicker.blurDelay
     ) // wait until animation is over
 
-    this.removeOutsideClickHandler()
+    // this.removeOutsideClickHandler()
   }
 
   togglePicker = (args) => {
@@ -671,49 +676,53 @@ export default class DatePicker extends React.PureComponent {
                   onSubmit={this.togglePicker}
                   {...status_props}
                 />
-                <span className="dnb-date-picker__container">
-                  <span
-                    className="dnb-date-picker__triangle"
-                    ref={this._triangleRef}
-                  />
-                  {!hidden && (
-                    <>
-                      <DatePickerRange
-                        id={id}
-                        firstDayOfWeek={first_day}
-                        locale={locale}
-                        resetDate={isTrue(reset_date)}
-                        isRange={isTrue(range)}
-                        isLink={isTrue(link)}
-                        isSync={isTrue(sync)}
-                        hideDays={isTrue(hide_days)}
-                        hideNav={isTrue(hide_navigation)}
-                        views={
-                          isTrue(hide_navigation_buttons)
-                            ? [{ nextBtn: false, prevBtn: false }]
-                            : null
-                        }
-                        onlyMonth={isTrue(only_month)}
-                        hideNextMonthWeek={isTrue(hide_last_week)}
-                        noAutofocus={isTrue(disable_autofocus)}
-                        onChange={this.onPickerChange}
-                      />
-                      {(addon_element || shortcuts) && (
-                        <DatePickerAddon
-                          {...props}
-                          renderElement={addon_element}
-                          shortcuts={shortcuts}
+                <Modal
+                  mode="drawer"
+                  open_state={opened}
+                  trigger_hidden
+                  on_close={this.hidePicker}
+                  title="Title"
+                >
+                  <div className="dnb-date-picker__container">
+                    {!hidden && (
+                      <>
+                        <DatePickerRange
+                          id={id}
+                          firstDayOfWeek={first_day}
+                          locale={locale}
+                          resetDate={isTrue(reset_date)}
+                          isRange={isTrue(range)}
+                          isLink={isTrue(link)}
+                          isSync={isTrue(sync)}
+                          hideDays={isTrue(hide_days)}
+                          hideNav={isTrue(hide_navigation)}
+                          views={
+                            isTrue(hide_navigation_buttons)
+                              ? [{ nextBtn: false, prevBtn: false }]
+                              : null
+                          }
+                          onlyMonth={isTrue(only_month)}
+                          hideNextMonthWeek={isTrue(hide_last_week)}
+                          noAutofocus={isTrue(disable_autofocus)}
+                          onChange={this.onPickerChange}
                         />
-                      )}
-                      <DatePickerFooter
-                        isRange={isTrue(range)}
-                        onSubmit={this.onSubmitHandler}
-                        onCancel={this.onCancelHandler}
-                        onReset={this.onResetHandler}
-                      />
-                    </>
-                  )}
-                </span>
+                        {(addon_element || shortcuts) && (
+                          <DatePickerAddon
+                            {...props}
+                            renderElement={addon_element}
+                            shortcuts={shortcuts}
+                          />
+                        )}
+                        <DatePickerFooter
+                          isRange={isTrue(range)}
+                          onSubmit={this.onSubmitHandler}
+                          onCancel={this.onCancelHandler}
+                          onReset={this.onResetHandler}
+                        />
+                      </>
+                    )}
+                  </div>
+                </Modal>
               </span>
               {suffix && (
                 <Suffix

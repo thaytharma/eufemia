@@ -6,7 +6,8 @@ on:
       - '**'
       - '!**--skip-ci'
       - '!**--visual-reports'
-      - 'experiments/**'
+      - '!wip/**'
+      - '!experiments/**'
 
 jobs:
   action:
