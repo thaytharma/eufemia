@@ -4,7 +4,7 @@
 
 import React from 'react'
 import CodeBlock from './CodeBlock'
-import { Checkbox, Input } from '@dnb/eufemia/src/components'
+import { Copy, Checkbox, Input } from '@dnb/eufemia/src/components'
 import {
   Ul,
   Ol,
@@ -23,7 +23,6 @@ import Tabbar from './Tabbar'
 import Anchor from './Anchor'
 import Intro, { IntroFooter } from './Intro'
 import Header from './AutoLinkHeader'
-import Copy from './Copy'
 
 export default {
   Copy,

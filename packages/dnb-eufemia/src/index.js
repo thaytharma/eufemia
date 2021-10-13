@@ -14,6 +14,7 @@ import Accordion from './components/accordion/Accordion'
 import Autocomplete from './components/autocomplete/Autocomplete'
 import Button from './components/button/Button'
 import Checkbox from './components/checkbox/Checkbox'
+import Copy from './components/copy/Copy'
 import DatePicker from './components/date-picker/DatePicker'
 import Dropdown from './components/dropdown/Dropdown'
 import FormLabel from './components/form-label/FormLabel'
@@ -80,6 +81,7 @@ export {
   Autocomplete,
   Button,
   Checkbox,
+  Copy,
   DatePicker,
   Dropdown,
   FormLabel,
