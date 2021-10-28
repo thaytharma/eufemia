@@ -24,6 +24,7 @@ export default {
     },
     Anchor: {
       target_blank_title: 'Åpner et nytt vindu',
+      target_blank_external_title: 'Åpner ekstern lenke i nytt vindu',
     },
     GlobalStatus: {
       default_title: 'En feil har skjedd',

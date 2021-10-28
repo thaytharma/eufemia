@@ -24,6 +24,7 @@ export default {
     },
     Anchor: {
       target_blank_title: 'Opens a new Window',
+      target_blank_external_title: 'Opens external link in new window',
     },
     GlobalStatus: {
       default_title: 'An error has occurred',
