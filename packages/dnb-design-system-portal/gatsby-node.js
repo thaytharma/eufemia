@@ -224,10 +224,34 @@ async function createRedirects({ graphql, actions }) {
   })
 }
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = (
+  { stage, actions, getConfig },
+  pluginOptions
+) => {
+  // actions.setWebpackConfig({
+  //   resolve: {
+  //     fallback: { path: require.resolve('path-browserify') }, // was added during webpack 4 to 5 migration
+  //     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+  //     alias: {
+  //       Root: path.resolve(__dirname),
+  //       Src: path.resolve(__dirname, 'src'),
+  //       Pages: path.resolve(__dirname, 'src/docs'),
+  //       Docs: path.resolve(__dirname, 'src/docs'),
+  //       Tags: path.resolve(__dirname, 'src/shared/tags'),
+  //       Parts: path.resolve(__dirname, 'src/shared/parts'),
+  //     },
+  //   },
+  // })
+
+  // console.log('stage', stage)
   actions.setWebpackConfig({
     resolve: {
-      fallback: { path: require.resolve('path-browserify') }, // was added during webpack 4 to 5 migration
+      fallback: {
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('stream-browserify'), // is needed when esbuild-loader loads "/mdx-..."
+        os: require.resolve('os-browserify/browser'), // is needed when esbuild-loader loads "/mdx-..."
+        crypto: require.resolve('crypto-browserify'), // is needed when esbuild-loader loads "/mdx-..."
+      }, // was added during webpack 4 to 5 migration
       modules: [path.resolve(__dirname, 'src'), 'node_modules'],
       alias: {
         Root: path.resolve(__dirname),
@@ -239,4 +263,101 @@ exports.onCreateWebpackConfig = ({ actions }) => {
       },
     },
   })
+
+  if (
+    pluginOptions &&
+    (stage === 'develop' || stage === 'build-javascript')
+  ) {
+    // Get Webpack config
+    const config = getConfig()
+
+    config.module.rules = config.module.rules.map((config) => {
+      let loader = config.loader
+
+      if (typeof config.use === 'string') {
+        loader = config.use
+      } else if (Array.isArray(config.use) && config.use[0].loader) {
+        loader = config.use[0].loader
+      }
+
+      if (
+        loader &&
+        loader.includes('babel-loader') &&
+        (new RegExp(config.test).test('file.js') ||
+          new RegExp(config.test).test('file.ts'))
+
+        /*
+          // mdx-scopes and mdx-wrappers do NOT work, fs not found ?!?
+          || String(config.test).includes('/mdx-components\\.js$/')
+        */
+      ) {
+        console.log('esbuild-loader ✅', config.test)
+        delete config.use
+        // delete config.include
+        // delete config.type
+        config.loader = 'esbuild-loader'
+        config.options = {
+          loader: 'jsx', // Remove this if you're not using JSX
+          // target: 'es2015', // Syntax to compile to (see options below for possible values)
+        }
+        console.log('config', config)
+      }
+
+      // if (
+      //   loader &&
+      //   loader.includes('babel-loader') &&
+      //   (new RegExp(config.test).test('file.js') ||
+      //     new RegExp(config.test).test('file.ts'))
+
+      //   /*
+      //     // mdx-scopes and mdx-wrappers do NOT work, fs not found ?!?
+      //     || String(config.test).includes('/mdx-components\\.js$/')
+      //   */
+      // ) {
+      //   console.log('swc-loader ✅', config.test)
+      //   delete config.use
+      //   // delete config.include
+      //   // delete config.type
+      //   config.loader = 'swc-loader'
+      //   config.options = {
+      //     jsc: {
+      //       target: 'es2016',
+      //       loose: true,
+      //       parser: {
+      //         syntax: 'ecmascript',
+      //         jsx: true,
+      //         dynamicImport: true,
+      //         privateMethod: false,
+      //         functionBind: true,
+      //         classPrivateProperty: false,
+      //         exportDefaultFrom: true,
+      //         exportNamespaceFrom: true,
+      //         decorators: false,
+      //         decoratorsBeforeExport: false,
+      //         importMeta: false,
+      //       },
+      //     },
+      //   }
+      //   console.log('swc-loader config', config)
+      // }
+
+      return config
+    })
+
+    delete config.optimization.minimizer
+
+    // config.optimization.minimizer = config.optimization.minimizer.map(
+    //   (config) => {
+    //     // or CssMinimizerPlugin
+    //     if (String(config.constructor.name).includes('TerserPlugin')) {
+    //       config = new ESBuildMinifyPlugin({
+    //         target: 'es2015', // Syntax to compile to (see options below for possible values)
+    //       })
+    //     }
+    //     return config
+    //   }
+    // )
+
+    actions.replaceWebpackConfig(config)
+  }
 }
