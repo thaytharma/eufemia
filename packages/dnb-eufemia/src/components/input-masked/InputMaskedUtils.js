@@ -229,6 +229,7 @@ export const handleCurrencyMask = ({
     showMask: true,
     placeholderChar: null,
     allowDecimal: true,
+    allowLeadingZeroes: true,
     decimalLimit: 2,
     decimalSymbol: ',',
     ...context?.InputMasked?.mask_options,
@@ -265,6 +266,7 @@ export const handleNumberMask = ({
 }) => {
   const maskParams = {
     decimalSymbol: ',',
+    allowLeadingZeroes: true,
     ...context?.InputMasked?.mask_options,
     ...context?.InputMasked?.number_mask,
     ...mask_options,

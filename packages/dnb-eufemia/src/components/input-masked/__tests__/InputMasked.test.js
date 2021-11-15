@@ -155,7 +155,7 @@ describe('InputMasked component', () => {
     expect(on_change.mock.calls[0][0].numberValue).toBe(123456789.678)
   })
 
-  it('should prevent leading zero by default', () => {
+  it('should prevent leading zero when allowLeadingZeroes is negative', () => {
     const newValue = 'NOK 1 234,56 kr'
 
     const onKeyDown = jest.fn()
@@ -169,6 +169,7 @@ describe('InputMasked component', () => {
           prefix: 'NOK ',
           suffix: ',- kr',
           allowDecimal: true,
+          allowLeadingZeroes: false,
         }}
         on_key_down={onKeyDown}
       />
@@ -299,7 +300,7 @@ describe('InputMasked component', () => {
     expect(Comp.find('input').instance().value).toBe('1 234')
   })
 
-  it('should not set leading zero when entering decimal separator', () => {
+  it('should not set leading zero when entering decimal separator and allowLeadingZeroes is negative', () => {
     const onKeyDown = jest.fn()
     const preventDefault = jest.fn()
 
@@ -308,6 +309,7 @@ describe('InputMasked component', () => {
         number_mask={{
           suffix: ' kr',
           allowDecimal: true,
+          allowLeadingZeroes: false,
         }}
         on_key_down={onKeyDown}
       />
