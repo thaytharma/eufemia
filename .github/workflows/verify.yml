@@ -61,6 +61,20 @@ jobs:
       - name: Run lint
         run: yarn workspace @dnb/eufemia lint:ci && yarn workspace dnb-design-system-portal lint:ci
 
+      - name: Get Jest cache directory path
+        id: jest-cache-dir-path
+        run: |
+          JEST_CACHE_DIR=$(yarn workspace @dnb/eufemia jest --showConfig | grep -oP '(?<="cacheDirectory": ")[^"]+(?=")')
+          echo "::set-output name=dir::$JEST_CACHE_DIR"
+
+      - name: Use Jest cache
+        uses: actions/cache@v2
+        id: jest-cache
+        with:
+          path: ${{ steps.jest-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-jest-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-jest-
+
       - name: Run tests
         run: yarn workspace @dnb/eufemia test:ci && yarn workspace dnb-design-system-portal test:ci
 
