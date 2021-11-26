@@ -96,28 +96,25 @@ exports[`Section scss have to match default theme snapshot 1`] = `
 
 .dnb-section--fire-red .dnb-anchor,
 .dnb-section--emerald-green .dnb-anchor,
-.dnb-section--sea-green .dnb-anchor {
+.dnb-section--sea-green .dnb-anchor,
+.dnb-section--fire-red .dnb-button--tertiary,
+.dnb-section--emerald-green .dnb-button--tertiary,
+.dnb-section--sea-green .dnb-button--tertiary {
   color: var(--color-white); }
   .dnb-section--fire-red .dnb-anchor:hover,
   .dnb-section--emerald-green .dnb-anchor:hover,
-  .dnb-section--sea-green .dnb-anchor:hover {
-    color: var(--color-sea-green); }
+  .dnb-section--sea-green .dnb-anchor:hover,
+  .dnb-section--fire-red .dnb-button--tertiary:hover,
+  .dnb-section--emerald-green .dnb-button--tertiary:hover,
+  .dnb-section--sea-green .dnb-button--tertiary:hover {
+    color: var(--color-white); }
   .dnb-section--fire-red .dnb-anchor:focus,
   .dnb-section--emerald-green .dnb-anchor:focus,
-  .dnb-section--sea-green .dnb-anchor:focus {
-    color: var(--color-white);
-    outline: none; }
-    html[data-whatinput='keyboard'] .dnb-section--fire-red .dnb-anchor:focus, html[data-whatinput='keyboard']
-    .dnb-section--emerald-green .dnb-anchor:focus, html[data-whatinput='keyboard']
-    .dnb-section--sea-green .dnb-anchor:focus {
-      --border-color: var(--color-black-8);
-      box-shadow: 0 0 0 0.125rem var(--border-color);
-      border-color: transparent; }
-      @media screen and (-ms-high-contrast: none) {
-        html[data-whatinput='keyboard'] .dnb-section--fire-red .dnb-anchor:focus, html[data-whatinput='keyboard']
-        .dnb-section--emerald-green .dnb-anchor:focus, html[data-whatinput='keyboard']
-        .dnb-section--sea-green .dnb-anchor:focus {
-          box-shadow: 0 0 0 0.125rem var(--color-black-8); } }
+  .dnb-section--sea-green .dnb-anchor:focus,
+  .dnb-section--fire-red .dnb-button--tertiary:focus,
+  .dnb-section--emerald-green .dnb-button--tertiary:focus,
+  .dnb-section--sea-green .dnb-button--tertiary:focus {
+    color: var(--color-white); }
 
 .dnb-section--signal-orange {
   color: var(--color-ocean-green); }
