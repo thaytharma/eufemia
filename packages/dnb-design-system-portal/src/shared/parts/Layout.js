@@ -110,7 +110,16 @@ class Layout extends React.PureComponent {
             {!fs && <StickyMenuBar />}
             {!fs && <MainMenu enableOverlay />}
 
-            <Wrapper className="content-wrapper">
+            <Wrapper
+              className="content-wrapper"
+              style={
+                fs
+                  ? {
+                      '--aside-width': 0, // ensure the sidebar has not left over margin during fullscreen (SSR issue)
+                    }
+                  : {}
+              }
+            >
               {!fs && !hideSidebar && (
                 <Sidebar location={location} showAll={false} />
               )}
