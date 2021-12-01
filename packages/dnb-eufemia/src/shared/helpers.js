@@ -3,14 +3,11 @@
  *
  */
 
-import {
-  warn,
-  PLATFORM_MAC,
-  PLATFORM_WIN,
-  PLATFORM_ANDROID,
-  PLATFORM_LINUX,
-  PLATFORM_IOS,
-} from './component-helper'
+export const PLATFORM_MAC = 'Mac|iPad|iPhone|iPod'
+export const PLATFORM_WIN = 'Win'
+export const PLATFORM_ANDROID = 'Android'
+export const PLATFORM_LINUX = 'Linux'
+export const PLATFORM_IOS = 'iOS|iPhone|iPad|iPod'
 
 export let IS_IE11 = false
 export let IS_EDGE = false
@@ -420,4 +417,15 @@ export async function copyToClipboard(string) {
   }
 
   return success
+}
+
+export const warn = (...e) => {
+  if (
+    typeof process !== 'undefined' &&
+    process.env.NODE_ENV !== 'production' &&
+    typeof console !== 'undefined' &&
+    typeof console.log === 'function'
+  ) {
+    console.log('Eufemia:', ...e)
+  }
 }
