@@ -338,7 +338,7 @@ export default class Autocomplete extends React.PureComponent {
         prevent_focus
         skip_keysearch
       >
-        <AutocompleteInstance id={this._id} {...this.props} />
+        <AutocompleteInstance {...this.props} id={this._id} />
       </DrawerListProvider>
     )
   }
