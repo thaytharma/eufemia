@@ -185,6 +185,10 @@ export default class Autocomplete extends React.PureComponent {
         ])
       ),
     ]),
+    limit_results: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     search_in_word_index: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
@@ -279,6 +283,7 @@ export default class Autocomplete extends React.PureComponent {
     align_autocomplete: null,
     options_render: null,
     data: null,
+    limit_results: 30,
     search_in_word_index: 3,
     search_numbers: null,
     default_value: null,
@@ -1217,7 +1222,6 @@ class AutocompleteInstance extends React.PureComponent {
         return []
       }
 
-      // [cc, bb]
       return searchWords
         .map((word, wordIndex) => ({ word, wordIndex }))
         .filter(({ word, wordIndex }) => {
@@ -1449,6 +1453,13 @@ class AutocompleteInstance extends React.PureComponent {
       }
 
       searchIndex = searchIndex.map(({ item }) => item.dataItem)
+
+      if (this.props.limit_results) {
+        searchIndex = searchIndex.slice(
+          0,
+          parseFloat(this.props.limit_results)
+        )
+      }
     }
 
     return searchIndex
@@ -1563,7 +1574,7 @@ class AutocompleteInstance extends React.PureComponent {
       }
     }
 
-    if (typeof args.data.render === 'function') {
+    if (typeof args.data?.render === 'function') {
       delete args.data.render
     }
 
@@ -1653,6 +1664,7 @@ class AutocompleteInstance extends React.PureComponent {
       default_value,
       search_numbers, // eslint-disable-line
       search_in_word_index, // eslint-disable-line
+      limit_results, // eslint-disable-line
       show_options_sr, // eslint-disable-line
       submit_button_title,
       submit_button_icon,

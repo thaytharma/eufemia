@@ -204,6 +204,21 @@ const AutocompleteWithState = () => {
   )
 }
 
+export const AutocompleteLimit = () => {
+  return (
+    <Autocomplete
+      opened
+      prevent_close
+      // no_animation
+      input_value="the"
+      show_clear_button
+      show_submit_button
+      limit_results={2}
+      data={topMovies}
+    />
+  )
+}
+
 export const AutocompleteSandbox = () => {
   // const [data, setData] = useState(autocompleteData)
   // const [value, setSelectedItem] = useState(0)
