@@ -18,6 +18,7 @@ import Breadcrumb from './breadcrumb/Breadcrumb'
 import Button from './button/Button'
 import Checkbox from './checkbox/Checkbox'
 import DatePicker from './date-picker/DatePicker'
+import Drawer from './drawer/Drawer'
 import Dropdown from './dropdown/Dropdown'
 import FormLabel from './form-label/FormLabel'
 import FormRow from './form-row/FormRow'
@@ -56,6 +57,7 @@ export {
   Button,
   Checkbox,
   DatePicker,
+  Drawer,
   Dropdown,
   FormLabel,
   FormRow,
@@ -95,6 +97,7 @@ export const getComponents = () => {
     Button,
     Checkbox,
     DatePicker,
+    Drawer,
     Dropdown,
     FormLabel,
     FormRow,
