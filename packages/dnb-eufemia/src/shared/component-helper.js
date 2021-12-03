@@ -470,10 +470,10 @@ export const toKebabCase = (str) =>
 //     }, {})
 
 /**
- * [detectOutsideClick Detects a click outside a given DOM element]
- * @param  {[type]} ignoreElement [The element we want to protect from a click]
- * @param  {[type]} onSuccess     [Will be called on outside click]
- * @return {[type]}               [void]
+ * detectOutsideClick Detects a click outside a given DOM element
+ * @param  {type} ignoreElement The element we want to protect from a click
+ * @param  {type} onSuccess     Will be called on outside click
+ * @return {type}               void
  */
 export const detectOutsideClick = (ignoreElements, onSuccess, options) =>
   new DetectOutsideClickClass(ignoreElements, onSuccess, options)
@@ -658,27 +658,33 @@ export const matchAll = (string, regex) => {
 }
 
 /**
- * [getPreviousSibling traverses down the DOM tree until it finds the wanted element]
- * @param  {[string]} className [CSS class]
- * @param  {[HTMLElement]} element      [starting HTMLElement]
- * @return {[HTMLElement]}           [HTMLElement]
+ * getPreviousSibling traverses down the DOM tree until it finds the wanted element
+ *
+ * @param  {string} selector CSS .class or #id
+ * @param  {HTMLElement} element starting HTMLElement
+ * @return {HTMLElement} HTMLElement
  */
-export const getPreviousSibling = (className, element) => {
+export const getPreviousSibling = (selector, element) => {
   try {
-    const contains = (element) =>
-      element && element.classList.contains(className)
+    const id = selector.startsWith('#') ? selector.replace(/^#/, '') : null
+
+    const className =
+      id === null &&
+      (selector.startsWith('.') ? selector.replace(/^\./, '') : selector)
+
+    const contains = id
+      ? (el) => el?.getAttribute('id') === id
+      : (el) => el?.classList.contains(className)
 
     if (contains(element)) {
       return element
     }
 
-    while (
-      (element = element && element.parentElement) &&
-      !contains(element)
-    );
+    while ((element = element?.parentElement) && !contains(element));
   } catch (e) {
     warn(e)
   }
+
   return element
 }
 
@@ -719,7 +725,7 @@ export const isInsideScrollView = (
   currentElement,
   returnElement = false
 ) => {
-  const elem = getPreviousSibling('dnb-scroll-view', currentElement)
+  const elem = getPreviousSibling('.dnb-scroll-view', currentElement)
   if (returnElement) {
     return elem == window ? null : elem
   }
